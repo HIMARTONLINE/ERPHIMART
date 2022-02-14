@@ -98,25 +98,65 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="resumen">Resumen:</label>
+                                <label for="resumen">Descripción corta:</label>
                                 <textarea class="form-control" name="resumen" id="" rows="3"></textarea>
                             </div>
 
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="descripcion">descripción:</label>
+                                <label for="descripcion">Descripción completa:</label>
                                 <textarea class="form-control" name="descripcion" id="" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-info btn-block">Crear Producto</button>
+                    <div class="row">
+                        <div class="col-md-6 text-left-right">
+                            <div class="form-group">
+                                <label for="nombre">Clave SAT:</label>
+                                <input type="text" name="clabe_sat" class="form-control"
+                                    placeholder="Ingrese la clave SAT del producto" required
+                                    value="{{old('clabe_sat')}}">
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-left-right">
+                            <div class="form-group">
+                                <label for="codigo">Unidad Medida:</label>
+                                <input type="text" name="unidad_medida" class="form-control"
+                                    placeholder="Ingrese la unidad de medida del producto" required
+                                    value="{{old('unidad_medida')}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-left-right">
+                            <div class="form-group">
+                                <label for="nombre">Caducidad:</label>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label for="nombre">No. de piezas:</label>
+                                        <input type="text" name="num_cad[]" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="nombre">Fecha de caducidad:</label>
+                                        <input type="date" name="fecha_cad[]" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="caducidad-produ" class="form-group"></div>
+                            <div class="form-group">
+                                <button type="button" id="agregar-caducidad" class="btn btn-success">+ Agregar caducidad</button>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <button class="btn btn-info">Crear Producto</button>
                 </form>
-
             </div>
         </div>
     </div>

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\View;
+use App\Product;
+use App\Expiration;
 use Prestashop;
 use Protechstudio\PrestashopWebService\PrestashopWebService;
 use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
@@ -14,7 +16,7 @@ class ProductoController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         
     }
 
@@ -153,9 +155,27 @@ class ProductoController extends Controller
         
         $agregar = Prestashop::add(['resource' => 'products', 'postXml' => $pstXml->asXml()]);
 
-        //$id = $agregar->product->id;
+        $id_p = $agregar->product->id;
         //set_product_quantity(35,$id,);
-        // dd($agregar);
+        // echo $id_p[0];
+        $id_produ = $id_p[0];
+        
+        Product::create([
+            'id_product' => $id_produ,
+            'clabe_sat' => request('clabe_sat'),
+            'unidad_medida' => request('unidad_medida'),
+        ]);
+        
+        $arreglo_cantidad = request('num_cad');
+        $arreglo_fecha = request('fecha_cad');
+        
+        for($i=0; $i<count($arreglo_cantidad); $i++){
+            Expiration::create([
+                'id_product' => $id_produ,
+                'quantity' => $arreglo_cantidad[$i],
+                'expiration_date' => $arreglo_fecha[$i],
+            ]);
+        }
        
     }
 
