@@ -106,6 +106,10 @@
 <script src="{{ asset('assets/dist/js/demo.js')}}"></script>
 <script>
   $(function () {
+       $('#agregar-caducidad').click(function(){
+            $('#caducidad-produ').append('<div class="row"><div class="col-md-2"><label for="nombre">No. de piezas:</label><input type="text" name="num_cad[]" class="form-control" required></div><div class="col-md-3"><label for="nombre">Fecha de caducidad:</label><input type="date" name="fecha_cad[]" class="form-control" required></div></div>');
+       });
+    
        $("#table_id").DataTable();
   });
 </script>

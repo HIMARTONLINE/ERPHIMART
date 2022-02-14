@@ -16,7 +16,25 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'role_id',
+        'name',
+        'surname',
+        'date_birth',
+        'gender',
+        'telephone',
+        'profile_picture',
+        'area',
+        'address',
+        'location',
+        'state',
+        'nss',
+        'curp',
+        'rfc',
+        'infonavit',
+        'clabe_account',
+        'date_admission',
+        'email',
+        'password',
     ];
 
     /**
@@ -36,4 +54,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function role(){
+        return $this->belongsTo('App\Role');
+    }
+    
+    public function Admin(){
+        if($this->role->tipo_usuario == 'Administrador'){
+            return true;
+        }
+        return false;
+    }
+    
+    public function Colaborador(){
+        if($this->role->tipo_usuario == 'Colaborador'){
+            return true;
+        }
+        return false;
+    }
+    
 }
