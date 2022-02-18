@@ -109,8 +109,20 @@
        $('#agregar-caducidad').click(function(){
             $('#caducidad-produ').append('<div class="row"><div class="col-md-2"><label for="nombre">No. de piezas:</label><input type="text" name="num_cad[]" class="form-control" required></div><div class="col-md-3"><label for="nombre">Fecha de caducidad:</label><input type="date" name="fecha_cad[]" class="form-control" required></div></div>');
        });
-    
-       $("#table_id").DataTable();
+       /*
+       $('#referencia').change(function(){
+            var op_ref = $(this).val();
+
+            if(op_ref != 1){
+              $('#ver-referencia').show();
+            }else{
+              $('#ver-referencia').hide();
+            }
+       });
+       */
+       setTimeout(function(){
+        $("#table_id").DataTable();
+       }, 1500);
   });
 </script>
 </body>

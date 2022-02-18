@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\View;
+use App\Sku;
 use App\Product;
 use App\Expiration;
 use Prestashop;
@@ -25,9 +26,29 @@ class ProductoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // $image = $request->file('image');
+        // $image->move('uploads', $image->getClientOriginalName());
 
+        /*
+        $urlImage['resource'] = 'images/products/10'; //pasamos los parametros por url de la apí
+        $xmlImage = Prestashop::get($urlImage); //llama los parametros por GET
+
+        $jsonImage = json_encode($xmlImage);
+        $arrayImage = json_decode($jsonImage, true);
+
+        for($i=0; $i<count($arrayImage['image']['declination']); $i++){
+            foreach($arrayImage['image']['declination'] as $value) {
+                echo $value['id'] . '<br>';
+            }
+        }*/
+
+        // $xml = $xmlProdu->products->children();
+
+        // dd($xmlProdu);
+        // return false;
+        
         $urlProdu['resource'] = 'products/?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
 
@@ -46,29 +67,80 @@ class ProductoController extends Controller
         $jsonCateg = json_encode($xmlCateg);
         $arrayCateg = json_decode($jsonCateg, true);
 
-        foreach($arrayCateg["categories"]["category"] as $index => $categ) {
-        
-            foreach($arrayProdu['products']['product'] as $key => $value) {
+        if(isset($_REQUEST['filtro_produ'])){
+            foreach($arrayCateg["categories"]["category"] as $index => $categ) {
+                
+                foreach($arrayProdu['products']['product'] as $key => $value) {
+    
+                    foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+    
+                        if($value['id'] == $valor['id_product'] && $value['id_category_default'] == $categ['id']) {
+                            
+                            if(($categ['name']['language'] == $_REQUEST['categoria'] || $_REQUEST['categoria'] == 1) && (($valor['quantity'] >= $_REQUEST['de_stock']) && ($valor['quantity'] <= $_REQUEST['a_stock'])) && (($value['price'] >= $_REQUEST['de_precio']) && ($value['price'] <= $_REQUEST['a_precio'])) && (($value['date_upd'] >= $_REQUEST['de_fecha']) && ($value['date_upd'] <= $_REQUEST['a_fecha']))){
+                                
+                                if(is_numeric($value['id_default_image'])){
 
-                foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+                                    $id_imagen = $value['id_default_image'];
+    
+                                }else{
+                                    $id_imagen = 1;
+                                }
 
-                    if($value['id'] == $valor['id_product'] && $value['id_category_default'] == $categ['id']) {
+                                $tablaProdu[] = ['id'         => $value['id'],
+                                                'name'        => $value['name']['language'],
+                                                'id_image'    => $id_imagen,
+                                                'stock'       => $valor['quantity'],
+                                                'reference'   => $value['reference'],
+                                                'category'    => $categ['name']['language'], 
+                                                'price'       => $value['price'],
+                                                'state'       => $value['state'],
+                                                'activo'      => $value['active'],
+                                                'date_upd'    => $value['date_upd'],
+                                                ];
 
-                        $tablaProdu[] = ['id'         => $value['id'],
-                                        'name'        => $value['name']['language'],
-                                        'stock'       => $valor['quantity'],
-                                        'reference'   => $value['reference'],
-                                        'category'    => $categ['name']['language'], 
-                                        'price'       => $value['price'],
-                                        'state'       => $value['state'],
-                                        'activo'      => $value['active'],
-                                        'date_upd'    => $value['date_upd'],
-                                        ];
-                    }   
-                }                              
+                            }
+                        }   
+                    }                              
+                }
             }
+            $ordenarTabla = Arr::sort($tablaProdu);
+
+        }else{
+            foreach($arrayCateg["categories"]["category"] as $index => $categ) {
+        
+                foreach($arrayProdu['products']['product'] as $key => $value) {
+
+                    foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+    
+                        if($value['id'] == $valor['id_product'] && $value['id_category_default'] == $categ['id']) {
+
+                            if(is_numeric($value['id_default_image'])){
+
+                                $id_imagen = $value['id_default_image'];
+
+                            }else{
+                                $id_imagen = 1;
+                            }
+
+                            $tablaProdu[] = ['id'         => $value['id'],
+                                            'name'        => $value['name']['language'],
+                                            'id_image'    => $id_imagen,
+                                            'stock'       => $valor['quantity'],
+                                            'reference'   => $value['reference'],
+                                            'category'    => $categ['name']['language'], 
+                                            'price'       => $value['price'],
+                                            'state'       => $value['state'],
+                                            'activo'      => $value['active'],
+                                            'date_upd'    => $value['date_upd'],
+                                            ];
+
+                        }   
+                    }                              
+                }
+            }
+            $ordenarTabla = Arr::sort($tablaProdu);
         }
-        $ordenarTabla = Arr::sort($tablaProdu);
+
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $ordenarTabla,];
 
@@ -114,14 +186,21 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $nombre = request('nombre');
-        $referencia = request('codigo');
+        $referencia = request('referencia');
         $catg = request('categoria_id');
         $cantidad = request('cantidad');
+        $peso = request('peso');
+        $precio_compra = request('precio_compra');
         $activo = request('activo');
         $precio = request('sinIVA');
         $description_short = request('resumen');
         $description = request('descripcion');
 
+        if(isset($_REQUEST['IVA'])){
+            $iva = 1;
+        }else{
+            $iva = 0;
+        }
 
         if($activo == null) {
             $activo = 0;
@@ -130,8 +209,23 @@ class ProductoController extends Controller
             $activo = 1;
         }
 
+        if($referencia == 1) {
+            $refer = Sku::find(1);
+            $referencia = $refer->referencia + 1;
+            $refer->referencia = $referencia;
+            $refer->save();
+        }
+        else {
+            $refer = Sku::find(2);
+            $referencia = $refer->referencia - 1;
+            $refer->referencia = $referencia;
+            $refer->save();
+        }
         //creamos el acceso al webservices
         $xmlSchema = Prestashop::getSchema('products');
+
+        // dd($xmlProduP);
+        // dd($arrayProduP['products']['product'][0]);
         
         $datos = ['id_manufacturer'         => 0,
                   'id_supplier'             => 0,  
@@ -143,6 +237,8 @@ class ProductoController extends Controller
                   'minimal_quantity'        => 1,
                   'is_virtual'              => 0,
                   'price'                   => $precio,
+                  'weight'                  => $peso,
+                  'wholesale_price'         => $precio_compra,
                   'description_short'       => $description_short,
                   'description'             => $description,
                   'active'                  => $activo,
@@ -159,11 +255,26 @@ class ProductoController extends Controller
         //set_product_quantity(35,$id,);
         // echo $id_p[0];
         $id_produ = $id_p[0];
+
+        $xmlSchema = Prestashop::get([
+            'resource' => 'stock_availables',
+            'id' => $id_produ
+        ]);
+
+        $dataXmlSchema = $xmlSchema->stock_available->children();
+
+        $dataXmlSchema->quantity = $cantidad;
+        
+        $editar = Prestashop::edit(['resource' => 'stock_availables', 
+                                    'id' => $id_produ, 
+                                    'putXml' => $xmlSchema->asXml()
+        ]);
         
         Product::create([
             'id_product' => $id_produ,
             'clabe_sat' => request('clabe_sat'),
             'unidad_medida' => request('unidad_medida'),
+            'iva' => $iva,
         ]);
         
         $arreglo_cantidad = request('num_cad');
@@ -176,6 +287,8 @@ class ProductoController extends Controller
                 'expiration_date' => $arreglo_fecha[$i],
             ]);
         }
+
+        return redirect('admin/productos');
        
     }
 
@@ -198,7 +311,72 @@ class ProductoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $urlProdu['resource'] = 'products/' . $id . '?display=full'; //pasamos los parametros por url de la apí
+        $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
+
+        $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
+        $arrayProdu = json_decode($jsonProdu, true);  //decodificamos el json anterior para poder manipularlos
+        
+        if(is_numeric($arrayProdu['product']['id_default_image'])){
+
+            $id_imagen = $arrayProdu['product']['id_default_image'];
+
+        }else{
+            $id_imagen = 1;
+        }
+
+        $urlStock['resource'] = 'stock_availables/?display=full';
+        $xmlStock = Prestashop::get($urlStock);
+
+        $jsonStock = json_encode($xmlStock);
+        $arrayStock = json_decode($jsonStock, true);
+
+        foreach($arrayStock['stock_availables']['stock_available'] as $valor) {
+        
+            if($id == $valor['id_product']) {
+                $cantidad = $valor['quantity'];
+            }
+
+        }
+
+        $tablaProdu[] = ['id'                     => $arrayProdu['product']['id'],
+                        'name'                    => $arrayProdu['product']['name']['language'],
+                        'id_image'                => $id_imagen,
+                        'stock'                   => $cantidad,
+                        'reference'               => $arrayProdu['product']['reference'],
+                        'category'                => $arrayProdu['product']['id_category_default'], 
+                        'price'                   => $arrayProdu['product']['price'],
+                        'peso'                    => $arrayProdu['product']['weight'],
+                        'precio_compra'           => $arrayProdu['product']['wholesale_price'],
+                        'descripcion_corta'       => $arrayProdu['product']['description_short']['language'],
+                        'descripcion'             => $arrayProdu['product']['description']['language'],
+                        'state'                   => $arrayProdu['product']['state'],
+                        'activo'                  => $arrayProdu['product']['active'],
+                        'date_upd'                => $arrayProdu['product']['date_upd'],
+                        ];
+
+        $parametros = ['producto' => $tablaProdu];
+
+        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,name]';
+        $xmlCateg = Prestashop::get($urlCateg);
+
+        $jsonCateg = json_encode($xmlCateg);
+        $arrayCateg = json_decode($jsonCateg, true);
+
+        foreach($arrayCateg["categories"]["category"] as $categorias) {
+            
+            $tablaCategorias[] = ['id'    => $categorias['id'],
+                                  'nombre'=> $categorias['name']['language'],];
+        }
+
+        $categorias = ['categorias' => $tablaCategorias];
+
+        $producto = Product::where('id_product', $id)->first();
+
+        $caducidad = Expiration::where('id_product', $id)->get();
+
+        return view('admin.productos.edit', compact('categorias','parametros','producto','caducidad'));
+
     }
 
     /**
@@ -211,6 +389,21 @@ class ProductoController extends Controller
     public function update(Request $request, $id)
     {
         /*try{
+
+            if($request->hasFile('image')){
+
+                $image = $request->file('image');
+
+                $xmlSchema = Prestashop::get([
+                    'resource' => 'images/products/603/'
+                ]);
+                
+                Prestashop::add(['resource' => 'images/products/603/', 
+                                            'image' => $image, 
+                                            'postXml' => $xmlSchema->asXml()
+                ]);
+
+            }
 
             $urlProdu['resource'] = 'products/'+$id+'?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
             $xmlProdu = Prestashop::get($urlProdu);

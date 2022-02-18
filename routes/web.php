@@ -20,7 +20,7 @@ Route::get('/', 'Admin\HomeController@index')->name('home');
 
 //Rutas de Catalogo Productos
 Route::resource('admin/productos','Admin\ProductoController')->parameters(['productos'=>'productos'])->names('admin.productos');
-
+Route::get('filtro-productos','Admin\ProductoController@index')->name('filtro-productos');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
