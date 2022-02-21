@@ -36,14 +36,27 @@
                 ?>
             @endforeach
             <div class="card-body" style="display: block;">
-                <form method="PUT" action="{{route('admin.productos.update', $id)}}">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <div class="form-group">
-                                <img src="https://himart.com.mx/api/images/products/{{ $id }}/{{ $id_imagen }}" width="200" height="auto" alt="{{ $nombre }}">
-                            </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 text-center">
+                        <div class="form-group">
+                            <img src="https://himart.com.mx/api/images/products/{{ $id }}/{{ $id_imagen }}" width="200" height="auto" alt="{{ $nombre }}">
+                            <hr />
                         </div>
+                        <div class="form-group text-left">
+                            <form enctype="multipart/form-data" method="POST" action="https://I24KTKXC8CLL94ENE1R1MX3SR8Q966H4@himart.com.mx/api/images/products/{{ $id }}">
+                                <fieldset>
+                                    <label>Agrega una imagen a este producto</label><br />
+                                    <input type="file" name="image">
+                                    <input type="submit" class="btn btn-success" value="Subir imagen">
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <form method="POST" action="{!! route('admin.productos.update', $id) !!}">
+                    @csrf
+                    @method('PUT') 
+                    <div class="row">
                         <div class="col-md-3 text-left-right">
                             <div class="form-group">
                                 <label for="nombre">Nombre:</label>
@@ -105,15 +118,21 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
+                                @if($producto->iva == 1)
                                 <?php $precio_iva = $precio * .16; $precio_iva = $precio_iva + $precio;?>
                                 <label for="">Precio con IVA</label>
                                 <input class="form-control" id="" name="conIVA" type="text" placeholder="$0.00" value="{{ $precio_iva }}" disabled>
+                                @else
+                                <?php $precio_iva = 0.00;?>
+                                <label for="">Precio con IVA</label>
+                                <input class="form-control" id="" name="conIVA" type="text" placeholder="$0.00" value="{{ $precio_iva }}" disabled>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="">Cantidad</label>
-                                <input class="form-control" type="number" name="cantidad" id="" value="{{ $cantidad }}" disabled>
+                                <input class="form-control" type="number" name="cantidad" id="" value="{{ $cantidad }}">
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -126,7 +145,7 @@
                             <div class="form-group">
                                 <label for="">IVA</label>
                                 <div>
-                                    @if($activo != 1)
+                                    @if($producto->iva != 1)
                                         <input type="checkbox" name="IVA" id="activo" data-switch="succes">
                                         <label for="activo" data-on-label="si" data-off-label="no"></label>
                                     @else
@@ -185,28 +204,43 @@
                             <div class="form-group">
                                 <label for="nombre">Caducidad:</label>
                                 <hr />
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">No. de piezas</th>
-                                                    <th scope="col">Fecha de caducidad</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($caducidad as $cad)
-                                                <tr>
-                                                    <td>{{ $cad->quantity }}</td>
-                                                    <?php
-                                                        $timestamp = strtotime($cad->expiration_date); 
-                                                        $fecha = date("d/m/Y", $timestamp );
-                                                    ?>
-                                                    <td>{{ $fecha }}</td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                <div id="accordion">
+                                    <div class="card">
+                                        <div class="card-header" id="headingOne">
+                                            <h5 class="mb-0">
+                                                <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Ver registro de caducidades
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">No. de piezas</th>
+                                                                    <th scope="col">Fecha de caducidad</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($caducidad as $cad)
+                                                                <tr>
+                                                                    <td>{{ $cad->quantity }}</td>
+                                                                    <?php
+                                                                        $timestamp = strtotime($cad->expiration_date); 
+                                                                        $fecha = date("d/m/Y", $timestamp );
+                                                                    ?>
+                                                                    <td>{{ $fecha }}</td>
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <hr />
@@ -228,7 +262,7 @@
                             <hr />
                         </div>
                     </div>
-                    <button class="btn btn-primary">Crear Producto</button>
+                    <button class="btn btn-primary">Guardar Producto</button>
                 </form>
             </div>
         </div>
