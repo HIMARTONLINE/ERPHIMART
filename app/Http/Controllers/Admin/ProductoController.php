@@ -17,7 +17,7 @@ class ProductoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
         
     }
 
@@ -28,27 +28,7 @@ class ProductoController extends Controller
      */
     public function index(Request $request)
     {
-        // $image = $request->file('image');
-        // $image->move('uploads', $image->getClientOriginalName());
-
-        /*
-        $urlImage['resource'] = 'images/products/10'; //pasamos los parametros por url de la apí
-        $xmlImage = Prestashop::get($urlImage); //llama los parametros por GET
-
-        $jsonImage = json_encode($xmlImage);
-        $arrayImage = json_decode($jsonImage, true);
-
-        for($i=0; $i<count($arrayImage['image']['declination']); $i++){
-            foreach($arrayImage['image']['declination'] as $value) {
-                echo $value['id'] . '<br>';
-            }
-        }*/
-
-        // $xml = $xmlProdu->products->children();
-
-        // dd($xmlProdu);
-        // return false;
-        
+   
         $urlProdu['resource'] = 'products/?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
 
