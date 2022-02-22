@@ -176,13 +176,13 @@ class ProductoController extends Controller
         $description_short = request('resumen');
         $description = request('descripcion');
 
-        if(isset($_REQUEST['IVA'])){
+        if(!empty($_REQUEST['IVA'])){
             $iva = 1;
         }else{
             $iva = 0;
         }
 
-        if($activo == null) {
+        if(empty($activo)) {
             $activo = 0;
         }
         else {
@@ -223,7 +223,7 @@ class ProductoController extends Controller
                   'description'             => $description,
                   'active'                  => $activo,
                   'state'                   => 1
-                ];
+        ];
         
         $pstXml = Prestashop::fillSchema($xmlSchema, $datos);
         
@@ -256,16 +256,18 @@ class ProductoController extends Controller
             'unidad_medida' => request('unidad_medida'),
             'iva' => $iva,
         ]);
-        
-        $arreglo_cantidad = request('num_cad');
-        $arreglo_fecha = request('fecha_cad');
-        
-        for($i=0; $i<count($arreglo_cantidad); $i++){
-            Expiration::create([
-                'id_product' => $id_produ,
-                'quantity' => $arreglo_cantidad[$i],
-                'expiration_date' => $arreglo_fecha[$i],
-            ]);
+
+        if(empty($_REQUEST['num_cad'])){
+            $arreglo_cantidad = request('num_cad');
+            $arreglo_fecha = request('fecha_cad');
+            
+            for($i=0; $i<count($arreglo_cantidad); $i++){
+                Expiration::create([
+                    'id_product' => $id_produ,
+                    'quantity' => $arreglo_cantidad[$i],
+                    'expiration_date' => $arreglo_fecha[$i],
+                ]);
+            }
         }
 
         return redirect('admin/productos');
@@ -368,30 +370,101 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        /*try{
+        try{
+            $nombre = request('nombre');
+            $catg = request('categoria_id');
+            $cantidad = request('cantidad');
+            $peso = request('peso');
+            $precio_compra = request('precio_compra');
+            $activo = request('activo');
+            $precio = request('sinIVA');
+            $description_short = request('resumen');
+            $description = request('descripcion');
 
-            if($request->hasFile('image')){
+            if(!empty($_REQUEST['IVA'])){
+                $iva = 1;
+            }else{
+                $iva = 0;
+            }
+    
+            if(empty($activo)) {
+                $activo = 0;
+            }
+            else {
+                $activo = 1;
+            }
+            
+            $xmlProdu = Prestashop::get([
+                'resource' => 'products',
+                'id' => $id
+            ]);
+    
+            $dataXmlProdu = $xmlProdu->children()->children();
 
-                $image = $request->file('image');
+            unset($dataXmlProdu->manufacturer_name);
+            unset($dataXmlProdu->quantity);
+            unset($dataXmlProdu->id_shop_default);
+            unset($dataXmlProdu->id_default_image);
+            unset($dataXmlProdu->associations);
+            unset($dataXmlProdu->id_default_combination);
+            unset($dataXmlProdu->position_in_category);
+            unset($dataXmlProdu->type);
+            unset($dataXmlProdu->pack_stock_type);
+            unset($dataXmlProdu->date_add);
+            unset($dataXmlProdu->date_upd);
+            
+            $dataXmlProdu->id_category_default = $catg;
+            $dataXmlProdu->name = $nombre;
+            $dataXmlProdu->price = $precio;
+            $dataXmlProdu->weight = $peso;
+            $dataXmlProdu->wholesale_price = $precio_compra;
+            $dataXmlProdu->description_short = $description_short;
+            $dataXmlProdu->description = $description;
+            $dataXmlProdu->active = $activo;
+            
+            Prestashop::edit(['resource' => 'products', 
+                            'id' => $id, 
+                            'putXml' => $xmlProdu->asXml()
+            ]);
 
-                $xmlSchema = Prestashop::get([
-                    'resource' => 'images/products/603/'
-                ]);
+            $xmlSchema = Prestashop::get([
+                'resource' => 'stock_availables',
+                'id' => $id
+            ]);
+    
+            $dataXmlSchema = $xmlSchema->stock_available->children();
+    
+            $dataXmlSchema->quantity = $cantidad;
+            
+            Prestashop::edit(['resource' => 'stock_availables', 
+                            'id' => $id, 
+                            'putXml' => $xmlSchema->asXml()
+            ]);
+            
+            $producto = Product::where('id_product', $id)->first();
+            $producto->clabe_sat = request('clabe_sat');
+            $producto->unidad_medida = request('unidad_medida');
+            $producto->iva = $iva;
+            $producto->save();
+            
+            if(empty($_REQUEST['num_cad'])){
+                $arreglo_cantidad = request('num_cad');
+                $arreglo_fecha = request('fecha_cad');
                 
-                Prestashop::add(['resource' => 'images/products/603/', 
-                                            'image' => $image, 
-                                            'postXml' => $xmlSchema->asXml()
-                ]);
-
+                for($i=0; $i<count($arreglo_cantidad); $i++){
+                    Expiration::create([
+                        'id_product' => $id,
+                        'quantity' => $arreglo_cantidad[$i],
+                        'expiration_date' => $arreglo_fecha[$i],
+                    ]);
+                }
             }
 
-            $urlProdu['resource'] = 'products/'+$id+'?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
-            $xmlProdu = Prestashop::get($urlProdu);
-            
+            return redirect()->back();
 
         }catch(PrestaShopWebserviceException $e) {
             echo 'Error' . $e->getMessage();
-        }*/
+        }
     }
 
     /**
