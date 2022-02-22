@@ -73,7 +73,7 @@
 
 
             <li class="nav-item">
-                <a href="{{ route('admin.ventas.index') }}" class="nav-link">
+                <a href="" class="nav-link">
                     <i class="nav-icon fa-solid fas  fa-cash-register"></i>
 
 
