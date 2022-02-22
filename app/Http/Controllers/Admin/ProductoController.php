@@ -17,7 +17,7 @@ class ProductoController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
         
     }
 
@@ -28,7 +28,27 @@ class ProductoController extends Controller
      */
     public function index(Request $request)
     {
-   
+        // $image = $request->file('image');
+        // $image->move('uploads', $image->getClientOriginalName());
+
+        /*
+        $urlImage['resource'] = 'images/products/10'; //pasamos los parametros por url de la apí
+        $xmlImage = Prestashop::get($urlImage); //llama los parametros por GET
+
+        $jsonImage = json_encode($xmlImage);
+        $arrayImage = json_decode($jsonImage, true);
+
+        for($i=0; $i<count($arrayImage['image']['declination']); $i++){
+            foreach($arrayImage['image']['declination'] as $value) {
+                echo $value['id'] . '<br>';
+            }
+        }*/
+
+        // $xml = $xmlProdu->products->children();
+
+        // dd($xmlProdu);
+        // return false;
+        
         $urlProdu['resource'] = 'products/?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
 
@@ -85,6 +105,16 @@ class ProductoController extends Controller
             }
             $ordenarTabla = Arr::sort($tablaProdu);
 
+            $filtro = [
+                'categoria' => $_REQUEST['categoria'],
+                'de_stock' => $_REQUEST['de_stock'],
+                'a_stock' => $_REQUEST['a_stock'],
+                'de_precio' => $_REQUEST['de_precio'],
+                'a_precio' => $_REQUEST['a_precio'],
+                'de_fecha' => $_REQUEST['de_fecha'],
+                'a_fecha' => $_REQUEST['a_fecha']            
+            ];
+
         }else{
             foreach($arrayCateg["categories"]["category"] as $index => $categ) {
         
@@ -119,14 +149,38 @@ class ProductoController extends Controller
                 }
             }
             $ordenarTabla = Arr::sort($tablaProdu);
+
+            $filtro = [
+                'categoria' => 1,
+                'de_stock' => 0,
+                'a_stock' => 200,
+                'de_precio' => 0.00,
+                'a_precio' => 2000.00,
+                'de_fecha' => 2020-01-01,
+                'a_fecha' => date('Y-m-d')            
+            ];
         }
 
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $ordenarTabla,];
 
+        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,name]';
+        $xmlCateg = Prestashop::get($urlCateg);
+
+        $jsonCateg = json_encode($xmlCateg);
+        $arrayCateg = json_decode($jsonCateg, true);
+
+        foreach($arrayCateg["categories"]["category"] as $categorias) {
+            
+            $tablaCategorias[] = ['id'    => $categorias['id'],
+                                  'nombre'=> $categorias['name']['language'],];
+        }
+
+        $categorias = ['categorias' => $tablaCategorias];
+
          //dd($xmlProdu);
 
-        return view('admin.productos.index', compact('parametros'));
+        return view('admin.productos.index', compact('parametros','categorias','filtro'));
 
         
     }
@@ -475,6 +529,32 @@ class ProductoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $xmlProdu = Prestashop::get([
+            'resource' => 'products',
+            'id' => $id
+        ]);
+
+        $dataXmlProdu = $xmlProdu->children()->children();
+
+        unset($dataXmlProdu->manufacturer_name);
+        unset($dataXmlProdu->quantity);
+        unset($dataXmlProdu->id_shop_default);
+        unset($dataXmlProdu->id_default_image);
+        unset($dataXmlProdu->associations);
+        unset($dataXmlProdu->id_default_combination);
+        unset($dataXmlProdu->position_in_category);
+        unset($dataXmlProdu->type);
+        unset($dataXmlProdu->pack_stock_type);
+        unset($dataXmlProdu->date_add);
+        unset($dataXmlProdu->date_upd);
+        
+        $dataXmlProdu->state = 0;
+        
+        Prestashop::edit(['resource' => 'products', 
+                        'id' => $id, 
+                        'putXml' => $xmlProdu->asXml()
+        ]);
+
+        return redirect()->back();
     }
 }

@@ -43,9 +43,10 @@
                             <hr />
                         </div>
                         <div class="form-group text-left">
-                            <form enctype="multipart/form-data" method="POST" action="https://I24KTKXC8CLL94ENE1R1MX3SR8Q966H4@himart.com.mx/api/images/products/{{ $id }}">
+                            <form enctype="multipart/form-data" method="POST" action="{{ url('api.php') }}">
                                 <fieldset>
                                     <label>Agrega una imagen a este producto</label><br />
+                                    <input type="hidden" name="id_product" value="{{ $id }}">
                                     <input type="file" name="image">
                                     <input type="submit" class="btn btn-success" value="Subir imagen">
                                 </fieldset>
@@ -55,7 +56,7 @@
                 </div>
                 <form method="POST" action="{!! route('admin.productos.update', $id) !!}">
                     @csrf
-                    @method('PUT') 
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-3 text-left-right">
                             <div class="form-group">
