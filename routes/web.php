@@ -25,3 +25,6 @@ Route::get('/admin/dashboard', 'Admin\HomeController@index')->name('home');
 Route::resource('admin/productos','Admin\ProductoController')->parameters(['productos'=>'productos'])->names('admin.productos');
 Route::get('filtro-productos','Admin\ProductoController@index')->name('filtro-productos');
 
+//Rutas de ventas de producto
+Route::resource('admin/ventas', 'Admin\VentasController')->parameters(['ventas' => 'ventas'])->names('admin.ventas');
+Route::get('buscar', 'Admin\VentasController@index')->name('buscar.mes');
