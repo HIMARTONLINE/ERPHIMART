@@ -90,9 +90,9 @@
 
 
             <li class="nav-item">
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit();"
                     class="nav-link">
-                    <form id="logout-form" action="" method="POST" style="display: none;">
+                    <form id="logout" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
                     <i class="nav-icon fa fa-sign-out-alt"></i>

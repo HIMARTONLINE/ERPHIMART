@@ -17,7 +17,7 @@ Auth::routes();
 Route::get('export-excel', 'ExcelCSVController@exportExcelCSV')->name('export-excel');
 
 
-Route::get('/admin/dashboard', 'Admin\HomeController@index')->name('home');
+Route::get('/', 'Admin\HomeController@index')->name('home');
 
 //Route::get('home', 'Admin\HomeController@index')->name('home');   // cargar el Dasboard después de haber iniciado sesión
 
