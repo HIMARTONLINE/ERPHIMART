@@ -104,7 +104,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="resumen">Descripción corta:</label>
-                                <textarea class="form-control" name="resumen" id="" rows="3"></textarea>
+                                <textarea class="form-control" name="resumen" id="editor1"></textarea>
                             </div>
 
                         </div>
@@ -113,7 +113,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="descripcion">Descripción completa:</label>
-                                <textarea class="form-control" name="descripcion" id="" rows="3"></textarea>
+                                <textarea class="form-control" name="descripcion" id="editor2"></textarea>
                             </div>
                         </div>
                     </div>

@@ -126,7 +126,7 @@
 
                             <tr>
                                 @if ($val['state'] != "0")
-                                    <td><img src="https://himart.com.mx/api/images/products/{{ $val['id'] }}/{{ $val['id_image'] }}" width="100" height="100" alt=""></td>
+                                    <td><img src="https://himart.com.mx/api/images/products/{{ $val['id'] }}/{{ $val['id_image'] }}/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4&display=full" width="100" height="100" alt=""></td>
                                     @if ($val['reference'] == [])
                                         <td>Ref. vacío</td>
                                     @else
