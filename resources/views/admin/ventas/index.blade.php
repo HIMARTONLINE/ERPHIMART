@@ -108,7 +108,7 @@
                     </div>
                     <div class="card-body">
                         <div class="position-relative mb-4">
-                            <h3 class="mt-3 mb-3">${{ number_format($parametros['totalVentaOrden']), 2 }}</h3>
+                            <h3 class="mt-3 mb-3">${{ number_format($parametros['totalVentaOrden'], 2) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                     <h3>Valor total compra de productos</h3>
                 </div>
                 <div class="card-body">
-                    <h3 class="mt-3 mb-3">${{ number_format($parametros['totalCompra']), 2 }}</h3>
+                    <h3 class="mt-3 mb-3">${{ number_format($parametros['totalCompra'], 2) }}</h3>
                 </div>
             </div>
             <div class="card">
@@ -126,7 +126,7 @@
                     <h3>Valor total Venta de productos</h3>
                 </div>
                 <div class="card-body">
-                    <h3 class="mt-3 mb-3">${{ number_format($parametros['totalVentaProdu']), 2 }}</h3>
+                    <h3 class="mt-3 mb-3">${{ number_format($parametros['totalVentaProdu'], 2) }}</h3>
                 </div>
             </div>
             <div class="card">

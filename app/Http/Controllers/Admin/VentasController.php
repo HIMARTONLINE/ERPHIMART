@@ -38,14 +38,19 @@ class VentasController extends Controller
         foreach($arrayStock['stock_availables']['stock_available'] as $indexStock => $valorstock) {
 
             $sumaStock[] = intval($valorstock['quantity']);
+            
+            foreach($arrayProduct['products']['product'] as $indexProdu => $valorProduct) {
+                
+                if($valorstock['id_product'] == $valorProduct['id']) {
+
+                    $sumaCompra[] = floatval($valorProduct['wholesale_price'])  * floatval($valorstock['quantity']);
+                    $sumaVenta[] =  floatval($valorProduct['price']) * floatval($valorstock['quantity']);
+                }
+                
+            }
         }
 
-        foreach($arrayProduct['products']['product'] as $indexProdu => $valorProduct) {
-            
-            $sumaCompra[] = floatval($valorProduct['wholesale_price']);
-            $sumaVenta[] =  floatval($valorProduct['price']);
-            
-        }
+        
         
         foreach($arrayOrders['orders']['order'] as $indexOrder => $valorOrder) {
 
@@ -63,7 +68,7 @@ class VentasController extends Controller
         $totalCompra = array_sum($sumaCompra);
         $totalVenta = array_sum($sumaVenta);
         $total = array_sum($suma);
-
+        
         $parametros = ['totalVentaOrden'     => $total,
                         'totalCompra'        => $totalCompra,
                         'totalVentaProdu'    => $totalVenta,
