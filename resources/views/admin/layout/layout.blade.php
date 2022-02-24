@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -123,6 +124,40 @@
        setTimeout(function(){
         $("#table_id").DataTable();
        }, 1500);
+  });
+</script>
+<script>
+  ClassicEditor
+          .create( document.querySelector( '#editor1' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
+  });
+  ClassicEditor
+          .create( document.querySelector( '#editor2' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
+  });
+  ClassicEditor
+          .create( document.querySelector( '#editor3' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
+  });
+  ClassicEditor
+          .create( document.querySelector( '#editor4' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
   });
 </script>
 </body>
