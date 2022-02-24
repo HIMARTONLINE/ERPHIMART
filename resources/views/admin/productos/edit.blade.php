@@ -39,7 +39,7 @@
                 <div class="row mb-4">
                     <div class="col-md-12 text-center">
                         <div class="form-group">
-                            <img src="https://himart.com.mx/api/images/products/{{ $id }}/{{ $id_imagen }}" width="200" height="auto" alt="{{ $nombre }}">
+                            <img src="https://himart.com.mx/api/images/products/{{ $id }}/{{ $id_imagen }}/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4&display=full" width="200" height="auto" alt="{{ $nombre }}">
                             <hr />
                         </div>
                         <div class="form-group text-left">
@@ -161,16 +161,15 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="resumen">Descripción corta:</label>
-                                <textarea class="form-control" name="resumen" id="" rows="3">{!! $descripcion_corta !!}</textarea>
+                                <textarea class="form-control" name="resumen" id="editor3">{!! $descripcion_corta !!}</textarea>
                             </div>
-
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="descripcion">Descripción completa:</label>
-                                <textarea class="form-control" name="descripcion" id="" rows="3">{!! $descripcion !!}</textarea>
+                                <textarea class="form-control" name="descripcion" id="editor4">{!! $descripcion !!}</textarea>
                             </div>
                         </div>
                     </div>
