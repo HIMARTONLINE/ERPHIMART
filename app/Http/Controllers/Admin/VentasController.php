@@ -61,7 +61,7 @@ class VentasController extends Controller
 
             $fecha[] = date('Y-m-d', strtotime($valorOrder['date_add']));
 
-            if($valorOrder['current_state'] == "5" || $valorOrder['current_state'] == "4") {
+            if($valorOrder['current_state'] == "5" || $valorOrder['current_state'] == "4" || $valorOrder["current_state"] == "44") {
 
                 $suma[] = floatval($valorOrder['total_paid']);
 
