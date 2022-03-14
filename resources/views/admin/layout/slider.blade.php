@@ -73,19 +73,25 @@
 
 
             <li class="nav-item">
-                <a href="{{route('admin.ventas.index')}}" class="nav-link">
+                <a href="#" class="nav-link">
                     <i class="nav-icon fa-solid fas  fa-cash-register"></i>
-
-
-
-                    <p>Ventas</p>
+                    <p>Ventas<i class="fas fa-angle-left right"></i></p>
                 </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                    <li class="nav-item">
+                        <a href="{{route('admin.ventas.index')}}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Ventas</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.reportes') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Reporte de ventas</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
-
-
-
-
-
 
 
 

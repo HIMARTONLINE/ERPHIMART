@@ -113,6 +113,7 @@
                                 <th>Imagen</th>
                                 <th>SKU</th>
                                 <th>Nombre</th>
+                                <th>Total ventas</th>
                                 <th>Categoria</th>
                                 <th>Stock</th>
                                 <th>Precio de venta</th>
@@ -133,6 +134,7 @@
                                         <td>{{ $val['reference'] }}</td>
                                     @endif
                                     <td>{{ $val['name'] }}</td>
+                                    <td>{{ $val['total_piezas'] }}</td>
                                     <td>{{ $val['category'] }}</td>
                                     <td>{{ $val['stock'] }}</td>
                       
