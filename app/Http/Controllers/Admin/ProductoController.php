@@ -58,6 +58,9 @@ class ProductoController extends Controller
         $urlCateg['resource'] = 'categories/?display=[id,name]';
         $xmlCateg = Prestashop::get($urlCateg);
 
+        $urlOrder['resource'] = 'orders/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
+        $xmlOrder = Prestashop::get($urlOrder); //llama los parametros por GET
+
         $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
         $arrayProdu = json_decode($jsonProdu, true);  //decodificamos el json anterior para poder manipularlos
 
@@ -67,7 +70,74 @@ class ProductoController extends Controller
         $jsonCateg = json_encode($xmlCateg);
         $arrayCateg = json_decode($jsonCateg, true);
 
+        $jsonOrder = json_encode($xmlOrder);    
+        $arrayOrder = json_decode($jsonOrder, true);  
+
+        foreach($arrayOrder['orders']['order'] as $i => $v) {
+
+            if($v['current_state'] == 3 || $v['current_state'] == 5 || $v['current_state'] == 4 || $v['current_state'] == 2) {
+                
+                // $suma[] = floatval($v['total_paid']);
+                $id_orden = $v['id'];
+                $ejem[$id_orden] = $v['associations']['order_rows']['order_row'];
+
+            }
+        }
+
         if(isset($_REQUEST['filtro_produ'])){
+
+            $cdad_piezas = [];
+
+            foreach($arrayOrder['orders']['order'] as $index => $value) {
+
+                if($value['current_state'] == 3 || $value['current_state'] == 5 || $value['current_state'] == 4 || $value['current_state'] == 2) {
+
+                    foreach($arrayProdu['products']['product'] as $inPro => $valPro) {
+                        
+                        if(($value['date_add'] >= $_REQUEST['de_fecha']) && ($value['date_add'] <= $_REQUEST['a_fecha'])){
+
+                            foreach($ejem as $key => $row){
+                                if($value['id'] == $key){
+                                    if(in_array(0, $ejem[$key])){              
+
+                                        if($valPro['id'] == $ejem[$key]['product_id']) {
+                                            $id_produ = $ejem[$key]['product_id'];
+
+                                            if(!array_key_exists($ejem[$key]['product_id'], $cdad_piezas)){
+                                                $cdad_piezas[$id_produ] = $ejem[$key]['product_quantity'];
+                                            }else{
+                                                $cdad_piezas[$id_produ] += $ejem[$key]['product_quantity'];
+                                            }
+                                        }                          
+                                        
+                                    }else{
+
+                                        foreach($ejem[$key] as $filas){
+                                            
+                                            if($valPro['id'] == $filas['product_id']) {
+                                                $id_produ = $filas['product_id'];
+
+                                                if(!array_key_exists($filas['product_id'], $cdad_piezas)){
+                                                    $cdad_piezas[$id_produ] = $filas['product_quantity'];
+                                                }else{
+                                                    $cdad_piezas[$id_produ] += $filas['product_quantity'];
+                                                }
+                                            }
+                                        
+                                        }
+                                    
+                                    }
+                                }
+                                
+                            }
+                            
+                        }
+                    }
+                    
+                }
+                
+            }
+
             foreach($arrayCateg["categories"]["category"] as $index => $categ) {
                 
                 foreach($arrayProdu['products']['product'] as $key => $value) {
@@ -76,7 +146,7 @@ class ProductoController extends Controller
     
                         if($value['id'] == $valor['id_product'] && $value['id_category_default'] == $categ['id']) {
                             
-                            if(($categ['name']['language'] == $_REQUEST['categoria'] || $_REQUEST['categoria'] == 1) && (($valor['quantity'] >= $_REQUEST['de_stock']) && ($valor['quantity'] <= $_REQUEST['a_stock'])) && (($value['price'] >= $_REQUEST['de_precio']) && ($value['price'] <= $_REQUEST['a_precio'])) && (($value['date_upd'] >= $_REQUEST['de_fecha']) && ($value['date_upd'] <= $_REQUEST['a_fecha']))){
+                            if(($categ['name']['language'] == $_REQUEST['categoria'] || $_REQUEST['categoria'] == 1) && (($valor['quantity'] >= $_REQUEST['de_stock']) && ($valor['quantity'] <= $_REQUEST['a_stock'])) && (($value['price'] >= $_REQUEST['de_precio']) && ($value['price'] <= $_REQUEST['a_precio']))){
                                 
                                 if(is_numeric($value['id_default_image'])){
 
@@ -86,17 +156,25 @@ class ProductoController extends Controller
                                     $id_imagen = 1;
                                 }
 
-                                $tablaProdu[] = ['id'         => $value['id'],
-                                                'name'        => $value['name']['language'],
-                                                'id_image'    => $id_imagen,
-                                                'stock'       => $valor['quantity'],
-                                                'reference'   => $value['reference'],
-                                                'category'    => $categ['name']['language'], 
-                                                'price'       => $value['price'],
-                                                'state'       => $value['state'],
-                                                'activo'      => $value['active'],
-                                                'date_upd'    => $value['date_upd'],
-                                                ];
+                                if(array_key_exists($value['id'], $cdad_piezas)){
+                                    $id_product = $value['id'];
+                                    $sumaTotalPiezas = $cdad_piezas[$id_product];
+                                }else{
+                                    $sumaTotalPiezas = 0;
+                                }
+
+                                $tablaProdu[] = ['id'          => $value['id'],
+                                                'name'         => $value['name']['language'],
+                                                'total_piezas' => $sumaTotalPiezas,
+                                                'id_image'     => $id_imagen,
+                                                'stock'        => $valor['quantity'],
+                                                'reference'    => $value['reference'],
+                                                'category'     => $categ['name']['language'], 
+                                                'price'        => $value['price'],
+                                                'state'        => $value['state'],
+                                                'activo'       => $value['active'],
+                                                'date_upd'     => $value['date_upd'],
+                                ];
 
                             }
                         }   
@@ -116,6 +194,58 @@ class ProductoController extends Controller
             ];
 
         }else{
+
+            $cdad_piezas = [];
+
+            foreach($arrayOrder['orders']['order'] as $index => $value) {
+
+                if($value['current_state'] == 3 || $value['current_state'] == 5 || $value['current_state'] == 4 || $value['current_state'] == 2) {
+
+                    foreach($arrayProdu['products']['product'] as $inPro => $valPro) {
+                        
+                        foreach($ejem as $key => $row){
+                            if($value['id'] == $key){
+                                if(in_array(0, $ejem[$key])){              
+
+                                    if($valPro['id'] == $ejem[$key]['product_id']) {
+                                        $id_produ = $ejem[$key]['product_id'];
+                                        if(!array_key_exists($ejem[$key]['product_id'], $cdad_piezas)){
+                                            $cdad_piezas[$id_produ] = $ejem[$key]['product_quantity'];
+                                        }else{
+                                            $cdad_piezas[$id_produ] += $ejem[$key]['product_quantity'];
+                                        }
+                                        /*echo $ejem[$key]['product_id'] . '<br>';
+                                        $total_piezas[] = $ejem[$key]['product_quantity'];*/
+                                    }                          
+                                    
+                                }else{
+
+                                    foreach($ejem[$key] as $filas){
+                                        
+                                        if($valPro['id'] == $filas['product_id']) {
+                                            $id_produ = $filas['product_id'];
+                                            if(!array_key_exists($filas['product_id'], $cdad_piezas)){
+                                                $cdad_piezas[$id_produ] = $filas['product_quantity'];
+                                            }else{
+                                                $cdad_piezas[$id_produ] += $filas['product_quantity'];
+                                            }
+                                            /*echo $filas['product_id'] . '<br>';
+                                            $total_piezas[] = $filas['product_quantity'];*/
+                                        }
+                                    
+                                    }
+                                
+                                }
+                            }
+                            
+                        }  
+                        
+                    }
+                    
+                }
+                
+            }
+
             foreach($arrayCateg["categories"]["category"] as $index => $categ) {
         
                 foreach($arrayProdu['products']['product'] as $key => $value) {
@@ -132,17 +262,23 @@ class ProductoController extends Controller
                                 $id_imagen = 1;
                             }
 
-                            $tablaProdu[] = ['id'         => $value['id'],
-                                            'name'        => $value['name']['language'],
-                                            'id_image'    => $id_imagen,
-                                            'stock'       => $valor['quantity'],
-                                            'reference'   => $value['reference'],
-                                            'category'    => $categ['name']['language'], 
-                                            'price'       => $value['price'],
-                                            'state'       => $value['state'],
-                                            'activo'      => $value['active'],
-                                            'date_upd'    => $value['date_upd'],
-                                            ];
+                            if(array_key_exists($value['id'], $cdad_piezas)){
+                                $id_product = $value['id'];
+                                $sumaTotalPiezas = $cdad_piezas[$id_product];
+                            }
+
+                            $tablaProdu[] = ['id'          => $value['id'],
+                                            'name'         => $value['name']['language'],
+                                            'total_piezas' => $sumaTotalPiezas,
+                                            'id_image'     => $id_imagen,
+                                            'stock'        => $valor['quantity'],
+                                            'reference'    => $value['reference'],
+                                            'category'     => $categ['name']['language'], 
+                                            'price'        => $value['price'],
+                                            'state'        => $value['state'],
+                                            'activo'       => $value['active'],
+                                            'date_upd'     => $value['date_upd'],
+                            ];
 
                         }   
                     }                              
@@ -159,6 +295,7 @@ class ProductoController extends Controller
                 'de_fecha' => 2020-01-01,
                 'a_fecha' => date('Y-m-d')            
             ];
+
         }
 
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
@@ -408,6 +545,17 @@ class ProductoController extends Controller
         $categorias = ['categorias' => $tablaCategorias];
 
         $producto = Product::where('id_product', $id)->first();
+
+        if($producto){
+
+        }else{
+            $producto = [
+                'id_product' => $id,
+                'clabe_sat' => '',
+                'unidad_medida' => '',
+                'iva' => 0
+            ];
+        }
 
         $caducidad = Expiration::where('id_product', $id)->get();
 
