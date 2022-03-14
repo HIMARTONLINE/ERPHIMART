@@ -5998,7 +5998,7 @@
 
 						test = x<y ? -1 : x>y ? 1 : 0;
 						if ( test !== 0 ) {
-							return sort.dir === 'asc' ? test : -test;
+							return sort.dir === 'desc' ? test : -test;
 						}
 					}
 
@@ -6067,14 +6067,14 @@
 			/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
 			if ( col.bSortable ) {
 				if ( aSort.length > 0 && aSort[0].col == i ) {
-					th.setAttribute('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
+					th.setAttribute('aria-sort', aSort[0].dir=="desc" ? "ascending" : "descending" );
 					nextSort = asSorting[ aSort[0].index+1 ] || asSorting[0];
 				}
 				else {
 					nextSort = asSorting[0];
 				}
 
-				label = sTitle + ( nextSort === "asc" ?
+				label = sTitle + ( nextSort === "desc" ?
 					oAria.sSortAscending :
 					oAria.sSortDescending
 				);
@@ -11218,7 +11218,7 @@
 		 *      } );
 		 *    } )
 		 */
-		"iDisplayLength": 10,
+		"iDisplayLength": 30,
 
 
 		/**
@@ -14883,7 +14883,7 @@
 							classes.sSortAsc +' '+
 							classes.sSortDesc
 						)
-						.addClass( columns[ colIdx ] == 'asc' ?
+						.addClass( columns[ colIdx ] == 'desc' ?
 							classes.sSortAsc : columns[ colIdx ] == 'desc' ?
 								classes.sSortDesc :
 								column.sSortingClass
@@ -14910,7 +14910,7 @@
 
 					cell
 						.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
-						.addClass( columns[ colIdx ] == 'asc' ?
+						.addClass( columns[ colIdx ] == 'desc' ?
 							classes.sSortAsc : columns[ colIdx ] == 'desc' ?
 								classes.sSortDesc :
 								column.sSortingClass
@@ -14925,7 +14925,7 @@
 							classes.sSortJUIAscAllowed +" "+
 							classes.sSortJUIDescAllowed
 						)
-						.addClass( columns[ colIdx ] == 'asc' ?
+						.addClass( columns[ colIdx ] == 'desc' ?
 							classes.sSortJUIAsc : columns[ colIdx ] == 'desc' ?
 								classes.sSortJUIDesc :
 								column.sSortingClassJUI
