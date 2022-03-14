@@ -250,10 +250,10 @@
                                 <td><span style="display: none;">{{ strtotime($v['fecha']) }}</span>{{ date('d/m/Y', strtotime($v['fecha'])) }}</td>
                                 <td>{{ $v['orden'] }}</td>
                                 <td>{{ $v['referencia'] }}</td>
-                                <td>{{ number_format($v['total'], 2) }}</td>
+                                <td>{{ number_format($v['pagado'], 2) }}</td>
                                 <td>{{ number_format($v['descuento'], 2) }}</td>
                                 <td>{{ number_format($v['envio'], 2) }}</td>
-                                <td>{{ number_format($v['pagado'], 2) }}</td>
+                                <td>{{ number_format($v['total'], 2) }}</td>
                                 <td>{{ number_format($v['sin_iva'], 2) }}</td>
                                 <td>{{ number_format($v['compra'], 2) }}</td>
                                 <td>{{ number_format($v['paqueteria'], 2) }}</td>
