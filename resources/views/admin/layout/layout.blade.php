@@ -11,6 +11,8 @@
 
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=utf-8">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
@@ -26,7 +28,7 @@
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
-
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.css')}}">
   <!-- Google Font: Source Sans Pro -->
@@ -109,6 +111,7 @@
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('assets/dist/js/demo.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script>
   $(function () {
        $('#agregar-caducidad').click(function(){
@@ -125,9 +128,45 @@
             }
        });
        */
-       setTimeout(function(){
+      $('.btn-confirm').on('click', function(){
+          var confirm = $(this).val();
+          var data = confirm.split("-");
+          confirm = data[0];
+          id_orden = data[1];
+          
+          $.ajax({
+              headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+              type: "POST",
+              url: "{{ url('/confirmacion-p') }}",
+              data: { confirm: confirm, id_orden: id_orden },
+              success: function(response){
+                  if(response.msg == 1){     
+                      $('.a-' + id_orden).hide();
+                      $('.r-' + id_orden).show();
+                  }else{
+                      $('.r-' + id_orden).hide();
+                      $('.a-' + id_orden).show();
+                  }
+              }
+          });
+      });
+      /*
+      setTimeout(function(){
         $("#table_id").DataTable();
-       }, 1500);
+      }, 1500);*/
+  });
+</script>
+<script>
+  $(document).ready( function() {
+   
+      var table = $('#table_id').DataTable();
+ 
+      // Sort by column 1 and then re-draw
+      /*
+      table
+          .order( [ 0, 'desc' ] )
+          .draw();*/
+  
   });
 </script>
 <script>

@@ -119,7 +119,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                @if($producto->iva == 1)
+                                @if($producto['iva'] == 1)
                                 <?php $precio_iva = $precio * .16; $precio_iva = $precio_iva + $precio;?>
                                 <label for="">Precio con IVA</label>
                                 <input class="form-control" id="" name="conIVA" type="text" placeholder="$0.00" value="{{ $precio_iva }}" disabled>
@@ -146,7 +146,7 @@
                             <div class="form-group">
                                 <label for="">IVA</label>
                                 <div>
-                                    @if($producto->iva != 1)
+                                    @if($producto['iva'] != 1)
                                         <input type="checkbox" name="IVA" id="activo" data-switch="succes">
                                         <label for="activo" data-on-label="si" data-off-label="no"></label>
                                     @else
@@ -187,7 +187,7 @@
                                 <label for="nombre">Clave SAT:</label>
                                 <input type="text" name="clabe_sat" class="form-control"
                                     placeholder="Ingrese la clave SAT del producto"
-                                    value="{{ $producto->clabe_sat }}">
+                                    value="{{ $producto['clabe_sat'] }}">
                             </div>
                         </div>
                         <div class="col-md-4 text-left-right">
@@ -195,7 +195,7 @@
                                 <label for="codigo">Unidad Medida:</label>
                                 <input type="text" name="unidad_medida" class="form-control"
                                     placeholder="Ingrese la unidad de medida del producto"
-                                    value="{{ $producto->unidad_medida }}">
+                                    value="{{ $producto['unidad_medida'] }}">
                             </div>
                         </div>
                     </div>
