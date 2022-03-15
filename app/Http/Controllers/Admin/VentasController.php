@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Prestashop;
 
+
 class VentasController extends Controller
 {
     public function __construct()
@@ -20,7 +21,13 @@ class VentasController extends Controller
      */
     public function index(Request $request)
     {   
-        $mes = $parametros['mes'] = request('mes');
+        $meses = ['Enero', 'Febrero', 'Marzo', 'Abril',
+                  'Mayo', 'Junio', 'Julio', 'Agosto',
+                  'septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                ];
+        
+        $mes = request('mes');
+        $rango = request('rango');
         
         $urlOrdes['resource'] = 'orders/?display=full';
         $xmlOrders = Prestashop::get($urlOrdes);
@@ -39,37 +46,110 @@ class VentasController extends Controller
 
         $jsonStock = json_encode($xmlStock);
         $arrayStock = json_decode($jsonStock, true);
-
+        
         foreach($arrayStock['stock_availables']['stock_available'] as $indexStock => $valorstock) {
 
-            $sumaStock[] = intval($valorstock['quantity']);
+            //$sumaStock[] = intval($valorstock['quantity']);
             
             foreach($arrayProduct['products']['product'] as $indexProdu => $valorProduct) {
                 
+                $tablaProductos[] = $valorProduct;
+
                 if($valorstock['id_product'] == $valorProduct['id']) {
 
-                    $sumaCompra[] = floatval($valorProduct['wholesale_price'])  * floatval($valorstock['quantity']);
                     $sumaVenta[] =  floatval($valorProduct['price']) * floatval($valorstock['quantity']);
                 }
                 
             }
         }
 
-        
-        
-        foreach($arrayOrders['orders']['order'] as $indexOrder => $valorOrder) {
+        foreach($arrayOrders['orders']['order'] as $i => $v) {
+            $tabla[] = $v;
+            $fecha = date('Y-m-d', strtotime($v['date_add']));
 
-            $fecha[] = date('Y-m-d', strtotime($valorOrder['date_add']));
+            if($rango != null) {
 
-            if($valorOrder['current_state'] == "5" || $valorOrder['current_state'] == "4" || $valorOrder["current_state"] == "44") {
+                $fechas = explode(' - ', $rango);
 
-                $suma[] = floatval($valorOrder['total_paid']);
+                $inicio = date('Y-m-d', strtotime($fechas[0]));
+                $final = date('Y-m-d', strtotime($fechas[1]));
 
-            }       
-                
+                if($fecha >= $inicio && $fecha <= $final) {
+
+                    if($v['current_state'] == "3"|| $v['current_state'] == "5" || $v['current_state'] == "4" || $v['current_state'] == "2") {
+                    
+                        $suma[] = floatval($v['total_paid']);
+                        $ejem[] = $v['associations']['order_rows']['order_row'];
+                        $rangoGraf[] = date('Y-m-d', strtotime($v['date_add']));
+                    }
+                }
+
+            } else {
+               
+                if($mes != null) {
+                    
+                    $mes = date("Y-$mes");
+                    
+                    foreach($arrayOrders['orders']['order'] as $key => $value) {
+                        
+                        $tabla[] = $value;
+                        $fecha = date('Y-m', strtotime($value['date_add']));
+
+                        if($fecha == $mes) { 
+
+                            if($value['current_state'] == "3"|| $value['current_state'] == "5" || $value['current_state'] == "4" || $value['current_state'] == "2") {
+                    
+                                $suma[] = floatval($value['total_paid']);
+                                $ejem[] = $value['associations']['order_rows']['order_row'];
+                                $rangoGraf[] = date('Y-m-d', strtotime($value['date_add']));
+                            }
+
+                        }
+                    }
+                    
+                } else {
+
+                    if($v['current_state'] == "3"|| $v['current_state'] == "5" || $v['current_state'] == "4" || $v['current_state'] == "2") {
+                    
+                        $suma[] = floatval($v['total_paid']);
+                        $ejem[] = $v['associations']['order_rows']['order_row'];
+                        $rangoGraf[] = date('Y-m', strtotime($v['date_add']));
+                    }
+                }
+            }
         }
-        //dd($fecha);
-        $totalStock = array_sum($sumaStock);
+
+        foreach($arrayProduct['products']['product'] as $inPro => $valPro) {
+
+            foreach($ejem as $key => $row){
+                
+                if(in_array(0, $ejem[$key])){
+
+                    if($valPro['id'] == $ejem[$key]['product_id']) {
+
+                        $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
+                    }
+                    
+                    
+                }else{
+                    foreach($ejem[$key] as $filas){
+
+                        if($valPro['id'] == $filas['product_id']) {
+
+                            $sumar2[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
+                        }
+                        
+                    }
+                
+                }
+            }
+        }
+
+        $datosGraf = array_count_values($rangoGraf);
+        //dd($datosGraf);
+
+        $sumaCompra = array_merge($sumar, $sumar2);
+
         $totalCompra = array_sum($sumaCompra);
         $totalVenta = array_sum($sumaVenta);
         $total = array_sum($suma);
@@ -77,10 +157,13 @@ class VentasController extends Controller
         $parametros = ['totalVentaOrden'     => $total,
                         'totalCompra'        => $totalCompra,
                         'totalVentaProdu'    => $totalVenta,
-                        'totalStock'         => $totalStock,
+                        //'totalStock'         => $totalStock,
                         'mes'                => '',
+                        'meses'              => $meses,
+                        'rangoGra'          => $datosGraf,
                         'rango'              => ''];
                     
+        //dd($mes);
 
         return view('admin.ventas.index', compact('parametros'));
     }

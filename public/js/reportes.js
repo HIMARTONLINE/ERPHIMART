@@ -1,31 +1,85 @@
-const { values } = require("lodash");
+$(document).ready(function() {
+    //-----------grafica----------------------//
 
-// Crear el Formulario para el rango de fechas
-var reportes = (function(window, undefined) {
+    let fechas = [];
+    let datos = [];
 
-    $('[data-consultarmes="true"]').on('click', function() {
-        alert('Diste Click al boton');
+    let val = $("#datosGrafica").val();
+    val = JSON.parse(val);
+
+    $.each(val, function(i, item) {
+        fechas.push(i);
+        datos.push(item);
     });
-    /*
-    var accione = function() {
-        $('[data-consultarmes="true"]').on('click', function(e) {
-            e.preventDefault();
 
-            var continuar = true;
-
-            $('.inputerror').removeClass('inputerror');
-            var datos = $('#consulta').serializeArray();
-            datos.forEach(function() {
-                var elemento = $('#' + value.name);
-                if (!main.validar(value.value, elemento.attr('data-tipo'))) {
-                    continuar = false;
-                    elemento.addClass('inputerror');
+    const ctx = document.getElementById('graficaVentas').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: fechas,
+            datasets: [{
+                    label: 'Ordenes',
+                    data: datos,
+                    backgroundColor: [
+                        'rgba(255, 82, 0, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 82, 0, 1)',
+                    ],
+                    borderWidth: 3
+                },
+                /*{
+                    label: 'Ventas',
+                    data: [5, 6, 4, 8, 5, 6, .3, 12, 18, 5],
+                    backgroundColor: [
+                        'rgba(0, 80, 255, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(0, 80, 255, 1)',
+                    ],
+                    borderWidth: 3
+                }*/
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            });
-
-            if (continuar) {
-                $('#consultames').submit();
             }
-        });
-    }*/
+        }
+    });
 });
+/*$('#fecha').daterangepicker({
+    timePicker: false,
+    timePickerIncrement: 30,
+    autoApply: true,
+    locale: {
+        format: 'DD/MM/YYYY'
+    }
+});*/
+
+
+//---------------------------- DateRangePicker------------------------//
+
+var start = moment().subtract(29, 'days');
+var end = moment();
+
+function cb(start, end) {
+    $('#reportrange input').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+}
+
+$('#reportrange').daterangepicker({
+    startDate: start,
+    endDate: end,
+    ranges: {
+        'Hoy': [moment(), moment()],
+        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Ultimos 7 días': [moment().subtract(6, 'days'), moment()],
+        'Ultimos 30 días': [moment().subtract(29, 'days'), moment()],
+        'Este mes': [moment().startOf('month'), moment().endOf('month')],
+        'Mes pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    }
+}, cb);
+
+cb(start, end);

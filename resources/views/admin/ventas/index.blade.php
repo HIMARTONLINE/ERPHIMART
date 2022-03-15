@@ -4,6 +4,7 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="/css_custom.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     
 @endsection
 @section('content-header')
@@ -42,7 +43,7 @@
                     <div class="tab-content">
                         <div class="tab-pane {{ $parametros['mes'] == '' && $parametros['rango'] == '' ? 'show active' : '' }}{{ $parametros['mes'] != '' ? 'show active' : '' }}"
                             id="meses">
-                            <form id="consultaMes" action="{{ route('buscar.mes')}}" method="GET"
+                            <form id="consultaMes" action="{{ route('buscar.mes')}}" method="post"
                                  autocomplete="off">
                                 @csrf
                                 <div class="row">
@@ -51,25 +52,20 @@
                                             <label for="mes">Mes</label>
                                             <select name="mes" id="mes" class="form-control select2" data-toggle="select2"
                                                 required="true" data-tipo="txt">
-                                                <option>Selecciona mes</option>
-                                                <option value="1" {{ $parametros['mes'] == 1 ? 'selected="selected"' : '' }}>Enero</option>
-                                                <option value="2" {{ $parametros['mes'] == 2 ? 'selected="selected"' : '' }}>Febrero</option>
-                                                <option value="3" {{ $parametros['mes'] == 3 ? 'selected="selected"' : '' }}>Marzo</option>
-                                                <option value="4" {{ $parametros['mes'] == 4 ? 'selected="selected"' : '' }}>Abril</option>
-                                                <option value="5" {{ $parametros['mes'] == 5 ? 'selected="selected"' : '' }}>Mayo</option>
-                                                <option value="6" {{ $parametros['mes'] == 6 ? 'selected="selected"' : '' }}>Junio</option>
-                                                <option value="7" {{ $parametros['mes'] == 7 ? 'selected="selected"' : '' }}>Julio</option>
-                                                <option value="8" {{ $parametros['mes'] == 8 ? 'selected="selected"' : '' }}>Agosto</option>
-                                                <option value="9" {{ $parametros['mes'] == 9 ? 'selected="selected"' : '' }}>Septiembre</option>
-                                                <option value="10" {{ $parametros['mes'] == 10 ? 'selected="selected"' : '' }}>Octubre</option>
-                                                <option value="11" {{ $parametros['mes'] == 11 ? 'selected="selected"' : '' }}>Noviembre</option>
-                                                <option value="12" {{ $parametros['mes'] == 12 ? 'selected="selected"' : '' }}>Diciembre</option>
+                                                <option value="00" >Selecciona mes</option>
+                                                @foreach($parametros['meses'] as $key => $value)
+                                                        @if($key + 1 < 10)
+                                                            <option value="0{{ $key + 1 }}">{{ $value }}</option>
+                                                        @else
+                                                            <option value="{{ $key + 1 }}">{{ $value }}</option>
+                                                        @endif
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <button type="submit" data-consultarmes="true" id="validacion"
-                                            class="btn btn-secondary margenbtnfloat">Consultar</button>
+                                            class="btn btn-secondary ">Consultar</button>
                                     </div>
                                 </div>
                             </form>
@@ -82,9 +78,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="fecha">Rango</label>
-                                            <input type="text" class="form-control date" name="fecha" id="fecha"
-                                                required="true" data-tipo="txt" data-toggle="date-picker"
-                                                data-cancel-class="btn-warning" value="{{ $parametros['rango'] }}" />
+                                            <input id="reportrange" type="text" class="form-control" name="rango" id="rango" required="true" value="{{ $parametros['rango'] }}" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -129,14 +123,14 @@
                     <h3 class="mt-3 mb-3">${{ number_format($parametros['totalVentaProdu'], 2) }}</h3>
                 </div>
             </div>
-            <div class="card">
+            {{--<div class="card">
                 <div class="card-header border-0">
                     <h3>Cantidad total de Piezas</h3>
                 </div>
                 <div class="card-body">
                     <h3 class="mt-3 mb-3">{{ number_format($parametros['totalStock']) }} Piezas</h3>
                 </div>
-            </div>
+            </div>--}}
         </div>
         <div class="col-lg-8">
             <div class="card">
@@ -151,16 +145,11 @@
                     </div>
                     <div class="position-relative mb-4">
                         <div class="chartjs-size-monitor">
-                            <div class="chartjs-size-monitor-expand">
-
-                            </div>
-                            <div class="chartjs-size-monitor-shrink">
-
-                            </div>
-                            <canvas id="visitors-chart" height="200" width="764" style="display: block; width: 764px; height: 200px;" class="chartjs-render-monitor"></canvas>
+                            <input id="datosGrafica" type="text" value='@json($parametros['rangoGra'])'>
+                            <canvas id="graficaVentas" height="200" width="764" style="display: block; width: 764px; height: 200px;" class="chartjs-render-monitor"></canvas>
                         </div>
                     </div>
-                    <div class="d-flex flex-row justify-content-end">
+                    {{--<div class="d-flex flex-row justify-content-end">
                         <span class="mr-2">
                           <i class="fas fa-square text-primary"></i> This Week
                         </span>
@@ -168,7 +157,7 @@
                         <span>
                           <i class="fas fa-square text-gray"></i> Last Week
                         </span>
-                      </div>
+                    </div>--}}
                 </div>
             </div>
         </div>
@@ -179,9 +168,16 @@
 @include('auxiliares.design-datatables')
 @endpush
 @push('scripts')
+<script src="{{ asset('page/assets/js/vendor/jquery-3.6.0.min.js') }}"></script>
+<script src="{{ asset('page/assets/js/daterangepicker/moment.min.js') }}"></script>
+<script src="{{ asset('page/assets/js/daterangepicker/daterangepicker.js') }}"></script>
+
+
 {{-- Incluimos los scripts de la tabla de un solo archivo --}}
 <script src="{{asset('assets/plugins/moment/moment.min.js')}}"></script>
 <script src="{{asset('assets/plugins/inputmask/jquery.inputmask.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>
 @include('auxiliares.scripts-datatables')
 
 @endpush
