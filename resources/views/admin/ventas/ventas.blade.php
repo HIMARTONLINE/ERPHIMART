@@ -307,6 +307,8 @@
                                 <td class="text-center">
                                     @if(intval($v['confirmacion']) == 4)
                                     <button type="button" class="btn btn-warning btn-sm">Enviado</button>
+                                    @elseif(intval($v['confirmacion']) == 5)
+                                    <button type="button" class="btn btn-secondary btn-sm">Entregado</button>
                                     @elseif($v['status'] == 'si')
                                     <button type="button" class="btn btn-success btn-sm btn-confirm r-{{ $v['orden'] }}" value="no-{{ $v['orden'] }}">Autorizado</button>
                                     @elseif($v['status'] == 'no')
