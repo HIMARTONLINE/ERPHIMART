@@ -132,7 +132,9 @@ class ReportController extends Controller
 
                 }
             }
-            
+
+            $total_pedidos = 0;
+
             foreach($arrayOrder['orders']['order'] as $index => $value) {
 
                 if($value['current_state'] == 3 || $value['current_state'] == 5 || $value['current_state'] == 4 || $value['current_state'] == 2) {
@@ -216,6 +218,7 @@ class ReportController extends Controller
                         $total_sin_iva[] = $value['total_paid_tax_excl'];
                         $total_compra[] = $sumaCompra;
                         $total_envio[] = $value['total_shipping_tax_incl'];
+                        $total_pedidos++;
 
                     }
                     
@@ -258,6 +261,8 @@ class ReportController extends Controller
                 }
             }
             
+            $total_pedidos = 0;
+
             foreach($arrayOrder['orders']['order'] as $index => $value) {
 
                 if($value['current_state'] == 3 || $value['current_state'] == 5 || $value['current_state'] == 4 || $value['current_state'] == 2) {
@@ -341,6 +346,7 @@ class ReportController extends Controller
                     $total_envio[] = $value['total_shipping_tax_incl'];
                     
                 }
+                $total_pedidos++;
 
             }
 
@@ -593,7 +599,7 @@ class ReportController extends Controller
         
         // $total_utilidad = $sumaSinIva - $sumaCompra - $comision - $sumaEnvio
 
-        return view('admin.ventas.ventas', compact('parametros','total_piezas','total_venta','total_utilidad','filtro'));
+        return view('admin.ventas.ventas', compact('parametros','total_pedidos','total_piezas','total_venta','total_utilidad','filtro'));
 
     }
 
