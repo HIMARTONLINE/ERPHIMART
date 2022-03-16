@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Prestashop;
 
@@ -64,7 +65,7 @@ class VentasController extends Controller
         }
 
         foreach($arrayOrders['orders']['order'] as $i => $v) {
-            $tabla[] = $v;
+            
             $fecha = date('Y-m-d', strtotime($v['date_add']));
 
             if($rango != null) {
@@ -92,9 +93,8 @@ class VentasController extends Controller
                     
                     foreach($arrayOrders['orders']['order'] as $key => $value) {
                         
-                        $tabla[] = $value;
                         $fecha = date('Y-m', strtotime($value['date_add']));
-
+                        
                         if($fecha == $mes) { 
 
                             if($value['current_state'] == "3"|| $value['current_state'] == "5" || $value['current_state'] == "4" || $value['current_state'] == "2") {
@@ -119,30 +119,36 @@ class VentasController extends Controller
             }
         }
 
-        foreach($arrayProduct['products']['product'] as $inPro => $valPro) {
+        try {
+            
+            foreach($arrayProduct['products']['product'] as $inPro => $valPro) {
 
-            foreach($ejem as $key => $row){
-                
-                if(in_array(0, $ejem[$key])){
-
-                    if($valPro['id'] == $ejem[$key]['product_id']) {
-
-                        $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
-                    }
+                foreach($ejem as $key => $row){
                     
-                    
-                }else{
-                    foreach($ejem[$key] as $filas){
-
-                        if($valPro['id'] == $filas['product_id']) {
-
-                            $sumar2[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
+                    if(in_array(0, $ejem[$key])){
+    
+                        if($valPro['id'] == $ejem[$key]['product_id']) {
+    
+                            $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
                         }
                         
+                        
+                    }else{
+                        foreach($ejem[$key] as $filas){
+    
+                            if($valPro['id'] == $filas['product_id']) {
+    
+                                $sumar2[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
+                            }
+                            
+                        }
+                    
                     }
-                
                 }
             }
+
+        }catch (Exception $e) {
+            return back()->with('Error', 'No se encontraron registros de pedidos con pago confirmado');
         }
 
         $datosGraf = array_count_values($rangoGraf);

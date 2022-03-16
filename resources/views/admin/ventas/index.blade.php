@@ -145,7 +145,7 @@
                     </div>
                     <div class="position-relative mb-4">
                         <div class="chartjs-size-monitor">
-                            <input id="datosGrafica" type="text" value='@json($parametros['rangoGra'])'>
+                            <input id="datosGrafica" type="hidden" value='@json($parametros['rangoGra'])'>
                             <canvas id="graficaVentas" height="200" width="764" style="display: block; width: 764px; height: 200px;" class="chartjs-render-monitor"></canvas>
                         </div>
                     </div>
