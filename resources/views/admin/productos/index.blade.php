@@ -103,7 +103,8 @@
                                 <input class="form-control" type="date" name="a_fecha" value="{{ $filtro['a_fecha'] }}">
                             </div>
                             <div class="col-md-2">
-                                <input class="btn btn-info" style="margin-top: 32px;" type="submit" name="filtro_produ" value="Buscar">
+                                <input class="btn btn-info" style="margin-top: 32px;" type="submit" name="filtro_produ" value="Buscar">&nbsp;
+                                <a href="{{ url('admin/productos') }}" style="text-decoration:underline;vertical-align: bottom;font-weight: bold;">Borrar filtro</a>
                             </div>
                         </div>
                     </form>
