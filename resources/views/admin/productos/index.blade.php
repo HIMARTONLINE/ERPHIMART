@@ -117,6 +117,7 @@
                                 <th>Categoria</th>
                                 <th>Stock</th>
                                 <th>Precio de venta</th>
+                                <th>Precio de compra</th>
                                 <th>Fecha</th>
                                 <th>Opciones</th>
                             </tr>
@@ -137,8 +138,8 @@
                                     <td>{{ $val['total_piezas'] }}</td>
                                     <td>{{ $val['category'] }}</td>
                                     <td>{{ $val['stock'] }}</td>
-                      
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
+                                    <td>$ {{ number_format($val['compra'], 2) }}</td>
                                     <td>{{ $val['date_upd'] }}</td>
                                     <td>
                                         <form action="{{route('admin.productos.destroy', $val['id'])}}" method="POST">
