@@ -22,14 +22,6 @@
 
             <li class="nav-item">
                 <a href="" class="nav-link">
-                    <i class="nav-icon fas fa-store"></i>
-                    <p>Sucursales</p>
-                </a>
-            </li>
-
-
-            <li class="nav-item">
-                <a href="" class="nav-link">
                     <i class="nav-icon fas fa-users"></i>
                     <p>Usuarios</p>
                 </a>
@@ -75,7 +67,7 @@
             <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fa-solid fas  fa-cash-register"></i>
-                    <p>Ventas<i class="fas fa-angle-left right"></i></p>
+                    <p>Reportes<i class="fas fa-angle-left right"></i></p>
                 </a>
                 <ul class="nav nav-treeview" style="display: none;">
                     <li class="nav-item">
@@ -88,6 +80,12 @@
                         <a href="{{ route('admin.reportes') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Reporte de ventas</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Facturas</p>
                         </a>
                     </li>
                 </ul>

@@ -765,6 +765,71 @@
             "install-path": "../facade/ignition-contracts"
         },
         {
+            "name": "facturama/facturama-php-sdk",
+            "version": "v2.0.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Facturama/facturama-php-sdk.git",
+                "reference": "53e15f67460c6fdcc69af71c919da2fc9498da56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Facturama/facturama-php-sdk/zipball/53e15f67460c6fdcc69af71c919da2fc9498da56",
+                "reference": "53e15f67460c6fdcc69af71c919da2fc9498da56",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-openssl": "*",
+                "guzzlehttp/guzzle": "^6.2",
+                "php": "^5.6|^7.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.0",
+                "phpmd/phpmd": "^2.4.3",
+                "phpunit/phpunit": "^5.4.3|^6.0|^7.0"
+            },
+            "time": "2018-05-23T17:11:12+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Facturama\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Facturama",
+                    "email": "dev@facturama.com"
+                }
+            ],
+            "description": "Facturama PHP SDK",
+            "homepage": "https://www.api.facturama.com.mx/",
+            "keywords": [
+                "Facturama",
+                "api",
+                "json",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/Facturama/facturama-php/issues",
+                "source": "https://github.com/Facturama/facturama-php-sdk/tree/v2.0.0"
+            },
+            "install-path": "../facturama/facturama-php-sdk"
+        },
+        {
             "name": "fideloper/proxy",
             "version": "4.4.1",
             "version_normalized": "4.4.1.0",

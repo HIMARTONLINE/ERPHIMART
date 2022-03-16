@@ -82,7 +82,11 @@ class VentasController extends Controller
                         $suma[] = floatval($v['total_paid']);
                         $ejem[] = $v['associations']['order_rows']['order_row'];
                         $rangoGraf[] = date('Y-m-d', strtotime($v['date_add']));
-                    }
+                    } /*else {
+                        $suma[] = floatval($v['total_paid']);
+                        $ejem[] = $v['associations']['order_rows']['order_row'];
+                        $rangoGraf[] = date('Y-m-d H', strtotime($v['date_add']));
+                    }*/
                 }
 
             } else {
