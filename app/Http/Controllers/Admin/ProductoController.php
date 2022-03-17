@@ -266,6 +266,8 @@ class ProductoController extends Controller
                             if(array_key_exists($value['id'], $cdad_piezas)){
                                 $id_product = $value['id'];
                                 $sumaTotalPiezas = $cdad_piezas[$id_product];
+                            }else{
+                                $sumaTotalPiezas = 0;
                             }
 
                             $tablaProdu[] = ['id'          => $value['id'],
