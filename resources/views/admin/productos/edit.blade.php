@@ -169,7 +169,13 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="descripcion">Descripción completa:</label>
-                                <textarea class="form-control" name="descripcion" id="editor4">{!! $descripcion !!}</textarea>
+                                <textarea class="form-control" name="descripcion" id="editor4">
+                                    @if(!is_string($descripcion))    
+                                        
+                                    @else
+                                        {!! $descripcion !!}
+                                    @endif
+                                </textarea>
                             </div>
                         </div>
                     </div>
@@ -244,6 +250,7 @@
                                     </div>
                                 </div>
                                 <hr />
+                                <!--
                                 <div class="row">
                                     <div class="col-md-2">
                                         <label for="nombre">No. de piezas:</label>
@@ -254,6 +261,7 @@
                                         <input type="date" name="fecha_cad[]" class="form-control">
                                     </div>
                                 </div>
+                                -->
                             </div>
                             <div id="caducidad-produ" class="form-group"></div>
                             <div class="form-group">
