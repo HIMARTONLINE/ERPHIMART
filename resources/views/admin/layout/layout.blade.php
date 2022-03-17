@@ -157,19 +157,6 @@
   });
 </script>
 <script>
-  $(document).ready( function() {
-   
-      var table = $('#table_id').DataTable();
- 
-      // Sort by column 1 and then re-draw
-      /*
-      table
-          .order( [ 0, 'desc' ] )
-          .draw();*/
-  
-  });
-</script>
-<script>
   ClassicEditor
           .create( document.querySelector( '#editor1' ) )
           .then( editor => {
@@ -201,6 +188,16 @@
           } )
           .catch( error => {
                   console.error( error );
+  });
+</script>
+<script>
+  $(document).ready( function() {
+    /*
+      setTimeout(function(){
+        alert('ACTIVO');
+        $('#table_id').DataTable();
+      }, 7000);*/
+      $('#table_id').DataTable();
   });
 </script>
 </body>

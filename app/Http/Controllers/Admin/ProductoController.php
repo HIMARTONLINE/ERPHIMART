@@ -616,7 +616,7 @@ class ProductoController extends Controller
             unset($dataXmlProdu->position_in_category);
             unset($dataXmlProdu->type);
             unset($dataXmlProdu->pack_stock_type);
-            unset($dataXmlProdu->date_add);
+            // unset($dataXmlProdu->date_add);
             unset($dataXmlProdu->date_upd);
             
             $dataXmlProdu->id_category_default = $catg;

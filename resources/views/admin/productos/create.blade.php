@@ -145,6 +145,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 text-left-right">
+                            <!--
                             <div class="form-group">
                                 <label for="nombre">Caducidad:</label>
                                 <hr />
@@ -159,6 +160,7 @@
                                     </div>
                                 </div>
                             </div>
+                            -->
                             <div id="caducidad-produ" class="form-group"></div>
                             <div class="form-group">
                                 <button type="button" id="agregar-caducidad" class="btn btn-success"><i class="fa fa-plus"></i> Agregar caducidad</button>
