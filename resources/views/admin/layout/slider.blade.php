@@ -83,7 +83,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">
+                        <a href="{{ route('admin.facturas.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Facturas</p>
                         </a>

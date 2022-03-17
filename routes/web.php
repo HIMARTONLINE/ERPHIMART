@@ -36,4 +36,4 @@ Route::post('/confirmacion-p', 'Admin\ReportController@confirmacion_p');
 Route::get('filtro-ventas','Admin\ReportController@periodSales')->name('filtro-ventas');
 
 //Facturas
-Route::resource('admin/ventas', 'Admin\facturaController')->parameters(['facturas' => 'facturas'])->names('admin.facturas');
+Route::resource('admin/facturas', 'Admin\FacturasController')->parameters(['facturas' => 'facturas'])->names('admin.facturas');
