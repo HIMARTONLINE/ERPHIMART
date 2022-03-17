@@ -452,7 +452,7 @@ class ProductoController extends Controller
             'iva' => $iva,
         ]);
 
-        if(empty($_REQUEST['num_cad'])){
+        if(!empty($_REQUEST['num_cad'])){
             $arreglo_cantidad = request('num_cad');
             $arreglo_fecha = request('fecha_cad');
             
@@ -663,7 +663,7 @@ class ProductoController extends Controller
                 ]);
             }
             
-            if(empty($_REQUEST['num_cad'])){
+            if(!empty($_REQUEST['num_cad'])){
                 $arreglo_cantidad = request('num_cad');
                 $arreglo_fecha = request('fecha_cad');
                 
@@ -676,7 +676,7 @@ class ProductoController extends Controller
                 }
             }
 
-            return redirect()->back();
+            return redirect('/admin/productos');
 
         }catch(PrestaShopWebserviceException $e) {
             echo 'Error' . $e->getMessage();
