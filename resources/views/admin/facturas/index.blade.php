@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <button type="submit" data-consultarmes="true" id="validacion"
-                                            class="btn btn-secondary ">Consultar</button>
+                                            class="btn btn-secondary" style="margin-top: 31px;">Consultar</button>
                                     </div>
                                 </div>
                             </form>

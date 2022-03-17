@@ -646,12 +646,22 @@ class ProductoController extends Controller
                             'id' => $id, 
                             'putXml' => $xmlSchema->asXml()
             ]);
-            
+
             $producto = Product::where('id_product', $id)->first();
-            $producto->clabe_sat = request('clabe_sat');
-            $producto->unidad_medida = request('unidad_medida');
-            $producto->iva = $iva;
-            $producto->save();
+
+            if($producto){
+                $producto->clabe_sat = request('clabe_sat');
+                $producto->unidad_medida = request('unidad_medida');
+                $producto->iva = $iva;
+                $producto->save();
+            }else{
+                Product::create([
+                    'id_product' => $id,
+                    'clabe_sat' => request('clabe_sat'),
+                    'unidad_medida' => request('unidad_medida'),
+                    'iva' => $iva,
+                ]);
+            }
             
             if(empty($_REQUEST['num_cad'])){
                 $arreglo_cantidad = request('num_cad');
