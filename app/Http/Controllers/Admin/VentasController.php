@@ -76,15 +76,16 @@ class VentasController extends Controller
                 $final = date('Y-m-d', strtotime($fechas[1]));
 
                 if($fecha >= $inicio && $fecha <= $final) {
-
+                    
                     if($v['current_state'] == "3"|| $v['current_state'] == "5" || $v['current_state'] == "4" || $v['current_state'] == "2") {
                     
                         $suma[] = floatval($v['total_paid']);
                         $ejem[] = $v['associations']['order_rows']['order_row'];
                         $rangoGraf[] = date('Y-m-d', strtotime($v['date_add']));
+                        
                     }
                 }
-
+                
             } else {
                
                 if($mes != null) {
@@ -118,7 +119,7 @@ class VentasController extends Controller
                 }
             }
         }
-
+        //dd($suma, $ejem);
         try {
             
             foreach($arrayProduct['products']['product'] as $inPro => $valPro) {
@@ -128,14 +129,14 @@ class VentasController extends Controller
                     if(in_array(0, $ejem[$key])){
     
                         if($valPro['id'] == $ejem[$key]['product_id']) {
-    
+                            
                             $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
                         }
                         
                         
                     }else{
                         foreach($ejem[$key] as $filas){
-    
+
                             if($valPro['id'] == $filas['product_id']) {
     
                                 $sumar2[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
@@ -148,18 +149,23 @@ class VentasController extends Controller
             }
 
         }catch (Exception $e) {
-            return back()->with('Error', 'No se encontraron registros de pedidos con pago confirmado');
+            
+            return back()->with('Error', 'No se encontraron registros de pedidos con pago confirmado', compact('mensaje'));
         }
 
-        $datosGraf = array_count_values($rangoGraf);
-        //dd($datosGraf);
+        if(isset($sumar)) {
 
-        $sumaCompra = array_merge($sumar, $sumar2);
+            $sumaCompra = array_merge($sumar, $sumar2);
+        }else {
 
+            $sumaCompra = $sumar2;
+        }
+
+        $datosGraf = array_count_values($rangoGraf);  
         $totalCompra = array_sum($sumaCompra);
         $totalVenta = array_sum($sumaVenta);
         $total = array_sum($suma);
-        
+
         $parametros = ['totalVentaOrden'     => $total,
                         'totalCompra'        => $totalCompra,
                         'totalVentaProdu'    => $totalVenta,

@@ -28,7 +28,6 @@ Route::get('filtro-productos','Admin\ProductoController@index')->name('filtro-pr
 //Rutas de ventas de producto
 Route::resource('admin/ventas', 'Admin\VentasController')->parameters(['ventas' => 'ventas'])->names('admin.ventas');
 
-Route::post('buscar', 'Admin\VentasController@index')->name('buscar.mes');
 
 
 Route::get('admin/reportes', 'Admin\ReportController@periodSales')->name('admin.reportes');

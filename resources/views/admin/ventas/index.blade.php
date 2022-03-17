@@ -43,7 +43,7 @@
                     <div class="tab-content">
                         <div class="tab-pane {{ $parametros['mes'] == '' && $parametros['rango'] == '' ? 'show active' : '' }}{{ $parametros['mes'] != '' ? 'show active' : '' }}"
                             id="meses">
-                            <form id="consultaMes" action="{{ route('buscar.mes')}}" method="post"
+                            <form id="consultaMes" action="{{ route('admin.ventas.index')}}" method="GET"
                                  autocomplete="off">
                                 @csrf
                                 <div class="row">
@@ -71,7 +71,7 @@
                             </form>
                         </div>
                         <div class="tab-pane {{ $parametros['rango'] == '' ? '' : 'show active' }}" id="rango">
-                            <form id="consulta" action="{{ route('buscar.mes') }}" method="post"
+                            <form id="consulta" action="{{ route('admin.ventas.index') }}" method="GET"
                                 enctype="multipart/form-data" autocomplete="off">
                                 @csrf
                                 <div class="row">
