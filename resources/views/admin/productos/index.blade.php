@@ -103,7 +103,8 @@
                                 <input class="form-control" type="date" name="a_fecha" value="{{ $filtro['a_fecha'] }}">
                             </div>
                             <div class="col-md-2">
-                                <input class="btn btn-info" style="margin-top: 32px;" type="submit" name="filtro_produ" value="Buscar">
+                                <input class="btn btn-info" style="margin-top: 32px;" type="submit" name="filtro_produ" value="Buscar">&nbsp;
+                                <a href="{{ url('admin/productos') }}" style="text-decoration:underline;vertical-align: bottom;font-weight: bold;">Borrar filtro</a>
                             </div>
                         </div>
                     </form>
@@ -117,6 +118,7 @@
                                 <th>Categoria</th>
                                 <th>Stock</th>
                                 <th>Precio de venta</th>
+                                <th>Precio de compra</th>
                                 <th>Fecha</th>
                                 <th>Opciones</th>
                             </tr>
@@ -137,8 +139,8 @@
                                     <td>{{ $val['total_piezas'] }}</td>
                                     <td>{{ $val['category'] }}</td>
                                     <td>{{ $val['stock'] }}</td>
-                      
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
+                                    <td>$ {{ number_format($val['compra'], 2) }}</td>
                                     <td>{{ $val['date_upd'] }}</td>
                                     <td>
                                         <form action="{{route('admin.productos.destroy', $val['id'])}}" method="POST">

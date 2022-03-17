@@ -171,6 +171,7 @@ class ProductoController extends Controller
                                                 'reference'    => $value['reference'],
                                                 'category'     => $categ['name']['language'], 
                                                 'price'        => $value['price'],
+                                                'compra'       => $value['wholesale_price'],
                                                 'state'        => $value['state'],
                                                 'activo'       => $value['active'],
                                                 'date_upd'     => $value['date_upd'],
@@ -265,6 +266,8 @@ class ProductoController extends Controller
                             if(array_key_exists($value['id'], $cdad_piezas)){
                                 $id_product = $value['id'];
                                 $sumaTotalPiezas = $cdad_piezas[$id_product];
+                            }else{
+                                $sumaTotalPiezas = 0;
                             }
 
                             $tablaProdu[] = ['id'          => $value['id'],
@@ -275,6 +278,7 @@ class ProductoController extends Controller
                                             'reference'    => $value['reference'],
                                             'category'     => $categ['name']['language'], 
                                             'price'        => $value['price'],
+                                            'compra'       => $value['wholesale_price'],
                                             'state'        => $value['state'],
                                             'activo'       => $value['active'],
                                             'date_upd'     => $value['date_upd'],

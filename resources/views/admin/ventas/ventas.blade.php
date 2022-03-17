@@ -122,7 +122,18 @@
 
     @if(count($parametros['ordenes']) > 0)
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <div class="float-right">
+                        <i class="mdi mdi-hexagon-multiple widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted font-weight-normal mt-0">Pedidos Totales</h5>
+                    <h3 class="mt-3 mb-3">{{ $total_pedidos }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
             <div class="card widget-flat">
                 <div class="card-body">
                     <div class="float-right">
@@ -133,7 +144,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card widget-flat">
                 <div class="card-body">
                     <div class="float-right">
@@ -144,7 +155,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card widget-flat">
                 <div class="card-body">
                     <div class="float-right">
@@ -191,7 +202,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card widget-flat">
                 <div class="card-body">
                     <div class="float-right">
@@ -296,6 +307,8 @@
                                 <td class="text-center">
                                     @if(intval($v['confirmacion']) == 4)
                                     <button type="button" class="btn btn-warning btn-sm">Enviado</button>
+                                    @elseif(intval($v['confirmacion']) == 5)
+                                    <button type="button" class="btn btn-secondary btn-sm">Entregado</button>
                                     @elseif($v['status'] == 'si')
                                     <button type="button" class="btn btn-success btn-sm btn-confirm r-{{ $v['orden'] }}" value="no-{{ $v['orden'] }}">Autorizado</button>
                                     @elseif($v['status'] == 'no')
