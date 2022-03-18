@@ -655,12 +655,16 @@ class ProductoController extends Controller
                 $producto->iva = $iva;
                 $producto->save();
             }else{
-                Product::create([
-                    'id_product' => $id,
-                    'clabe_sat' => request('clabe_sat'),
-                    'unidad_medida' => request('unidad_medida'),
-                    'iva' => $iva,
-                ]);
+                if(!empty($_REQUEST['clabe_sat']) && !empty($_REQUEST['unidad_medida'])){
+                    Product::create([
+                        'id_product' => $id,
+                        'clabe_sat' => request('clabe_sat'),
+                        'unidad_medida' => request('unidad_medida'),
+                        'iva' => $iva,
+                    ]);
+                }else{
+
+                }
             }
             
             if(!empty($_REQUEST['num_cad'])){
