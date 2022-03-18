@@ -32,9 +32,11 @@ class ReportController extends Controller
         //$response = Http::withToken('448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349')->get('https://queries.envia.com/payment/01/2022');
         $client = new Client(['base_uri' => 'https://queries.envia.com']);
 
-        $response = $client->request(
+        $anio = date('Y');
+
+        $response1 = $client->request(
             'GET',
-            'guide/02/2022', 
+            'guide/01/' . $anio, 
             ['headers' => 
                 [
                     'Authorization' => "Bearer 448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349"
@@ -42,13 +44,131 @@ class ReportController extends Controller
             ]
         )->getBody()->getContents();
         
-        $response = json_decode($response);
+        $response1 = json_decode($response1);
 
-        foreach($response as $row){
+        foreach($response1 as $row){
             $ultimo_env[] = $row[array_key_last($row)];
         }
         
         $id_env = $ultimo_env[0]->id;
+
+        foreach($response1 as $row){
+            for($i=0; $i<3000; $i++){
+                $id_envio = $row[$i]->id;
+                $id_orden = explode(" - ", $row[$i]->consignee_name);
+                $id_orden = $id_orden[0];
+                $total_orden = $row[$i]->total;
+                $response11[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+
+                if($id_env == $id_envio){
+                    break;
+                }
+            }
+        }
+
+        $response2 = $client->request(
+            'GET',
+            'guide/02/' . $anio,
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer 448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349"
+                ]
+            ]
+        )->getBody()->getContents();
+        
+        $response2 = json_decode($response2);
+
+        foreach($response2 as $row){
+            $ultimo_env2[] = $row[array_key_last($row)];
+        }
+        
+        $id_env = $ultimo_env2[0]->id;
+
+        foreach($response2 as $row){
+            for($i=0; $i<3000; $i++){
+                $id_envio = $row[$i]->id;
+                $id_orden = explode(" - ", $row[$i]->consignee_name);
+                $id_orden = $id_orden[0];
+                $total_orden = $row[$i]->total;
+                $response22[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+
+                if($id_env == $id_envio){
+                    break;
+                }
+            }
+        }
+
+        $response3 = $client->request(
+            'GET',
+            'guide/03/' . $anio,
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer 448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349"
+                ]
+            ]
+        )->getBody()->getContents();
+        
+        $response3 = json_decode($response3);
+
+        foreach($response3 as $row){
+            $ultimo_env3[] = $row[array_key_last($row)];
+        }
+        
+        $id_env = $ultimo_env3[0]->id;
+
+        foreach($response3 as $row){
+            for($i=0; $i<3000; $i++){
+                $id_envio = $row[$i]->id;
+                $id_orden = explode(" - ", $row[$i]->consignee_name);
+                $id_orden = $id_orden[0];
+                $total_orden = $row[$i]->total;
+                $response33[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+
+                if($id_env == $id_envio){
+                    break;
+                }
+            }
+        }
+        /*
+        $response4 = $client->request(
+            'GET',
+            'guide/04/' . $anio, 
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer 448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349"
+                ]
+            ]
+        )->getBody()->getContents();
+        
+        $response4 = json_decode($response4);
+
+        foreach($response4 as $row){
+            $ultimo_env4[] = $row[array_key_last($row)];
+        }
+        
+        $id_env = $ultimo_env4[0]->id;
+
+        foreach($response4 as $row){
+            for($i=0; $i<3000; $i++){
+                $id_envio = $row[$i]->id;
+                $id_orden = explode(" - ", $row[$i]->consignee_name);
+                $id_orden = $id_orden[0];
+                $total_orden = $row[$i]->total;
+                $response44[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+
+                if($id_env == $id_envio){
+                    break;
+                }
+            }
+        }
+        */
+        $response = array_merge($response11,$response22,$response33);
+        /*
+        foreach($response as $row){
+            $ultimo_env[] = $row[array_key_last($row)];
+        }
+        
+        $id_env = $ultimo_env[0]->id;*/
         /*
         foreach($response as $row){
             for($i=0; $i<200; $i++){
@@ -168,22 +288,19 @@ class ReportController extends Controller
                                 
                             }
                         }
-
+                        $bandera = 0;
                         foreach($response as $row){
-                            for($i=0; $i<3000; $i++){
-                                $id_envio = $row[$i]->id;
-                                $id_orden = explode(" - ", $row[$i]->consignee_name);
-                                if(intval($value['id']) == intval($id_orden[0])){
-                                    $paqueteria = $row[$i]->total;
-                                    break;
-                                }else{
-                                    $paqueteria = 0.00;
-                                }
-                                // echo $id_orden[0] . '<br>';
-                                if($id_env == $id_envio){
-                                    break;
-                                }
+                            
+                            $id_envio = $row[$bandera][0];
+                            $id_orden = $row[$bandera][1];
+                            if(intval($value['id']) == intval($id_orden)){
+                                $paqueteria = $row[$bandera][2];
+                                break;
+                            }else{
+                                $paqueteria = 0.00;
                             }
+                            $bandera++;
+                    
                         }
 
                         $confirmacion = Order::where('id_order', $value['id'])->first();
@@ -296,20 +413,16 @@ class ReportController extends Controller
                     }
 
                     foreach($response as $row){
-                        for($i=0; $i<3000; $i++){
-                            $id_envio = $row[$i]->id;
-                            $id_orden = explode(" - ", $row[$i]->consignee_name);
-                            if(intval($value['id']) == intval($id_orden[0])){
-                                $paqueteria = $row[$i]->total;
-                                break;
-                            }else{
-                                $paqueteria = 0.00;
-                            }
-                            // echo $id_orden[0] . '<br>';
-                            if($id_env == $id_envio){
-                                break;
-                            }
+                        
+                        $id_envio = $row[0];
+                        $id_orden = $row[1];
+                        if(intval($value['id']) == intval($id_orden)){
+                            $paqueteria = $row[2];
+                            break;
+                        }else{
+                            $paqueteria = 0.00;
                         }
+                
                     }
 
                     $confirmacion = Order::where('id_order', $value['id'])->first();
