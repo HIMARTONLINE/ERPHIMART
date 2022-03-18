@@ -49,7 +49,7 @@ class ProductoController extends Controller
         // dd($xmlProdu);
         // return false;
         
-        $urlProdu['resource'] = 'products/?sort=[id_ASC]&display=full'; //pasamos los parametros por url de la apí
+        $urlProdu['resource'] = 'products/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
 
         $urlStock['resource'] = 'stock_availables/?display=full';

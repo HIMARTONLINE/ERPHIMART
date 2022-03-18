@@ -171,7 +171,6 @@
 {{-- Incluimos los scripts de la tabla de un solo archivo --}}
 <script src="{{asset('assets/plugins/moment/moment.min.js')}}"></script>
 <script src="{{asset('assets/plugins/inputmask/jquery.inputmask.min.js')}}"></script>
-
 @include('auxiliares.scripts-datatables')
 
 @endpush

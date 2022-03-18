@@ -76,6 +76,7 @@
                                         <table id="table_id" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
+                                                    <th>Selección</th>
                                                     <th>Fecha</th>
                                                     <th>Id</th>
                                                     <th>Referencia</th>
@@ -87,6 +88,7 @@
                                             <tbody>
                                                 @foreach($parametros['ordenes'] as $key => $value)
                                                     <tr>
+                                                        <td class="text-center"><input type="checkbox" name="cliente[]"></td>
                                                         <td>{{ date('Y-m-d', strtotime($value['date_add'])) }}</td>
                                                         <td>{{ $value['id'] }}</td>
                                                         <td>{{ $value['reference'] }}</td>
@@ -99,6 +101,7 @@
                                         </table>
                                     </div>
                                 </div>
+                                <button class="btn btn-success">Realizar factura</button>
                             </div>
                         </div>
                     @else

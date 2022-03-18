@@ -1,4 +1,5 @@
 @extends('admin.layout.layout')
+
 @section('title')
 <h1 class="m-0 text-dark">Reporte de Ventas</h1>
 @endsection
@@ -302,7 +303,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ number_format($utilidad = $v['sin_iva'] - $v['compra'] - $comision - $v['envio'], 2) }}
+                                    {{ number_format($utilidad = $v['sin_iva'] - $v['compra'] - $comision - $v['paqueteria'], 2) }}
                                 </td>                                
                                 <td class="text-center">
                                     @if(intval($v['confirmacion']) == 4)
