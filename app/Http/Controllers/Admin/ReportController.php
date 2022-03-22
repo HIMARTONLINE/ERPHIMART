@@ -288,18 +288,17 @@ class ReportController extends Controller
                                 
                             }
                         }
-                        $bandera = 0;
+                        
                         foreach($response as $row){
-                            
-                            $id_envio = $row[$bandera][0];
-                            $id_orden = $row[$bandera][1];
+                        
+                            $id_envio = $row[0];
+                            $id_orden = $row[1];
                             if(intval($value['id']) == intval($id_orden)){
-                                $paqueteria = $row[$bandera][2];
+                                $paqueteria = $row[2];
                                 break;
                             }else{
                                 $paqueteria = 0.00;
                             }
-                            $bandera++;
                     
                         }
 
