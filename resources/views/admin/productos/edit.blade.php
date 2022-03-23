@@ -73,7 +73,7 @@
                                     value="{{ $sku }}" disabled>
                             </div>
                         </div>
-                        <div class="col-md-3 text-left-right">
+                        <div class="col-md-2 text-left-right">
                             <div class="form-group">
                                 <label for="categoria_id">Categoría:</label>
                                 <select id="categoria_id" name="categoria_id" class="form-control"
@@ -95,7 +95,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2 text-center">
+                        <div class="col-md-2 text-left-right">
+                            <div class="form-group">
+                                <label for="categoria_id">Merma:</label>
+                                <input class="form-control" type="number" name="merma" id="" value="{{ $producto['merma'] }}">
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-center">
                             <div class="form-group">
                                 <label>Activo</label>
                                 <div class="pt-1">

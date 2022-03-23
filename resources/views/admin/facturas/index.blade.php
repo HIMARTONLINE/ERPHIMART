@@ -66,6 +66,9 @@
                     @if (count($parametros['ordenes']) > 0)
                         <div class="row">
                             <div class="col-12">
+                                <form method="POST" action="{{route('admin.facturas.store')}}">
+                                @csrf
+                                <input type="hidden" name="mes_factura" value="{{ $parametros['mes_factura'] }}">
                                 <div class="card">
                                     <div class="card-header border-0">
                                         <div class="d-flex justify-content-between">
@@ -73,7 +76,12 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <table id="table_id" class="table table-bordered table-striped">
+                                        @foreach($ordenes_facturadas as $row)
+                                            <?php
+                                                $array_ordenes[] = $row->id_orden;
+                                            ?>
+                                        @endforeach
+                                        <table id="" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>Selección</th>
@@ -87,8 +95,22 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($parametros['ordenes'] as $key => $value)
+                                                    @if(in_array($value['id'], $array_ordenes))
                                                     <tr>
-                                                        <td class="text-center"><input type="checkbox" name="cliente[]"></td>
+                                                        <td class="text-center"><input type="checkbox" name="orden[]" value="{{ $value['id'] }}" checked></td>
+                                                        <td>{{ date('Y-m-d', strtotime($value['date_add'])) }}</td>
+                                                        <td>{{ $value['id'] }}</td>
+                                                        <td>{{ $value['reference'] }}</td>
+                                                        <td>${{ number_format($value['total_products'], 2) }}</td>
+                                                        <td>${{ number_format($value['total_paid'], 2) }}</td>
+                                                        <td>
+                                                            <a href="{{ route('admin.facturas.edit', $value['id']) }}" data-id="{{ $value['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <button type="button" class="btn btn-primary">FACTURADO</button>
+                                                        </td>
+                                                    </tr>
+                                                    @else
+                                                    <tr>
+                                                        <td class="text-center"><input type="checkbox" name="orden[]" value="{{ $value['id'] }}"></td>
                                                         <td>{{ date('Y-m-d', strtotime($value['date_add'])) }}</td>
                                                         <td>{{ $value['id'] }}</td>
                                                         <td>{{ $value['reference'] }}</td>
@@ -96,12 +118,14 @@
                                                         <td>${{ number_format($value['total_paid'], 2) }}</td>
                                                         <td><a href="{{ route('admin.facturas.edit', $value['id']) }}" data-id="{{ $value['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a></td>
                                                     </tr>
+                                                    @endif
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                <button class="btn btn-success">Realizar factura</button>
+                                    <button type="submit" class="btn btn-success">Realizar factura</button>
+                                </form>
                             </div>
                         </div>
                     @else
