@@ -58,6 +58,10 @@ class ProductoController extends Controller
         $urlCateg['resource'] = 'categories/?display=[id,name]';
         $xmlCateg = Prestashop::get($urlCateg);
 
+        $urlStockMvt['resource'] = 'stock_movements/?display=full';
+        $xmlStockMvt = Prestashop::get($urlStockMvt);
+
+
         $urlOrder['resource'] = 'orders/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
         $xmlOrder = Prestashop::get($urlOrder); //llama los parametros por GET
 
@@ -73,6 +77,27 @@ class ProductoController extends Controller
         $jsonOrder = json_encode($xmlOrder);    
         $arrayOrder = json_decode($jsonOrder, true);  
 
+        $jsonStockMvt = json_encode($xmlStockMvt);    
+        $arrayStockMvt = json_decode($jsonStockMvt, true);  
+
+        $cdad_compras = [];
+        //dd($arrayStockMvt);
+        foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+
+            foreach($arrayStockMvt['stock_mvts']['stock_mvt'] as $i => $v) {    
+                if($valor['id'] == $v['id_stock']){
+                    // dd($v['physical_quantity']);
+                    $id_produ = $valor['id_product'];
+                    if(!array_key_exists($id_produ, $cdad_compras)){
+                        $cdad_compras[$id_produ] = $v['physical_quantity'];
+                    }else{
+                        $cdad_compras[$id_produ] += $v['physical_quantity'];
+                    }
+                }                
+            }
+
+        }
+
         foreach($arrayOrder['orders']['order'] as $i => $v) {
 
             if($v['current_state'] == 3 || $v['current_state'] == 5 || $v['current_state'] == 4 || $v['current_state'] == 2) {
@@ -87,6 +112,25 @@ class ProductoController extends Controller
         if(isset($_REQUEST['filtro_produ'])){
 
             $cdad_piezas = [];
+            $cdad_compras = [];
+            //dd($arrayStockMvt);
+            foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+
+                foreach($arrayStockMvt['stock_mvts']['stock_mvt'] as $i => $v) {  
+                    if(($v['date_add'] >= $_REQUEST['de_fecha']) && ($v['date_add'] <= $_REQUEST['a_fecha'])){  
+                        if($valor['id'] == $v['id_stock']){
+                            // dd($v['physical_quantity']);
+                            $id_produ = $valor['id_product'];
+                            if(!array_key_exists($id_produ, $cdad_compras)){
+                                $cdad_compras[$id_produ] = $v['physical_quantity'];
+                            }else{
+                                $cdad_compras[$id_produ] += $v['physical_quantity'];
+                            }
+                        }
+                    }                
+                }
+
+            }
 
             foreach($arrayOrder['orders']['order'] as $index => $value) {
 
@@ -163,18 +207,35 @@ class ProductoController extends Controller
                                     $sumaTotalPiezas = 0;
                                 }
 
-                                $tablaProdu[] = ['id'          => $value['id'],
-                                                'name'         => $value['name']['language'],
-                                                'total_piezas' => $sumaTotalPiezas,
-                                                'id_image'     => $id_imagen,
-                                                'stock'        => $valor['quantity'],
-                                                'reference'    => $value['reference'],
-                                                'category'     => $categ['name']['language'], 
-                                                'price'        => $value['price'],
-                                                'compra'       => $value['wholesale_price'],
-                                                'state'        => $value['state'],
-                                                'activo'       => $value['active'],
-                                                'date_upd'     => $value['date_upd'],
+                                if(array_key_exists($value['id'], $cdad_compras)){
+                                    $id_product = $value['id'];
+                                    $sumaTotalCompras = $cdad_compras[$id_product];
+                                }else{
+                                    $sumaTotalCompras = 0;
+                                }
+
+                                $merma = Product::where('id_product', $value['id'])->first();
+
+                                if($merma){
+                                    $merma = $merma->merma;
+                                }else{
+                                    $merma = 0;
+                                }
+
+                                $tablaProdu[] = ['id'           => $value['id'],
+                                                'name'          => $value['name']['language'],
+                                                'total_compras' => $sumaTotalCompras,
+                                                'total_piezas'  => $sumaTotalPiezas,
+                                                'id_image'      => $id_imagen,
+                                                'stock'         => $valor['quantity'],
+                                                'merma'         => $merma,
+                                                'reference'     => $value['reference'],
+                                                'category'      => $categ['name']['language'], 
+                                                'price'         => $value['price'],
+                                                'compra'        => $value['wholesale_price'],
+                                                'state'         => $value['state'],
+                                                'activo'        => $value['active'],
+                                                'date_upd'      => $value['date_upd'],
                                 ];
 
                             }
@@ -270,18 +331,35 @@ class ProductoController extends Controller
                                 $sumaTotalPiezas = 0;
                             }
 
-                            $tablaProdu[] = ['id'          => $value['id'],
-                                            'name'         => $value['name']['language'],
-                                            'total_piezas' => $sumaTotalPiezas,
-                                            'id_image'     => $id_imagen,
-                                            'stock'        => $valor['quantity'],
-                                            'reference'    => $value['reference'],
-                                            'category'     => $categ['name']['language'], 
-                                            'price'        => $value['price'],
-                                            'compra'       => $value['wholesale_price'],
-                                            'state'        => $value['state'],
-                                            'activo'       => $value['active'],
-                                            'date_upd'     => $value['date_upd'],
+                            if(array_key_exists($value['id'], $cdad_compras)){
+                                $id_product = $value['id'];
+                                $sumaTotalCompras = $cdad_compras[$id_product];
+                            }else{
+                                $sumaTotalCompras = 0;
+                            }
+
+                            $merma = Product::where('id_product', $value['id'])->first();
+
+                            if($merma){
+                                $merma = $merma->merma;
+                            }else{
+                                $merma = 0;
+                            }
+
+                            $tablaProdu[] = ['id'           => $value['id'],
+                                            'name'          => $value['name']['language'],
+                                            'total_compras' => $sumaTotalCompras,
+                                            'total_piezas'  => $sumaTotalPiezas,
+                                            'id_image'      => $id_imagen,
+                                            'stock'         => $valor['quantity'],
+                                            'merma'         => $merma,
+                                            'reference'     => $value['reference'],
+                                            'category'      => $categ['name']['language'], 
+                                            'price'         => $value['price'],
+                                            'compra'        => $value['wholesale_price'],
+                                            'state'         => $value['state'],
+                                            'activo'        => $value['active'],
+                                            'date_upd'      => $value['date_upd'],
                             ];
 
                         }   
@@ -557,6 +635,7 @@ class ProductoController extends Controller
                 'id_product' => $id,
                 'clabe_sat' => '',
                 'unidad_medida' => '',
+                'merma' => 0,
                 'iva' => 0
             ];
         }
@@ -652,19 +731,17 @@ class ProductoController extends Controller
             if($producto){
                 $producto->clabe_sat = request('clabe_sat');
                 $producto->unidad_medida = request('unidad_medida');
+                $producto->merma = request('merma');
                 $producto->iva = $iva;
                 $producto->save();
             }else{
-                if(!empty($_REQUEST['clabe_sat']) && !empty($_REQUEST['unidad_medida'])){
-                    Product::create([
-                        'id_product' => $id,
-                        'clabe_sat' => request('clabe_sat'),
-                        'unidad_medida' => request('unidad_medida'),
-                        'iva' => $iva,
-                    ]);
-                }else{
-
-                }
+                Product::create([
+                    'id_product' => $id,
+                    'clabe_sat' => request('clabe_sat'),
+                    'unidad_medida' => request('unidad_medida'),
+                    'merma' => request('merma'),
+                    'iva' => $iva,
+                ]); 
             }
             
             if(!empty($_REQUEST['num_cad'])){

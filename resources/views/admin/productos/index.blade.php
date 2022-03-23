@@ -111,14 +111,17 @@
                     <table id="table_id" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Imagen</th>
-                                <th>SKU</th>
-                                <th>Nombre</th>
-                                <th>Total ventas</th>
                                 <th>Categoria</th>
+                                <th>SKU</th>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Total compras</th>
+                                <th>Total ventas</th>
                                 <th>Stock</th>
+                                <th>Merma</th>
                                 <th>Precio de venta</th>
                                 <th>Precio de compra</th>
+                                <th>Fecha de caducidad</th>
                                 <th>Fecha</th>
                                 <th>Opciones</th>
                             </tr>
@@ -129,18 +132,21 @@
 
                             <tr>
                                 @if ($val['state'] != "0")
-                                    <td><img src="https://himart.com.mx/api/images/products/{{ $val['id'] }}/{{ $val['id_image'] }}/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4&display=full" width="100" height="100" alt=""></td>
+                                    <td>{{ $val['category'] }}</td>
                                     @if ($val['reference'] == [])
                                         <td>Ref. vacío</td>
                                     @else
                                         <td>{{ $val['reference'] }}</td>
                                     @endif
+                                    <td><img src="https://himart.com.mx/api/images/products/{{ $val['id'] }}/{{ $val['id_image'] }}/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4&display=full" width="100" height="100" alt=""></td>
                                     <td>{{ $val['name'] }}</td>
+                                    <td>{{ $val['total_compras'] }}</td>
                                     <td>{{ $val['total_piezas'] }}</td>
-                                    <td>{{ $val['category'] }}</td>
                                     <td>{{ $val['stock'] }}</td>
+                                    <td>{{ $val['merma'] }}</td>
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
                                     <td>$ {{ number_format($val['compra'], 2) }}</td>
+                                    <td>YYYY-mm-dd</td>
                                     <td>{{ $val['date_upd'] }}</td>
                                     <td>
                                         <form action="{{route('admin.productos.destroy', $val['id'])}}" method="POST">
