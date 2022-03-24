@@ -60,6 +60,10 @@ class FacturasController extends Controller
         $mes = request('mes');
         $ordenes_facturadas = Ordenes_facturadas::select('id_orden')->whereMonth('created_at', $mes)->get();
 
+        if(!$ordenes_facturadas){
+            $ordenes_facturadas = [];
+        }
+
         $parametros = ['mes'    => "",
                        'rango'  => "",
                        'ordenes'=> $ordenes,
