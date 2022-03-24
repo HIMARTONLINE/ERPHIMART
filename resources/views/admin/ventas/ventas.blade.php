@@ -252,7 +252,9 @@
                                 <th>Paquetería</th>
                                 <th>Comisión</th>
                                 <th>Utilidad</th>
+                                <th>Método de pago</th>
                                 <th>Confirmación</th>
+                                <th>Productos</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -304,7 +306,8 @@
                                 </td>
                                 <td>
                                     {{ number_format($utilidad = $v['sin_iva'] - $v['compra'] - $comision - $v['paqueteria'], 2) }}
-                                </td>                                
+                                </td>    
+                                <td>{{ $v['comision'] }}</td>                            
                                 <td class="text-center">
                                     @if(intval($v['confirmacion']) == 4)
                                     <button type="button" class="btn btn-warning btn-sm">Enviado</button>
@@ -319,6 +322,18 @@
                                     <button type="button" class="btn btn-info btn-sm btn-confirm a-{{ $v['orden'] }}" value="si-{{ $v['orden'] }}">Aceptar</button>
                                     <button type="button" class="btn btn-success btn-sm btn-confirm r-{{ $v['orden'] }}" style="display: none;" value="no-{{ $v['orden'] }}">Autorizado</button>
                                     @endif
+                                </td>
+                                <td>
+                                    <?php
+                                        $ultima_key = end( $v['productos'] );
+                                    ?>
+                                    @foreach($v['productos'] as $key => $producto)
+                                        @if($ultima_key == $producto)
+                                            {{ $key . ' x ' . $producto }}
+                                        @else
+                                            {{ $key . ' x ' . $producto . ',' }}
+                                        @endif
+                                    @endforeach
                                 </td>
                             </tr>
                             @endforeach

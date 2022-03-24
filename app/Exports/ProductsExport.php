@@ -10,7 +10,7 @@ use Prestashop;
 use Protechstudio\PrestashopWebService\PrestashopWebService;
 use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
 
-class ProductsExport implements FromCollection,WithHeadings
+class ProductsExport implements FromCollection, WithHeadings
 {
     public function __construct($categoria, $de_stock, $a_stock, $de_precio, $a_precio, $de_fecha, $a_fecha)
     {
@@ -73,10 +73,18 @@ class ProductsExport implements FromCollection,WithHeadings
                             
                             $producto = Product::where('id_product', $valor['id_product'])->first();
 
-                            if($producto->iva == 1){
-                                $iva = (number_format($value['price'], 2) * .16) + number_format($value['price'], 2);
+                            if($producto){
+                                if($producto->iva == 1){
+                                    $iva = (number_format($value['price'], 2) * .16) + number_format($value['price'], 2);
+                                }else{
+                                    $iva = 0;
+                                }
+                                $clabe_sat = $producto->clabe_sat;
+                                $unidad_medida = $producto->unidad_medida;
                             }else{
                                 $iva = 0;
+                                $clabe_sat = '';
+                                $unidad_medida = '';
                             }
 
                             $tablaProdu[] = ['name'              => $value['name']['language'],
@@ -86,8 +94,8 @@ class ProductsExport implements FromCollection,WithHeadings
                                             'price'              => number_format($value['price'], 2),
                                             'precio_iva'         => $iva,
                                             'wholesale_price'    => number_format($value['wholesale_price'], 2),
-                                            'clabe_sat'          => $producto->clabe_sat,
-                                            'unidad_medida'      => $producto->unidad_medida,
+                                            'clabe_sat'          => $clabe_sat,
+                                            'unidad_medida'      => $unidad_medida,
                             ];
 
                         }
