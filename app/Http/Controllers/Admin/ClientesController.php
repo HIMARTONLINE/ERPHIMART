@@ -38,30 +38,65 @@ class ClientesController extends Controller
 
             foreach($arrayOrdenes['orders']['order'] as $key => $valor) {
                 
-                if($value['id'] == $valor['id_customer'] && $valor['current_state'] != "6") {
+                if($value['id'] == $valor['id_customer'] && $valor['current_state'] != 6) {
                     
                     $numeroPedido[] = $valor['id_customer'];
+                    $suma[] = ['id'   => $valor['id_customer'], 'total_paid'  => $valor['total_paid'],];
                     $totalPedidos = array_count_values($numeroPedido);
+                    
                 }
             }
         }
+        //dd($valor);
+        $ids_products = [];
+        foreach($suma as $arre_product) {
+            $id_product = $arre_product['id'];
+            if(! in_array($id_product, $ids_products)) {
+                $ids_products[] = $id_product;
+            }
+        }
+        $result = [];
+        foreach($ids_products as $unique_id) {
+            $temp = [];
+            $quantity = 0;
+            foreach($suma as $arre_product) {
+                $id = $arre_product['id'];
 
+                if($id === $unique_id) {
+                    $temp[] = $arre_product;
+                }
+            }
+
+            $product = $temp[0];
+
+            $product['total_paid'] = 0;
+            foreach($temp as $product_temp) {
+                $product['total_paid'] = $product['total_paid'] + $product_temp['total_paid'];
+            }
+
+            $result[] = $product;
+        }
+        
         foreach($arrayClientes['customers']['customer'] as $in => $val) {
 
-            foreach($totalPedidos as $k => $v) {
+            foreach($result as $idProduct) {
 
-                if($k == $val['id']) {
+                foreach($totalPedidos as $k => $v) {
+
+                    if($k == $val['id'] && $k == $idProduct['id']) {
+                        
+                        $tablaClientes[] = ['id'         => $val['id'],
+                                            //'id_orden'   => $k,
+                                            'firstname'  => $val['firstname'],
+                                            'lastname'   => $val['lastname'],
+                                            'email'      => $val['email'],
+                                            'birthday'   => $val['birthday'],
+                                            'quantity'   => $v,
+                                            'total_paid' => $idProduct['total_paid'],
+                                        ];
+                    }   
                     
-                    $tablaClientes[] = ['id'         => $val['id'],
-                                        //'id_orden'   => $k,
-                                        'firstname'  => $val['firstname'],
-                                        'lastname'   => $val['lastname'],
-                                        'email'      => $val['email'],
-                                        'birthday'   => $val['birthday'],
-                                        'quantity'   => $v,
-                                    ];
-                }   
-                
+                }
             }
         }
 

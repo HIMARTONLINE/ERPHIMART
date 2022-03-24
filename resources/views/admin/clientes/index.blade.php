@@ -50,7 +50,7 @@
                                                     <td>{{ $value['email'] }}</td>
                                                     {{--<td>{{ $value['birthday'] }}</td>--}}
                                                     <td>{{ $value['quantity'] }}</td>
-                                                    <td>$ 0.00</td>
+                                                    <td>$ {{ number_format($value['total_paid'], 2) }}</td>
                                                     {{--<td><a href="" data-id="" class="right fas fa-angle-left" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> </a></td>--}}
                                                 </tr>
                                             @endforeach
