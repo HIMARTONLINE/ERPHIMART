@@ -28,7 +28,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{ route('admin.clientes.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-user-check"></i>
                     <p>Clientes</p>
                 </a>

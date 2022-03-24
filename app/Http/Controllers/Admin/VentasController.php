@@ -129,7 +129,8 @@ class VentasController extends Controller
                     if(in_array(0, $ejem[$key])){
     
                         if($valPro['id'] == $ejem[$key]['product_id']) {
-                            
+
+                            $producto[] = $ejem[$key]['product_id'];
                             $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
                         }
                         
@@ -138,7 +139,8 @@ class VentasController extends Controller
                         foreach($ejem[$key] as $filas){
 
                             if($valPro['id'] == $filas['product_id']) {
-    
+
+                                $producto2[] = $filas['product_id'];
                                 $sumar2[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
                             }
                             
@@ -147,10 +149,10 @@ class VentasController extends Controller
                     }
                 }
             }
-
+            
         }catch (Exception $e) {
             
-            return back()->with('Error', 'No se encontraron registros de pedidos con pago confirmado', compact('mensaje'));
+            return back()->with('Error', 'No se encontraron registros de pedidos con pago confirmado');
         }
 
         if(isset($sumar)) {
@@ -160,6 +162,10 @@ class VentasController extends Controller
 
             $sumaCompra = $sumar2;
         }
+        
+        $juntar = array_merge($producto, $producto2);
+        $productosCant = array_count_values($juntar);
+        //dd($productosCant);
 
         $datosGraf = array_count_values($rangoGraf);  
         $totalCompra = array_sum($sumaCompra);
@@ -169,11 +175,13 @@ class VentasController extends Controller
         $parametros = ['totalVentaOrden'     => $total,
                         'totalCompra'        => $totalCompra,
                         'totalVentaProdu'    => $totalVenta,
+                        'productoVenta'      => $productosCant,
                         //'totalStock'         => $totalStock,
                         'mes'                => '',
                         'meses'              => $meses,
                         'rangoGra'          => $datosGraf,
-                        'rango'              => ''];
+                        'rango'              => ''
+                      ];
                     
         //dd($mes);
 

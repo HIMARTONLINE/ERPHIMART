@@ -3,14 +3,28 @@ $(document).ready(function() {
 
     let fechas = [];
     let datos = [];
+    let proId = [];
+    let mejor = [];
 
     let val = $("#datosGrafica").val();
     val = JSON.parse(val);
+
+    let pro = $("#productoGrafica").val();
+    let arreglo = JSON.parse(pro);
 
     $.each(val, function(i, item) {
         fechas.push(i);
         datos.push(item);
     });
+
+    $.each(arreglo, function(k, valor) {
+        proId.push(k);
+        mejor.push(valor);
+    });
+
+    //var top10 = mejor.sort(function(a, b) { return b - a; }).slice(0, 10);
+
+    console.log(proId);
 
     const ctx = document.getElementById('graficaVentas').getContext('2d');
     const myChart = new Chart(ctx, {
@@ -29,8 +43,8 @@ $(document).ready(function() {
                     borderWidth: 3
                 },
                 /*{
-                    label: 'Ventas',
-                    data: [5, 6, 4, 8, 5, 6, .3, 12, 18, 5],
+                    label: 'Producto',
+                    data: top10,
                     backgroundColor: [
                         'rgba(0, 80, 255, 0.2)',
                     ],

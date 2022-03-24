@@ -28,7 +28,8 @@ Route::get('filtro-productos','Admin\ProductoController@index')->name('filtro-pr
 //Rutas de ventas de producto
 Route::resource('admin/ventas', 'Admin\VentasController')->parameters(['ventas' => 'ventas'])->names('admin.ventas');
 
-
+//Clientes 
+Route::resource('admin/clientes', 'Admin\ClientesController')->parameters(['clientes' => 'clientes'])->names('admin.clientes');
 
 Route::get('admin/reportes', 'Admin\ReportController@periodSales')->name('admin.reportes');
 Route::post('/confirmacion-p', 'Admin\ReportController@confirmacion_p');

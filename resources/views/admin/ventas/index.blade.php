@@ -146,6 +146,7 @@
                     <div class="position-relative mb-4">
                         <div class="chartjs-size-monitor">
                             <input id="datosGrafica" type="hidden" value='@json($parametros['rangoGra'])'>
+                            <input id="productoGrafica" type="text" value='@json($parametros['productoVenta'])'>
                             <canvas id="graficaVentas" height="200" width="764" style="display: block; width: 764px; height: 200px;" class="chartjs-render-monitor"></canvas>
                         </div>
                     </div>
@@ -158,6 +159,15 @@
                           <i class="fas fa-square text-gray"></i> Last Week
                         </span>
                     </div>--}}
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header border-0">
+                    <h3>datos</h3>
+                </div>
+                <div class="card-body">
+                    <h3>datos</h3>
+                    <input type="text" name="" id="productoTop">
                 </div>
             </div>
         </div>
