@@ -76,11 +76,17 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        @foreach($ordenes_facturadas as $row)
+                                        @if(count($ordenes_facturadas) > 0)
+                                            @foreach($ordenes_facturadas as $row)
+                                                <?php
+                                                    $array_ordenes[] = $row->id_orden;
+                                                ?>
+                                            @endforeach
+                                        @else
                                             <?php
-                                                $array_ordenes[] = $row->id_orden;
+                                                $array_ordenes[] = 1;
                                             ?>
-                                        @endforeach
+                                        @endif
                                         <table id="" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
