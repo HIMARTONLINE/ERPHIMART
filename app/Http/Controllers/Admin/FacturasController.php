@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use Prestashop;
+use App\Product;
 use App\Ordenes_facturadas;
 
 class FacturasController extends Controller
@@ -23,7 +25,7 @@ class FacturasController extends Controller
     {
         $meses = ['Enero', 'Febrero', 'Marzo', 'Abril',
                   'Mayo', 'Junio', 'Julio', 'Agosto',
-                  'septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                  'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
                 ];
 
         $ordenes = [];
@@ -69,7 +71,7 @@ class FacturasController extends Controller
                        'ordenes'=> $ordenes,
                        'meses'  => $meses,
                        'mes_factura' => $mes,
-                    ];
+        ];
 
         return view('admin.facturas.index', compact('parametros','ordenes_facturadas'));
 
@@ -179,7 +181,7 @@ class FacturasController extends Controller
                 }
             }
             
-            $cdad_piezas = [];
+            $array_productos = [];
 
             foreach($ejem as $key => $row){
                 if($orden == $key){
@@ -187,10 +189,24 @@ class FacturasController extends Controller
 
                         $id_produ = $ejem[$key]['product_id'];
 
-                        if(!array_key_exists($ejem[$key]['product_id'], $cdad_piezas)){
-                            $cdad_piezas[$id_produ] = $ejem[$key]['product_quantity'];
+                        if(!array_key_exists($ejem[$key]['product_id'], $array_productos)){
+                            $array_productos[$id_produ] = array(
+                                'id_producto' => $ejem[$key]['product_id'],
+                                'cantidad' => $ejem[$key]['product_quantity'],
+                                'nombre' => $ejem[$key]['product_name'],
+                                'referencia' => $ejem[$key]['product_reference'],
+                                'precio_unitario_con_iva' => $ejem[$key]['unit_price_tax_incl'],
+                                'precio_unitario_sin_iva' => $ejem[$key]['unit_price_tax_excl']
+                            );
                         }else{
-                            $cdad_piezas[$id_produ] += $ejem[$key]['product_quantity'];
+                            $array_productos[$id_produ] = array(
+                                'id_producto' => $ejem[$key]['product_id'],
+                                'cantidad' => $ejem[$key]['product_quantity'],
+                                'nombre' => $ejem[$key]['product_name'],
+                                'referencia' => $ejem[$key]['product_reference'],
+                                'precio_unitario_con_iva' => $ejem[$key]['unit_price_tax_incl'],
+                                'precio_unitario_sin_iva' => $ejem[$key]['unit_price_tax_excl']
+                            );
                         }
                       
                     }else{
@@ -199,10 +215,24 @@ class FacturasController extends Controller
                            
                             $id_produ = $filas['product_id'];
 
-                            if(!array_key_exists($filas['product_id'], $cdad_piezas)){
-                                $cdad_piezas[$id_produ] = $filas['product_quantity'];
+                            if(!array_key_exists($filas['product_id'], $array_productos)){
+                                $array_productos[$id_produ] = array(
+                                    'id_producto' => $filas['product_id'],
+                                    'cantidad' => $filas['product_quantity'],
+                                    'nombre' => $filas['product_name'],
+                                    'referencia' => $filas['product_reference'],
+                                    'precio_unitario_con_iva' => $filas['unit_price_tax_incl'],
+                                    'precio_unitario_sin_iva' => $filas['unit_price_tax_excl']
+                                );
                             }else{
-                                $cdad_piezas[$id_produ] += $filas['product_quantity'];
+                                $array_productos[$id_produ] = array(
+                                    'id_producto' => $filas['product_id'],
+                                    'cantidad' => $filas['product_quantity'],
+                                    'nombre' => $filas['product_name'],
+                                    'referencia' => $filas['product_reference'],
+                                    'precio_unitario_con_iva' => $filas['unit_price_tax_incl'],
+                                    'precio_unitario_sin_iva' => $filas['unit_price_tax_excl']
+                                );
                             }
                             
                         }
@@ -211,8 +241,12 @@ class FacturasController extends Controller
                 }
                 
             }
-            $suma_produ = array_sum($cdad_piezas);
-            return $suma_produ;
+            // $suma_produ = array_sum($cdad_piezas);
+            /*$productos_orden = [
+                'cdad_piezas' => $cdad_piezas
+            ];*/ 
+            return $array_productos;
+
         }
         /*
                             
@@ -233,14 +267,93 @@ class FacturasController extends Controller
             if($fecha == $mes_select) {
                 if(!in_array($orden, $no_facturar)){
                     if($value['current_state'] == "3" || $value['current_state'] == "5" || $value['current_state'] == "4" || $value['current_state'] == "2") {
-                    
-                       dd(orden_a_facturar($orden, $mes));
+                        
+                        $productos_orden = orden_a_facturar($orden, $mes);
+
+                        // dd($productos_orden);
+                        
+                        foreach($productos_orden as $key => $row){
+                            $producto = Product::where('id_product', $row['id_producto'])->first();
+
+                            if($producto){
+                                $clabe_sat = $producto->clabe_sat;
+                                $unidad_medida_cod = $producto->unidad_medida;
+                                $unidad_medida_nom = 'Unidad de producto';
+                            }else{
+                                $clabe_sat = '84111506';
+                                $unidad_medida_cod = 'E48';
+                                $unidad_medida_nom = 'Unidad de producto';
+                            }
+
+                            $subtotal_produ = $row['cantidad'] * number_format($row['precio_unitario_sin_iva'], 2);
+                            $total_produ = $row['cantidad'] * number_format($row['precio_unitario_sin_iva'], 2);
+                            $precio_unitario_con_iva = number_format($row['precio_unitario_con_iva'], 2);
+                            $precio_unitario_sin_iva = number_format($row['precio_unitario_sin_iva'], 2);
+
+                            if($precio_unitario_con_iva != $precio_unitario_sin_iva){
+                                // $total_iva = $precio_unitario_con_iva - $precio_unitario_sin_iva;
+                                $array_imp = array(
+                                    "Name" => "IVA",
+                                    "Rate" => "0.16",
+                                    "Total" => $precio_unitario_con_iva,
+                                    "Base" => "40",
+                                    "IsRetention" => "false"
+                                );
+                            }else{
+                                $array_imp = [];
+                            }
+
+                            $products[] = array(
+                                "Quantity" => $row['cantidad'],
+                                "ProductCode" => $clabe_sat,
+                                "UnitCode" => $unidad_medida_cod,
+                                "Unit" => $unidad_medida_nom,
+                                "Description" => $row['nombre'],
+                                "IdentificationNumber" => $row['id_producto'],
+                                "UnitPrice" => number_format($row['precio_unitario_sin_iva'], 2),
+                                "Subtotal" => $subtotal_produ,            
+                                "Discount" => "0",
+                                "DiscountVal" => "0",
+                                "Taxes" => array($array_imp),
+                                "Total" => $total_produ
+                            );
+
+                        }
+
+                        // dd(orden_a_facturar($orden, $mes));
 
                     }
                 }else{
                 }
             }
         }
+        
+        $client = new Client(['base_uri' => 'https://apisandbox.facturama.mx/']);
+        // dd($products);
+
+
+        $response = $client->request('POST', '/2/cfdis', [
+            'auth' => ['DEVHIMART', 'Torre123'], 
+            // 'auth' => ['JERA EBUSINESS SA DE CV', 'Moon2392610'], 
+            'form_params' => [
+                "Receiver" => [
+                    "Name" => "Prueba Himart 2022",
+                    "CfdiUse" => "P01",
+                    "Rfc" => "XAXX010101000"        
+                ],
+                "CfdiType" => "I",
+                "NameId" => "1",
+                "ExpeditionPlace" => "45200",
+                "PaymentForm" => "03",
+                "PaymentMethod" => "PUE",
+                "Decimals" => "2",
+                "Currency" => "MXN",
+                "Date" => "2022-03-25",
+                "Items" => $products
+            ]
+        ]);
+
+        echo $response->getBody();
 
         // dd($sumaTotalPiezas);
 
