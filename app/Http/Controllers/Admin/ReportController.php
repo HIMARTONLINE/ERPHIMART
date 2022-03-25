@@ -268,6 +268,9 @@ class ReportController extends Controller
                                     if(in_array(0, $ejem[$key])){              
 
                                             if($valPro['id'] == $ejem[$key]['product_id']) {
+                                                $num_cdad_produ = $ejem[$key]['product_quantity'];
+                                                $nombre_produ = $ejem[$key]['product_name'];
+                                                $array_produ[$num_cdad_produ] = $nombre_produ;  
                                                 $total_piezas[] = $ejem[$key]['product_quantity'];
                                                 $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
                                             }                          
@@ -277,6 +280,9 @@ class ReportController extends Controller
                                         foreach($ejem[$key] as $filas){
                                             
                                                 if($valPro['id'] == $filas['product_id']) {
+                                                    $num_cdad_produ = $filas['product_quantity'];
+                                                    $nombre_produ = $filas['product_name'];
+                                                    $array_produ[$num_cdad_produ] = $nombre_produ;
                                                     $total_piezas[] = $filas['product_quantity'];
                                                     $sumar[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
                                                 }
@@ -326,9 +332,11 @@ class ReportController extends Controller
                                         // 'utilidad'       => 'pendiente',
                                         'confirmacion'   => $value['current_state'],
                                         'status'         => $status,
+                                        'productos'      => $array_produ,
                         ];
 
                         $sumar = [];
+                        $array_produ = [];
                         $total_venta[] = $value['total_paid'];
                         $sumaTotalPiezas = array_sum($total_piezas);
                         $total_sin_iva[] = $value['total_paid_tax_excl'];
