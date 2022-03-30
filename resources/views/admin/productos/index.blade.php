@@ -28,6 +28,11 @@
                         <input type="hidden" name="a_precio" value="{{ $filtro['a_precio'] }}">
                         <input type="hidden" name="de_fecha" value="{{ $filtro['de_fecha'] }}">
                         <input type="hidden" name="a_fecha" value="{{ $filtro['a_fecha'] }}">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary float-right ml-3" data-toggle="modal" data-target="#exampleModalCenter">
+                            <i class="fa fa-file-excel"></i>
+                            Importar Inventario
+                        </button>
                         <button type="submit" class="btn btn-danger float-right ml-3"><i class="fa fa-file-excel"></i> Exportar Inventario</button>
                         <a href="{{route('admin.productos.create')}}" class="btn btn-success float-right">
                             <i class="fa fa-plus"></i> Añadir Producto
@@ -167,6 +172,29 @@
             <!-- /.card -->
         </div>
     </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <form class="mb-4" action="{{ route('import-excel') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Sube un archivo de excel</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="file" name="archivo" accept=".xlsx, .xls">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Importar datos</button>
+      </div>
+    </div>
+    </form>
+  </div>
 </div>
 @stop
 @push('styles')
