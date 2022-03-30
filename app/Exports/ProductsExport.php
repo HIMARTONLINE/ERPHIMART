@@ -26,6 +26,7 @@ class ProductsExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
+            'ID',
             'Nombre',
             'Stock',
             'SKU',
@@ -87,7 +88,8 @@ class ProductsExport implements FromCollection, WithHeadings
                                 $unidad_medida = '';
                             }
 
-                            $tablaProdu[] = ['name'              => $value['name']['language'],
+                            $tablaProdu[] = ['id'                => $value['id'],
+                                            'name'               => $value['name']['language'],
                                             'stock'              => $valor['quantity'],
                                             'reference'          => $value['reference'],
                                             'category'           => $categ['name']['language'], 

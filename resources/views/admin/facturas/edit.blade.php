@@ -71,6 +71,9 @@
                                     <label for="">Uso de Factura</label>
                                     <select name="factura" id="" class="form-control">
                                         <option value="">Seleccione una opción</option>
+                                        @foreach($uso_cfdi as $key => $valor)
+                                            <option value="{{$valor}}">{{$valor}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -79,6 +82,9 @@
                                     <label for="">Método de pago</label>
                                     <select class="form-control" name="pago" id="">
                                         <option value="">Seleccione un metodo de pago</option>
+                                        @foreach($metodo_pago as $key => $valor)
+                                            <option value="{{$valor}}">{{$valor}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
