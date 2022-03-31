@@ -515,9 +515,11 @@ class FacturasController extends Controller
     
                                 if($producto){
                                     $clabe_sat = $producto->clabe_sat;
-                                    $unidad_medida = explode(" - ", $producto->unidad_medida);
+                                    /*$unidad_medida = explode(" - ", $producto->unidad_medida);
                                     $unidad_medida_cod = $unidad_medida[0];
-                                    $unidad_medida_nom = $unidad_medida[1];
+                                    $unidad_medida_nom = $unidad_medida[1];*/
+                                    $unidad_medida_cod = 'H87';
+                                    $unidad_medida_nom = 'Pieza';
                                 }else{
                                     $clabe_sat = '84111506';
                                     $unidad_medida_cod = 'E48';
