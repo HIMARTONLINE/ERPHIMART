@@ -273,7 +273,9 @@ class FacturasController extends Controller
                             $producto = Product::where('id_product', $row['id_producto'])->first();
 
                             if($producto){
-                                $clabe_sat = $producto->clabe_sat;
+                                $searchString = " ";
+                                $replaceString = "";
+                                $clabe_sat = str_replace($searchString, $replaceString, $producto->clabe_sat);
                                 $unidad_medida = explode(" - ", $producto->unidad_medida);
                                 $unidad_medida_cod = $unidad_medida[0];
                                 $unidad_medida_nom = $unidad_medida[1];
@@ -514,7 +516,9 @@ class FacturasController extends Controller
                                 $producto = Product::where('id_product', $row['id_producto'])->first();
     
                                 if($producto){
-                                    $clabe_sat = $producto->clabe_sat;
+                                    $searchString = " ";
+                                    $replaceString = "";
+                                    $clabe_sat = str_replace($searchString, $replaceString, $producto->clabe_sat);
                                     /*$unidad_medida = explode(" - ", $producto->unidad_medida);
                                     $unidad_medida_cod = $unidad_medida[0];
                                     $unidad_medida_nom = $unidad_medida[1];*/
@@ -567,7 +571,7 @@ class FacturasController extends Controller
                                 
                                 $products[] = array(
                                     "Quantity" => $row['cantidad'],
-                                    "ProductCode" => $clabe_sat,
+                                    "ProductCode" => "$clabe_sat",
                                     "UnitCode" => $unidad_medida_cod,
                                     "Unit" => $unidad_medida_nom,
                                     "Description" => $row['nombre'],
