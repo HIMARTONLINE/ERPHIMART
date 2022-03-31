@@ -246,6 +246,7 @@
                                 <th>Total</th>
                                 <th>Descuento</th>
                                 <th>Envío</th>
+                                <th>Seguro</th>
                                 <th>Pagado</th>
                                 <th>Sin IVA</th>
                                 <th>Compra</th>
@@ -267,6 +268,7 @@
                                 <td>{{ number_format($v['pagado'], 2) }}</td>
                                 <td>{{ number_format($v['descuento'], 2) }}</td>
                                 <td>{{ number_format($v['envio'], 2) }}</td>
+                                <td>{{ number_format($v['seguro'], 2) }}</td>
                                 <td>{{ number_format($v['total'], 2) }}</td>
                                 <td>{{ number_format($v['sin_iva'], 2) }}</td>
                                 <td>{{ number_format($v['compra'], 2) }}</td>
@@ -306,7 +308,7 @@
                                 </td>
                                 <td>
                                     {{ number_format($utilidad = $v['sin_iva'] - $v['compra'] - $comision - $v['paqueteria'], 2) }}
-                                </td>    
+                                </td>     
                                 <td>{{ $v['comision'] }}</td>                            
                                 <td class="text-center">
                                     @if(intval($v['confirmacion']) == 4)
