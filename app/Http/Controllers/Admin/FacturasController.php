@@ -501,11 +501,11 @@ class FacturasController extends Controller
     
                 $fecha = date("Y-m", strtotime($value['date_add']));
                 $orden = $value['id'];
-                $array_ordenes[] = $orden;
            
                 if($fecha == $mes_select) {
                     if(!in_array($orden, $no_facturar)){
                         if($value['current_state'] == "3" || $value['current_state'] == "5" || $value['current_state'] == "4" || $value['current_state'] == "2") {
+                            $array_ordenes[] = $orden;
                             
                             $productos_orden = orden_a_facturar($orden, $mes, $array_products);
                             // dd($productos_orden);
