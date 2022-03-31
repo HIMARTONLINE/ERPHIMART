@@ -130,7 +130,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                    <button type="submit" class="btn btn-success">Realizar factura</button>
+                                    <button type="submit" class="btn btn-success" name="factura-masiva">Realizar factura</button>
                                 </form>
                             </div>
                         </div>

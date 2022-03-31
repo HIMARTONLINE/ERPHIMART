@@ -57,8 +57,9 @@ class ReportController extends Controller
                 $id_envio = $row[$i]->id;
                 $id_orden = explode(" - ", $row[$i]->consignee_name);
                 $id_orden = $id_orden[0];
+                $seguro = $row[$i]->insurance_cost;
                 $total_orden = $row[$i]->total;
-                $response11[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+                $response11[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
 
                 if($id_env == $id_envio){
                     break;
@@ -89,8 +90,9 @@ class ReportController extends Controller
                 $id_envio = $row[$i]->id;
                 $id_orden = explode(" - ", $row[$i]->consignee_name);
                 $id_orden = $id_orden[0];
+                $seguro = $row[$i]->insurance_cost;
                 $total_orden = $row[$i]->total;
-                $response22[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+                $response22[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
 
                 if($id_env == $id_envio){
                     break;
@@ -121,8 +123,9 @@ class ReportController extends Controller
                 $id_envio = $row[$i]->id;
                 $id_orden = explode(" - ", $row[$i]->consignee_name);
                 $id_orden = $id_orden[0];
+                $seguro = $row[$i]->insurance_cost;
                 $total_orden = $row[$i]->total;
-                $response33[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+                $response33[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
 
                 if($id_env == $id_envio){
                     break;
@@ -181,7 +184,7 @@ class ReportController extends Controller
             }
         }
         */
-        // echo $response;
+        // dd($response);
 
         // return false;
 
@@ -301,9 +304,11 @@ class ReportController extends Controller
                             $id_orden = $row[1];
                             if(intval($value['id']) == intval($id_orden)){
                                 $paqueteria = $row[2];
+                                $seguro = $row[3];
                                 break;
                             }else{
                                 $paqueteria = 0.00;
+                                $seguro = 0.00;
                             }
                     
                         }
@@ -324,6 +329,7 @@ class ReportController extends Controller
                                         'total'          => $value['total_paid'],
                                         'descuento'      => $value['total_discounts'],
                                         'envio'          => $value['total_shipping_tax_incl'],
+                                        'seguro'         => $seguro,
                                         'pagado'         => $value['total_products_wt'],
                                         'sin_iva'        => $value['total_paid_tax_excl'],
                                         'compra'         => $sumaCompra,
@@ -431,9 +437,11 @@ class ReportController extends Controller
                         $id_orden = $row[1];
                         if(intval($value['id']) == intval($id_orden)){
                             $paqueteria = $row[2];
+                            $seguro = $row[3];
                             break;
                         }else{
                             $paqueteria = 0.00;
+                            $seguro = 0.00;
                         }
                 
                     }
@@ -454,6 +462,7 @@ class ReportController extends Controller
                                     'total'          => $value['total_paid'],
                                     'descuento'      => $value['total_discounts'],
                                     'envio'          => $value['total_shipping_tax_incl'],
+                                    'seguro'         => $seguro,
                                     'pagado'         => $value['total_products_wt'],
                                     'sin_iva'        => $value['total_paid_tax_excl'],
                                     'compra'         => $sumaCompra,

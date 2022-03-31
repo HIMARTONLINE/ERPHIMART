@@ -19,8 +19,10 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="">
+                    <form method="POST" action="{{route('admin.facturas.store')}}">
                         @csrf
+                        <input type="hidden" name="mes_factura" value="{{ $fecha_mes_orden }}" />
+                        <input type="hidden" name="id_orden" value="{{$orden['id']}}" />
                         <div class="row">
                             <div class="col-md-10 text-left-right">
                                 <div class="form-group">
@@ -41,20 +43,21 @@
                                     <input type="text" name="razon" class="form-control" placeholder="Escriba la Rázon Social del cliente">
                                 </div>
                             </div>
-                            <div class="col-md-1 text-left-right">
+                            <div class="col-md-2 text-left-right">
                                 <div class="form-group">
                                     <label for="pedido">Número de pedido</label>
-                                    <input class="form-control" type="text" name="pedidoId" id="pedidoId" value="{{ $orden['id'] }}">
+                                    <input class="form-control" type="text" name="pedidoId" id="pedidoId" value="{{ $orden['id'] }}" disabled />
                                 </div>
                             </div>
                             <div class="col-md-1 text-left-right">
                                 <div class="form-group">
                                     <label for="pedido">Referencia</label>
-                                    <input class="form-control" type="text" name="referencia" id="pedidoId" value="{{ $orden['reference'] }}">
+                                    <input class="form-control" type="text" name="referencia" id="pedidoId" value="{{ $orden['reference'] }}" disabled />
                                 </div>
                             </div>
                         </div>
                         <div class="row">
+                            {{--
                             <div class="col-md-2 text-left-right">
                                 <div class="form-group">
                                     <label for="regimen">Régimen Fiscal</label>
@@ -66,13 +69,25 @@
                                     </select>
                                 </div> 
                             </div>
-                            <div class="col-md-2">
+                            --}}
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="">Uso de Factura</label>
                                     <select name="factura" id="" class="form-control">
                                         <option value="">Seleccione una opción</option>
                                         @foreach($uso_cfdi as $key => $valor)
-                                            <option value="{{$valor}}">{{$valor}}</option>
+                                            <option value="{{$key}}">{{$valor}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">Forma de pago</label>
+                                    <select class="form-control" name="forma_pago" id="">
+                                        <option value="">Seleccione un metodo de pago</option>
+                                        @foreach($forma_pago as $key => $valor)
+                                            <option value="{{$key}}">{{$valor}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -80,15 +95,16 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="">Método de pago</label>
-                                    <select class="form-control" name="pago" id="">
+                                    <select class="form-control" name="metodo_pago" id="">
                                         <option value="">Seleccione un metodo de pago</option>
                                         @foreach($metodo_pago as $key => $valor)
-                                            <option value="{{$valor}}">{{$valor}}</option>
+                                            <option value="{{$key}}">{{$valor}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
+                        <!--
                         <div class="row">
                             <div class="col-md-10 text-left-right">
                                 <div class="form-group">
@@ -149,9 +165,9 @@
                                     <input class="form-control" type="email" name="correo" id="correo" placeholder="exple@example.com">
                                 </div>
                             </div>
-                            
                         </div>
-                        <button class="btn btn-success">Realizar factura</button>
+                        -->
+                        <button type="submit" class="btn btn-success" name="factura-individual">Realizar factura</button>
                     </form>
                 </div>
             </div>
