@@ -285,13 +285,14 @@ class FacturasController extends Controller
 
                             $subtotal_produ = $row['cantidad'] * number_format($row['precio_unitario_sin_iva'], 2);
                             $total_produ = $row['cantidad'] * number_format($row['precio_unitario_con_iva'], 2);
-                            $precio_unitario_con_iva = number_format($row['precio_unitario_con_iva'], 2);
-                            $precio_unitario_sin_iva = number_format($row['precio_unitario_sin_iva'], 2);
+                            $precio_unitario_con_iva = $row['precio_unitario_con_iva'];
+                            $precio_unitario_sin_iva = $row['precio_unitario_sin_iva'];
 
                             // dd($precio_unitario_con_iva .' '. $precio_unitario_sin_iva .' '. $total_produ .' '. $subtotal_produ);
 
                             if($precio_unitario_con_iva != $precio_unitario_sin_iva){
                                 $total_iva = $precio_unitario_con_iva - $precio_unitario_sin_iva;
+                                $total_iva = $total_iva * $row['cantidad'];
                                 $rate_iva = $row['rate_iva'];
 
                                 if($rate_iva == 1){
@@ -307,10 +308,14 @@ class FacturasController extends Controller
                                 $array_imp = array(
                                     "Name" => $nombre_impuesto,
                                     "Rate" => $rate_iva,
-                                    "Total" => $total_iva,
+                                    "Total" => number_format($total_iva, 2),
                                     "Base" => $subtotal_produ,
                                     "IsRetention" => "false"
                                 );
+
+                                $total_iva_produ = number_format($total_iva, 2);
+                                $base_iva = $subtotal_produ;
+                                $total_produ = $total_iva_produ + $base_iva;
                         
                             }else{
                                 $array_imp = [];
@@ -374,8 +379,17 @@ class FacturasController extends Controller
                     "Items" => $products
                 ]
             ]);
+
+            if($response){
+                Ordenes_facturadas::create([
+                    'id_orden' => $orden
+                ]);
+
+                return redirect()->back();
+            }else{
+            }
     
-            echo $response->getBody();
+            // echo $response->getBody();
             // dd($sumaTotalPiezas);
 
         }else{
@@ -487,6 +501,7 @@ class FacturasController extends Controller
     
                 $fecha = date("Y-m", strtotime($value['date_add']));
                 $orden = $value['id'];
+                $array_ordenes[] = $orden;
            
                 if($fecha == $mes_select) {
                     if(!in_array($orden, $no_facturar)){
@@ -511,13 +526,14 @@ class FacturasController extends Controller
     
                                 $subtotal_produ = $row['cantidad'] * number_format($row['precio_unitario_sin_iva'], 2);
                                 $total_produ = $row['cantidad'] * number_format($row['precio_unitario_con_iva'], 2);
-                                $precio_unitario_con_iva = number_format($row['precio_unitario_con_iva'], 2);
-                                $precio_unitario_sin_iva = number_format($row['precio_unitario_sin_iva'], 2);
+                                $precio_unitario_con_iva = $row['precio_unitario_con_iva'];
+                                $precio_unitario_sin_iva = $row['precio_unitario_sin_iva'];
     
                                 // dd($precio_unitario_con_iva .' '. $precio_unitario_sin_iva .' '. $total_produ .' '. $subtotal_produ);
     
                                 if($precio_unitario_con_iva != $precio_unitario_sin_iva){
                                     $total_iva = $precio_unitario_con_iva - $precio_unitario_sin_iva;
+                                    $total_iva = $total_iva * $row['cantidad'];
                                     $rate_iva = $row['rate_iva'];
     
                                     if($rate_iva == 1){
@@ -533,10 +549,14 @@ class FacturasController extends Controller
                                     $array_imp = array(
                                         "Name" => $nombre_impuesto,
                                         "Rate" => $rate_iva,
-                                        "Total" => $total_iva,
+                                        "Total" => number_format($total_iva, 2),
                                         "Base" => $subtotal_produ,
                                         "IsRetention" => "false"
                                     );
+
+                                    $total_iva_produ = number_format($total_iva, 2);
+                                    $base_iva = $subtotal_produ;
+                                    $total_produ = $total_iva_produ + $base_iva;
                            
                                 }else{
                                     $array_imp = [];
@@ -550,7 +570,7 @@ class FacturasController extends Controller
                                     "Unit" => $unidad_medida_nom,
                                     "Description" => $row['nombre'],
                                     "IdentificationNumber" => "23",
-                                    "UnitPrice" => $precio_unitario_sin_iva,
+                                    "UnitPrice" => number_format($precio_unitario_sin_iva, 2),
                                     "Subtotal" => $subtotal_produ,
                                     "Discount" => "0",
                                     "DiscountVal" => "0",
@@ -581,13 +601,12 @@ class FacturasController extends Controller
     
             $response = $client->request('POST', '/2/cfdis', [
                 // 'auth' => ['DEVHIMART', 'Torre123'], 
-                // 'auth' => ['JERA EBUSINESS SA DE CV', 'Moon2392610'], 
-                'Authorization' => $autenticacion, 
+                'auth' => ['HIMART', 'Himart2022'],
                 'form_params' => [
                     "Receiver" => [
                         // "Rfc" => "URE180429TM6",
-                        "Name" => "JERA EBUSINESS SA DE CV",
-                        "CfdiUse" => "P01",
+                        "Name" => "PUBLICO EN GENERAL",
+                        "CfdiUse" => "G03",
                         "Rfc" => "XAXX010101000"
                         // "FiscalRegime" => "601",
                         // "TaxZipCode" => "65000"
@@ -603,8 +622,19 @@ class FacturasController extends Controller
                     "Items" => $products
                 ]
             ]);
+
+            if($response){
+                foreach($array_ordenes as $row){
+                    Ordenes_facturadas::create([
+                        'id_orden' => $row
+                    ]);
+                }
+
+                return redirect()->back();
+            }else{
+            }
     
-            echo $response->getBody();
+            // echo $response->getBody();
             // dd($sumaTotalPiezas);
         }
 
