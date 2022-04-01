@@ -273,7 +273,8 @@ class ReportController extends Controller
                                             if($valPro['id'] == $ejem[$key]['product_id']) {
                                                 $num_cdad_produ = $ejem[$key]['product_quantity'];
                                                 $nombre_produ = $ejem[$key]['product_name'];
-                                                $array_produ[$num_cdad_produ] = $nombre_produ;  
+                                                $precio_produ = $ejem[$key]['unit_price_tax_incl'];
+                                                $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);
                                                 $total_piezas[] = $ejem[$key]['product_quantity'];
                                                 $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
                                             }                          
@@ -285,7 +286,8 @@ class ReportController extends Controller
                                                 if($valPro['id'] == $filas['product_id']) {
                                                     $num_cdad_produ = $filas['product_quantity'];
                                                     $nombre_produ = $filas['product_name'];
-                                                    $array_produ[$num_cdad_produ] = $nombre_produ;
+                                                    $precio_produ = $filas['unit_price_tax_incl'];
+                                                    $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);
                                                     $total_piezas[] = $filas['product_quantity'];
                                                     $sumar[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
                                                 }
@@ -426,25 +428,27 @@ class ReportController extends Controller
                             if($value['id'] == $key){
                                 if(in_array(0, $ejem[$key])){              
 
-                                        if($valPro['id'] == $ejem[$key]['product_id']) {
-                                            $num_cdad_produ = $ejem[$key]['product_quantity'];
-                                            $nombre_produ = $ejem[$key]['product_name'];
-                                            $array_produ[$num_cdad_produ] = $nombre_produ;  
-                                            $total_piezas[] = $ejem[$key]['product_quantity'];
-                                            $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
-                                        }                          
+                                    if($valPro['id'] == $ejem[$key]['product_id']) {
+                                        $num_cdad_produ = $ejem[$key]['product_quantity'];
+                                        $nombre_produ = $ejem[$key]['product_name'];
+                                        $precio_produ = $ejem[$key]['unit_price_tax_incl'];
+                                        $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);  
+                                        $total_piezas[] = $ejem[$key]['product_quantity'];
+                                        $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
+                                    }                          
                                     
                                 }else{
 
                                     foreach($ejem[$key] as $filas){
                                         
-                                            if($valPro['id'] == $filas['product_id']) {
-                                                $num_cdad_produ = $filas['product_quantity'];
-                                                $nombre_produ = $filas['product_name'];
-                                                $array_produ[$num_cdad_produ] = $nombre_produ;
-                                                $total_piezas[] = $filas['product_quantity'];
-                                                $sumar[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
-                                            }
+                                        if($valPro['id'] == $filas['product_id']) {
+                                            $num_cdad_produ = $filas['product_quantity'];
+                                            $nombre_produ = $filas['product_name'];
+                                            $precio_produ = $filas['unit_price_tax_incl'];
+                                            $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);
+                                            $total_piezas[] = $filas['product_quantity'];
+                                            $sumar[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
+                                        }
                                     
                                     }
                                 
