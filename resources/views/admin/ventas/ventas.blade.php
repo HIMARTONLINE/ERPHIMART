@@ -329,11 +329,12 @@
                                     <?php
                                         $ultima_key = end( $v['productos'] );
                                     ?>
+                                    <br />
                                     @foreach($v['productos'] as $key => $producto)
                                         @if($ultima_key == $producto)
                                             {{ $key . ' x ' . $producto }}
                                         @else
-                                            {{ $key . ' x ' . $producto . ',' }}
+                                            {{ $key . ' x ' . $producto }}<br />
                                         @endif
                                     @endforeach
                                 </td>
