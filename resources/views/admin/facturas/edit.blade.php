@@ -103,6 +103,12 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">Elegir fecha</label>
+                                    <input class="form-control" type="date" name="fecha_factura" />
+                                </div>
+                            </div>
                         </div>
                         <!--
                         <div class="row">

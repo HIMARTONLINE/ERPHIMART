@@ -96,6 +96,7 @@ class FacturasController extends Controller
     public function store(Request $request)
     {
         $mes = request('mes_factura');
+        $fecha_factura = request('fecha_factura');
 
         if(!empty($_REQUEST['orden'])){
             $no_facturar = request('orden');
@@ -377,7 +378,7 @@ class FacturasController extends Controller
                     "PaymentMethod" => $metodo_pago_cte,
                     "Decimals" => "2",
                     "Currency" => "MXN",
-                    "Date" => $fecha,
+                    "Date" => $fecha_factura,
                     "Items" => $products
                 ]
             ]);
@@ -601,7 +602,7 @@ class FacturasController extends Controller
             // $client = new Client(['base_uri' => 'https://apisandbox.facturama.mx/']);
             $client = new Client(['base_uri' => 'https://api.facturama.mx/']);
             // dd($products);
-            $fecha = date("Y-m-d");
+            // $fecha = date("Y-m-d");
             $autenticacion = base64_encode("HIMART:Himart2022");
             $autenticacion = "Basic " . $autenticacion;
     
@@ -624,7 +625,7 @@ class FacturasController extends Controller
                     "PaymentMethod" => "PUE",
                     "Decimals" => "2",
                     "Currency" => "MXN",
-                    "Date" => $fecha,
+                    "Date" => $fecha_factura,
                     "Items" => $products
                 ]
             ]);
