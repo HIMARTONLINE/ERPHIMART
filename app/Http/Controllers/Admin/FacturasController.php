@@ -531,8 +531,8 @@ class FacturasController extends Controller
                                     $unidad_medida_nom = 'Unidad de producto';
                                 }
     
-                                $subtotal_produ = $row['cantidad'] * number_format($row['precio_unitario_sin_iva'], 2);
-                                $total_produ = $row['cantidad'] * number_format($row['precio_unitario_con_iva'], 2);
+                                $subtotal_produ = $row['cantidad'] * $row['precio_unitario_sin_iva'];
+                                $total_produ = $row['cantidad'] * $row['precio_unitario_con_iva'];
                                 $precio_unitario_con_iva = $row['precio_unitario_con_iva'];
                                 $precio_unitario_sin_iva = $row['precio_unitario_sin_iva'];
     
@@ -556,8 +556,8 @@ class FacturasController extends Controller
                                     $array_imp = array(
                                         "Name" => $nombre_impuesto,
                                         "Rate" => $rate_iva,
-                                        "Total" => number_format($total_iva, 2),
-                                        "Base" => $subtotal_produ,
+                                        "Total" => number_format($total_iva, 2, '.', ''),
+                                        "Base" => number_format($subtotal_produ, 2, '.', ''),
                                         "IsRetention" => "false"
                                     );
 
@@ -569,7 +569,7 @@ class FacturasController extends Controller
                                     $array_imp = [];
                                     $objeto_impuesto = "01";
                                 }
-                                
+
                                 $products[] = array(
                                     "Quantity" => $row['cantidad'],
                                     "ProductCode" => "$clabe_sat",
@@ -577,19 +577,17 @@ class FacturasController extends Controller
                                     "Unit" => $unidad_medida_nom,
                                     "Description" => $row['nombre'],
                                     "IdentificationNumber" => "23",
-                                    "UnitPrice" => number_format($precio_unitario_sin_iva, 2),
-                                    "Subtotal" => $subtotal_produ,
+                                    "UnitPrice" => number_format($precio_unitario_sin_iva, 2, '.', ''),
+                                    "Subtotal" => number_format($subtotal_produ, 2, '.', ''),
                                     "Discount" => "0",
                                     "DiscountVal" => "0",
                                     // "ObjetoImp" => $objeto_impuesto,            
                                     "Taxes" => array(
                                         $array_imp
                                     ),
-                                    "Total" => $total_produ
+                                    "Total" => number_format($total_produ, 2, '.', '')
                                 );
     
-                            
-                            
                             }
                             // dd(orden_a_facturar($orden, $mes));
                         }
@@ -602,6 +600,7 @@ class FacturasController extends Controller
             // $client = new Client(['base_uri' => 'https://apisandbox.facturama.mx/']);
             $client = new Client(['base_uri' => 'https://api.facturama.mx/']);
             // dd($products);
+
             // $fecha = date("Y-m-d");
             $autenticacion = base64_encode("HIMART:Himart2022");
             $autenticacion = "Basic " . $autenticacion;
@@ -621,6 +620,7 @@ class FacturasController extends Controller
                     "CfdiType" => "I",
                     "NameId" => "1",
                     "ExpeditionPlace" => "06500",
+                    // "ExpeditionPlace" => "45200",
                     "PaymentForm" => "03",
                     "PaymentMethod" => "PUE",
                     "Decimals" => "2",
