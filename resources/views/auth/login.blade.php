@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header text-center" style="font-size: 30px;">ERP HI MART</div>
+                <div class="card-header text-center" style="font-size: 30px;">
+                    <img class="mb-3" src="{{ asset('images/logo.png') }}" alt="Hi Mart" /><br />
+                    <strong style="color: #ff5000;">ERP HI MART</strong>
+                </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -45,7 +48,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        Mantenerme conectado
                                     </label>
                                 </div>
                             </div>
@@ -53,7 +56,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" style="background: #ff5000;border: #ff5000;">
                                     Entrar
                                 </button>
 
