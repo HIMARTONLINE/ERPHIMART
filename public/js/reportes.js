@@ -9,22 +9,12 @@ $(document).ready(function() {
     let val = $("#datosGrafica").val();
     val = JSON.parse(val);
 
-    let pro = $("#productoGrafica").val();
-    let arreglo = JSON.parse(pro);
-
     $.each(val, function(i, item) {
         fechas.push(i);
         datos.push(item);
+
     });
 
-    $.each(arreglo, function(k, valor) {
-        proId.push(k);
-        mejor.push(valor);
-    });
-
-    //var top10 = mejor.sort(function(a, b) { return b - a; }).slice(0, 10);
-
-    console.log(proId);
 
     const ctx = document.getElementById('graficaVentas').getContext('2d');
     const myChart = new Chart(ctx, {

@@ -10,76 +10,193 @@
 @stop
 
 @section('content')
-
-<div class="row">
-    <!-- TABLE: LATEST ORDERS -->
-    <div class="card col-md-12">
-        <div class="card-header border-transparent">
-            <h3 class="card-title">Ultimas ordenes</h3>
-
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                </button>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        Obten el reporte de ventas de acuerdo al mes o al rango de fecha seleccionada
+                    </div>
+                    <ul class="nav nav-tabs nav-bordered mb-3">
+                        <li class="nav-item">
+                            <a href="#meses" data-toggle="tab"
+                                aria-expanded="{{ $parametros['mes'] == '' && $parametros['rango'] == '' ? 'true' : 'false' }}{{ $parametros['mes'] != '' ? 'true' : '' }}"
+                                class="nav-link {{ $parametros['mes'] == '' && $parametros['rango'] == '' ? 'active' : '' }}{{ $parametros['mes'] != '' ? 'active' : '' }}">
+                                <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Meses</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#rango" data-toggle="tab"
+                                aria-expanded="{{ $parametros['rango'] == '' ? 'false' : 'true' }}"
+                                class="nav-link {{ $parametros['rango'] == '' ? '' : 'active' }}">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Rango</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane {{ $parametros['mes'] == '' && $parametros['rango'] == '' ? 'show active' : '' }}{{ $parametros['mes'] != '' ? 'show active' : '' }}"
+                            id="meses">
+                            <form id="consultaMes" action="{{ route('home')}}" method="GET"
+                                autocomplete="off">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="mes">Mes</label>
+                                            <select name="mes" id="mes" class="form-control select2" data-toggle="select2"
+                                                required="true" data-tipo="txt">
+                                                <option value="00" >Selecciona mes</option>
+                                                @foreach($parametros['meses'] as $key => $value)
+                                                        @if($key + 1 < 10)
+                                                            <option value="0{{ $key + 1 }}">{{ $value }}</option>
+                                                        @else
+                                                            <option value="{{ $key + 1 }}">{{ $value }}</option>
+                                                        @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" data-consultarmes="true" id="validacion"
+                                            class="btn btn-secondary ">Consultar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane {{ $parametros['rango'] == '' ? '' : 'show active' }}" id="rango">
+                            <form id="consulta" action="{{ route('home') }}" method="GET"
+                                enctype="multipart/form-data" autocomplete="off">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="fecha">Rango</label>
+                                            <input id="reportrange" type="text" class="form-control" name="rango" id="rango" required="true" value="{{ $parametros['rango'] }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" data-consultar="true" class="btn btn-secondary margenbtnfloat"><i class="mdi mdi-database-search"></i>Consultar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- /.card-header -->
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table m-0">
-                    <thead>
-                        <tr>
-                            <th>Numero de orden</th>
-                            <th>Descripción</th>
-                            <th>Estatus</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                     
-                        <tr>
-                            <td><a href="pages/examples/invoice.html">OR1841</a></td>
-                            <td>Samsung Smart TV</td>
-                            <td><span class="badge badge-warning">Pendiente</span></td>
-                          
-                        </tr>
-                        <tr>
-                            <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                            <td>iPhone 6 Plus</td>
-                            <td><span class="badge badge-danger">Entregada</span></td>
-                          
-                        </tr>
-                        <tr>
-                            <td><a href="pages/examples/invoice.html">OR1844</a></td>
-                            <td>Samsung Smart TV</td>
-                            <td><span class="badge badge-warning">Pendiente</span></td>
-                          
-                        </tr>
-                        <tr>
-                            <td><a href="pages/examples/invoice.html">OR7434</a></td>
-                            <td>iPhone 6 Plus</td>
-                            <td><span class="badge badge-danger">Entregada</span></td>
-                          
-                        </tr>
-                      
-    
-                       
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.table-responsive -->
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer clearfix">
-            <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Realizar nuevo pedido</a>
-            <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">Ver todos los pedidos</a>
-        </div>
-        <!-- /.card-footer -->
     </div>
-    <!-- /.card -->
-</div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                        <h3>Venta Total</h3>
+                        {{-- aqui puede ir otra etiqueta que se mostrara en la esquina superior derecha--}}
+                    </div>
+                    <div class="card-body">
+                        <div class="position-relative mb-4">
+                            <h3 class="mt-3 mb-3">${{ number_format($parametros['totalVentaOrden'], 2) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header border-0">
+                    <h3>Top 10 de productos más vendidos</h3>
+                </div>
+                <div class="card-body">
+                    <div style="text-align: center;">
+                        <img id="top1Img" src="{{$parametros['CantidadVendida'][0]['imagen']}}" width="15%" alt="" srcset="">
+                        <br>
+                        <label for="">Nombre: {{$parametros['CantidadVendida'][0]['nombre']}}</label>
+                        <br>
+                        <label>Vendidos: {{$parametros['CantidadVendida'][0]['cantidad']}} piezas</label>
+                    </div>
+                </div>
+            </div>
+            {{--<div class="card">
+                <div class="card-header border-0">
+                    <h3>Valor total de compra de productos</h3>
+                </div>
+                <div class="card-body">
+                    <h3 class="mt-3 mb-3">${{ number_format($parametros['totalCompra'], 2) }}</h3>
+                </div>
+            </div>--}}
+            {{--<div class="card">
+                <div class="card-header border-0">
+                    <h3>Valor total Venta de productos</h3>
+                </div>
+                <div class="card-body">
+                    <h3 class="mt-3 mb-3">${{ number_format($parametros['totalVentaProdu'], 2) }}</h3>
+                </div>
+            </div>--}}
+            {{--<div class="card">
+                <div class="card-header border-0">
+                    <h3>Cantidad total de Piezas</h3>
+                </div>
+                <div class="card-body">
+                    <h3 class="mt-3 mb-3">{{ number_format($parametros['totalStock']) }} Piezas</h3>
+                </div>
+            </div>--}}
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                        <h3 class="card-title">Ventas</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex">
 
-
+                    </div>
+                    <div class="position-relative mb-4">
+                        <div class="chartjs-size-monitor">
+                            <input id="datosGrafica" type="hidden" value='@json($parametros['rangoGra'])'>
+                            {{--<input id="productoGrafica" type="text" value='@json($parametros['CantidadVendida'])'>--}}
+                            <canvas id="graficaVentas" height="200" width="764" style="display: block; width: 764px; height: 200px;" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                    {{--<div class="d-flex flex-row justify-content-end">
+                        <span class="mr-2">
+                        <i class="fas fa-square text-primary"></i> This Week
+                        </span>
+    
+                        <span>
+                        <i class="fas fa-square text-gray"></i> Last Week
+                        </span>
+                    </div>--}}
+                </div>
+            </div>
+            {{--<div class="card">
+                <div class="card-header border-0">
+                    <h3>datos</h3>
+                </div>
+                <div class="card-body">
+                    <h3>datos</h3>
+                    <input type="text" name="" id="productoTop">
+                </div>
+            </div>--}}
+        </div>
+    </div>
 @stop
+@push('styles')
+{{-- Incluimos los links del diseño de la tabla de un solo archivo --}}
+@include('auxiliares.design-datatables')
+@endpush
+@push('scripts')
+<script src="{{ asset('page/assets/js/vendor/jquery-3.6.0.min.js') }}"></script>
+<script src="{{ asset('page/assets/js/daterangepicker/moment.min.js') }}"></script>
+<script src="{{ asset('page/assets/js/daterangepicker/daterangepicker.js') }}"></script>
+
+
+{{-- Incluimos los scripts de la tabla de un solo archivo --}}
+<script src="{{asset('assets/plugins/moment/moment.min.js')}}"></script>
+<script src="{{asset('assets/plugins/inputmask/jquery.inputmask.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>
+@include('auxiliares.scripts-datatables')
+
+@endpush

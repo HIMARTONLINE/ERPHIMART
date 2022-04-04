@@ -28,14 +28,14 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <table id="table_id" class="table table-bordered table-striped">
+                                    <table id="table_id" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Nombre</th>
                                                 <th>Apellido</th>
                                                 <th>Correo electronico</th>
-                                                {{--<th>Fecha de cumpleaños</th>--}}
+                                                <th>Fecha de cumpleaños</th>
                                                 <th>No. de Pedidos</th>
                                                 <th>Total cantidad pagado</th>
                                                 {{--<th>Desplegar</th>--}}
@@ -43,16 +43,23 @@
                                         </thead>
                                         <tbody>
                                             @foreach($parametros['parametros'] as $key => $value)
-                                                <tr>
+                                                <tr data-widget="expandable-table" aria-expanded="false">
                                                     <td>{{ $value['id'] }}</td>
                                                     <td>{{ $value['firstname'] }}</td>
                                                     <td>{{ $value['lastname'] }}</td>
                                                     <td>{{ $value['email'] }}</td>
-                                                    {{--<td>{{ $value['birthday'] }}</td>--}}
+                                                    <td>{{ $value['birthday'] }}</td>
                                                     <td>{{ $value['quantity'] }}</td>
                                                     <td>$ {{ number_format($value['total_paid'], 2) }}</td>
                                                     {{--<td><a href="" data-id="" class="right fas fa-angle-left" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> </a></td>--}}
                                                 </tr>
+                                                {{--<tr class="expandable-body d-none">
+                                                    <td colspan="{{ $value['id'] }}">
+                                                       <p style="display: none;">
+                                                           {{$value['firstname']}}
+                                                       </p> 
+                                                    </td>
+                                                </tr>--}}
                                             @endforeach
                                         </tbody>
                                     </table>

@@ -25,9 +25,6 @@ Route::get('/', 'Admin\HomeController@index')->name('home');
 Route::resource('admin/productos','Admin\ProductoController')->parameters(['productos'=>'productos'])->names('admin.productos');
 Route::get('filtro-productos','Admin\ProductoController@index')->name('filtro-productos');
 
-//Rutas de ventas de producto
-Route::resource('admin/ventas', 'Admin\VentasController')->parameters(['ventas' => 'ventas'])->names('admin.ventas');
-
 //Clientes 
 Route::resource('admin/clientes', 'Admin\ClientesController')->parameters(['clientes' => 'clientes'])->names('admin.clientes');
 
