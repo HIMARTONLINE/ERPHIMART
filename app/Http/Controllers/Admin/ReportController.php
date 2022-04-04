@@ -132,7 +132,7 @@ class ReportController extends Controller
                 }
             }
         }
-        /*
+        
         $response4 = $client->request(
             'GET',
             'guide/04/' . $anio, 
@@ -145,6 +145,25 @@ class ReportController extends Controller
         
         $response4 = json_decode($response4);
 
+        $response4_seguro = $client->request(
+            'GET',
+            'invoice/04/' . $anio, 
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer 448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349"
+                ]
+            ]
+        )->getBody()->getContents();
+        
+        $response4_seguro = json_decode($response4_seguro);
+
+        foreach($response4_seguro as $key => $row){
+            for($i=0; $i<count($row); $i++){
+                $num_guia = $row[$i]->tracking_number;
+                $array_seguro4[$num_guia] = str_replace("$", "", $row[$i]->insurance);
+            }
+        }
+
         foreach($response4 as $row){
             $ultimo_env4[] = $row[array_key_last($row)];
         }
@@ -154,18 +173,27 @@ class ReportController extends Controller
         foreach($response4 as $row){
             for($i=0; $i<3000; $i++){
                 $id_envio = $row[$i]->id;
+                $numero_guia = $row[$i]->tracking_number;
                 $id_orden = explode(" - ", $row[$i]->consignee_name);
                 $id_orden = $id_orden[0];
                 $total_orden = $row[$i]->total;
-                $response44[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+                if(array_key_exists($numero_guia, $array_seguro4)){
+                    $seguro = $array_seguro4[$numero_guia];
+                    if($seguro == 1.00){
+                        $seguro = 100.00;
+                    }else{
+                        $seguro = 0.00;
+                    }
+                }
+                $response44[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
 
                 if($id_env == $id_envio){
                     break;
                 }
             }
         }
-        */
-        $response = array_merge($response11,$response22,$response33);
+        
+        $response = array_merge($response11,$response22,$response33,$response44);
         /*
         foreach($response as $row){
             $ultimo_env[] = $row[array_key_last($row)];
@@ -331,11 +359,12 @@ class ReportController extends Controller
                                         'total'          => $value['total_paid'],
                                         'descuento'      => $value['total_discounts'],
                                         'envio'          => $value['total_shipping_tax_incl'],
-                                        'seguro'         => $seguro,
+                                        'seguro_envio'   => $value['total_wrapping_tax_incl'],
                                         'pagado'         => $value['total_products_wt'],
                                         'sin_iva'        => $value['total_paid_tax_excl'],
                                         'compra'         => $sumaCompra,
                                         'paqueteria'     => $paqueteria,
+                                        'seguro'         => $seguro,
                                         'comision'       => $value['payment'],
                                         // 'utilidad'       => 'pendiente',
                                         'confirmacion'   => $value['current_state'],
@@ -489,11 +518,12 @@ class ReportController extends Controller
                                     'total'          => $value['total_paid'],
                                     'descuento'      => $value['total_discounts'],
                                     'envio'          => $value['total_shipping_tax_incl'],
-                                    'seguro'         => $seguro,
+                                    'seguro_envio'   => $value['total_wrapping_tax_incl'],
                                     'pagado'         => $value['total_products_wt'],
                                     'sin_iva'        => $value['total_paid_tax_excl'],
                                     'compra'         => $sumaCompra,
                                     'paqueteria'     => $paqueteria,
+                                    'seguro'         => $seguro,
                                     'comision'       => $value['payment'],
                                     // 'utilidad'       => 'pendiente',
                                     'confirmacion'   => $value['current_state'],

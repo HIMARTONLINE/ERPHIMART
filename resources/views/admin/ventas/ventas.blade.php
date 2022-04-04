@@ -246,15 +246,16 @@
                                 <th>Total</th>
                                 <th>Descuento</th>
                                 <th>Envío</th>
-                                <th>Seguro</th>
+                                <th>Seguro de envío</th>
                                 <th>Pagado</th>
                                 <th>Sin IVA</th>
                                 <th>Compra</th>
                                 <th>Paquetería</th>
+                                <th>Seguro</th>
                                 <th>Comisión</th>
                                 <th>Utilidad</th>
-                                <th>Método de pago</th>
                                 <th>Confirmación</th>
+                                <th>Método de pago</th>
                                 <th>Productos</th>
                             </tr>
                         </thead>
@@ -268,11 +269,12 @@
                                 <td>{{ number_format($v['pagado'], 2) }}</td>
                                 <td>{{ number_format($v['descuento'], 2) }}</td>
                                 <td>{{ number_format($v['envio'], 2) }}</td>
-                                <td>{{ number_format($v['seguro'], 2) }}</td>
+                                <td>{{ number_format($v['seguro_envio'], 2) }}</td>
                                 <td>{{ number_format($v['total'], 2) }}</td>
                                 <td>{{ number_format($v['sin_iva'], 2) }}</td>
                                 <td>{{ number_format($v['compra'], 2) }}</td>
                                 <td>{{ number_format($v['paqueteria'], 2) }}</td>
+                                <td>{{ number_format($v['seguro'], 2) }}</td>
                                 <td>
                                     @if($v['comision'] == 'Conekta Prestashop' || $v['comision'] == 'Conekta tarjetas de crédito')
                                         <?php 
@@ -307,9 +309,8 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ number_format($utilidad = $v['sin_iva'] - $v['compra'] - $comision - $v['paqueteria'], 2) }}
-                                </td>     
-                                <td>{{ $v['comision'] }}</td>                            
+                                    {{ number_format($utilidad = $v['sin_iva'] - $v['compra'] - $comision - $v['paqueteria'] - $v['seguro'], 2) }}
+                                </td>                                 
                                 <td class="text-center">
                                     @if(intval($v['confirmacion']) == 4)
                                     <button type="button" class="btn btn-warning btn-sm">Enviado</button>
@@ -325,6 +326,7 @@
                                     <button type="button" class="btn btn-success btn-sm btn-confirm r-{{ $v['orden'] }}" style="display: none;" value="no-{{ $v['orden'] }}">Autorizado</button>
                                     @endif
                                 </td>
+                                <td>{{ $v['comision'] }}</td>
                                 <td>
                                     <?php
                                         $ultima_key = end( $v['productos'] );
