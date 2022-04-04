@@ -294,8 +294,7 @@ class FacturasController extends Controller
                             // dd($precio_unitario_con_iva .' '. $precio_unitario_sin_iva .' '. $total_produ .' '. $subtotal_produ);
 
                             if($precio_unitario_con_iva != $precio_unitario_sin_iva){
-                                $total_iva = $precio_unitario_con_iva - $precio_unitario_sin_iva;
-                                $total_iva = $total_iva * $row['cantidad'];
+                                // $total_iva = $precio_unitario_con_iva - $precio_unitario_sin_iva;
                                 $rate_iva = $row['rate_iva'];
 
                                 if($rate_iva == 1){
@@ -307,16 +306,17 @@ class FacturasController extends Controller
                                     $nombre_impuesto = "IEPS";
                                     $objeto_impuesto = "02";
                                 }
+                                $total_iva = $subtotal_produ * $rate_iva;
                                 // dd($total_iva);
                                 $array_imp = array(
                                     "Name" => $nombre_impuesto,
                                     "Rate" => $rate_iva,
-                                    "Total" => number_format($total_iva, 2),
-                                    "Base" => $subtotal_produ,
+                                    "Total" => number_format($total_iva, 2, '.', ''),
+                                    "Base" => number_format($subtotal_produ, 2, '.', ''),
                                     "IsRetention" => "false"
                                 );
 
-                                $total_iva_produ = number_format($total_iva, 2);
+                                $total_iva_produ = number_format($total_iva, 2, '.', '');
                                 $base_iva = $subtotal_produ;
                                 $total_produ = $total_iva_produ + $base_iva;
                         
@@ -332,15 +332,15 @@ class FacturasController extends Controller
                                 "Unit" => $unidad_medida_nom,
                                 "Description" => $row['nombre'],
                                 "IdentificationNumber" => "23",
-                                "UnitPrice" => $precio_unitario_sin_iva,
-                                "Subtotal" => $subtotal_produ,
+                                "UnitPrice" => number_format($precio_unitario_sin_iva, 2, '.', ''),
+                                "Subtotal" => number_format($subtotal_produ, 2, '.', ''),
                                 "Discount" => "0",
                                 "DiscountVal" => "0",
                                 // "ObjetoImp" => $objeto_impuesto,            
                                 "Taxes" => array(
                                     $array_imp
                                 ),
-                                "Total" => $total_produ
+                                "Total" => number_format($total_produ, 2, '.', '')
                             );
                                 
                         }
@@ -539,8 +539,7 @@ class FacturasController extends Controller
                                 // dd($precio_unitario_con_iva .' '. $precio_unitario_sin_iva .' '. $total_produ .' '. $subtotal_produ);
     
                                 if($precio_unitario_con_iva != $precio_unitario_sin_iva){
-                                    $total_iva = $precio_unitario_con_iva - $precio_unitario_sin_iva;
-                                    $total_iva = $total_iva * $row['cantidad'];
+                                    // $total_iva = $precio_unitario_con_iva - $precio_unitario_sin_iva;
                                     $rate_iva = $row['rate_iva'];
     
                                     if($rate_iva == 1){
@@ -552,6 +551,7 @@ class FacturasController extends Controller
                                         $nombre_impuesto = "IEPS";
                                         $objeto_impuesto = "02";
                                     }
+                                    $total_iva = $subtotal_produ * $rate_iva;
                                     // dd($total_iva);
                                     $array_imp = array(
                                         "Name" => $nombre_impuesto,
@@ -561,7 +561,7 @@ class FacturasController extends Controller
                                         "IsRetention" => "false"
                                     );
 
-                                    $total_iva_produ = number_format($total_iva, 2);
+                                    $total_iva_produ = number_format($total_iva, 2, '.', '');
                                     $base_iva = $subtotal_produ;
                                     $total_produ = $total_iva_produ + $base_iva;
                            
