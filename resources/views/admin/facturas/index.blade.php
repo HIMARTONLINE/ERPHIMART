@@ -74,6 +74,13 @@
                                         <div class="d-flex justify-content-between">
                                             <h3 class="card-title">Ordenes</h3>
                                         </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col-md-2 mt-2">
+                                                <label for="">Elegir fecha</label>
+                                                <input class="form-control" type="date" name="fecha_factura" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         @if(count($ordenes_facturadas) > 0)
@@ -90,7 +97,7 @@
                                         <table id="" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Selección</th>
+                                                    <th>Selección &nbsp;&nbsp;&nbsp;<input id="select-ordenes" type="checkbox" /></th>
                                                     <th>Fecha</th>
                                                     <th>Id</th>
                                                     <th>Referencia</th>
@@ -103,7 +110,7 @@
                                                 @foreach($parametros['ordenes'] as $key => $value)
                                                     @if(in_array($value['id'], $array_ordenes))
                                                     <tr>
-                                                        <td class="text-center"><input type="checkbox" name="orden[]" value="{{ $value['id'] }}" checked></td>
+                                                        <td class="text-center"><input class="orden-factura" type="checkbox" name="orden[]" value="{{ $value['id'] }}" checked></td>
                                                         <td>{{ date('Y-m-d', strtotime($value['date_add'])) }}</td>
                                                         <td>{{ $value['id'] }}</td>
                                                         <td>{{ $value['reference'] }}</td>
@@ -116,7 +123,7 @@
                                                     </tr>
                                                     @else
                                                     <tr>
-                                                        <td class="text-center"><input type="checkbox" name="orden[]" value="{{ $value['id'] }}"></td>
+                                                        <td class="text-center"><input class="orden-factura" type="checkbox" name="orden[]" value="{{ $value['id'] }}"></td>
                                                         <td>{{ date('Y-m-d', strtotime($value['date_add'])) }}</td>
                                                         <td>{{ $value['id'] }}</td>
                                                         <td>{{ $value['reference'] }}</td>
@@ -130,7 +137,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                    <button type="submit" class="btn btn-success">Realizar factura</button>
+                                    <button type="submit" class="btn btn-success" name="factura-masiva">Realizar factura</button>
                                 </form>
                             </div>
                         </div>
@@ -174,8 +181,11 @@
 <script src="{{ asset('page/assets/js/vendor/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('page/assets/js/daterangepicker/moment.min.js') }}"></script>
 <script src="{{ asset('page/assets/js/daterangepicker/daterangepicker.js') }}"></script>
-
-
+<script>
+    $('#select-ordenes').change(function(){
+        $('.orden-factura').prop('checked', $(this).is(':checked'));
+    });
+</script>
 {{-- Incluimos los scripts de la tabla de un solo archivo --}}
 <script src="{{asset('assets/plugins/inputmask/jquery.inputmask.min.js')}}"></script>
 @include('auxiliares.scripts-datatables')

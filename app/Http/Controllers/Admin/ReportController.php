@@ -57,8 +57,9 @@ class ReportController extends Controller
                 $id_envio = $row[$i]->id;
                 $id_orden = explode(" - ", $row[$i]->consignee_name);
                 $id_orden = $id_orden[0];
+                $seguro = $row[$i]->insurance_cost;
                 $total_orden = $row[$i]->total;
-                $response11[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+                $response11[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
 
                 if($id_env == $id_envio){
                     break;
@@ -89,8 +90,9 @@ class ReportController extends Controller
                 $id_envio = $row[$i]->id;
                 $id_orden = explode(" - ", $row[$i]->consignee_name);
                 $id_orden = $id_orden[0];
+                $seguro = $row[$i]->insurance_cost;
                 $total_orden = $row[$i]->total;
-                $response22[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+                $response22[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
 
                 if($id_env == $id_envio){
                     break;
@@ -121,8 +123,9 @@ class ReportController extends Controller
                 $id_envio = $row[$i]->id;
                 $id_orden = explode(" - ", $row[$i]->consignee_name);
                 $id_orden = $id_orden[0];
+                $seguro = $row[$i]->insurance_cost;
                 $total_orden = $row[$i]->total;
-                $response33[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden);
+                $response33[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
 
                 if($id_env == $id_envio){
                     break;
@@ -181,7 +184,7 @@ class ReportController extends Controller
             }
         }
         */
-        // echo $response;
+        // dd($response);
 
         // return false;
 
@@ -268,6 +271,10 @@ class ReportController extends Controller
                                     if(in_array(0, $ejem[$key])){              
 
                                             if($valPro['id'] == $ejem[$key]['product_id']) {
+                                                $num_cdad_produ = $ejem[$key]['product_quantity'];
+                                                $nombre_produ = $ejem[$key]['product_name'];
+                                                $precio_produ = $ejem[$key]['unit_price_tax_incl'];
+                                                $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);
                                                 $total_piezas[] = $ejem[$key]['product_quantity'];
                                                 $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
                                             }                          
@@ -277,6 +284,10 @@ class ReportController extends Controller
                                         foreach($ejem[$key] as $filas){
                                             
                                                 if($valPro['id'] == $filas['product_id']) {
+                                                    $num_cdad_produ = $filas['product_quantity'];
+                                                    $nombre_produ = $filas['product_name'];
+                                                    $precio_produ = $filas['unit_price_tax_incl'];
+                                                    $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);
                                                     $total_piezas[] = $filas['product_quantity'];
                                                     $sumar[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
                                                 }
@@ -295,9 +306,11 @@ class ReportController extends Controller
                             $id_orden = $row[1];
                             if(intval($value['id']) == intval($id_orden)){
                                 $paqueteria = $row[2];
+                                $seguro = $row[3];
                                 break;
                             }else{
                                 $paqueteria = 0.00;
+                                $seguro = 0.00;
                             }
                     
                         }
@@ -318,6 +331,7 @@ class ReportController extends Controller
                                         'total'          => $value['total_paid'],
                                         'descuento'      => $value['total_discounts'],
                                         'envio'          => $value['total_shipping_tax_incl'],
+                                        'seguro'         => $seguro,
                                         'pagado'         => $value['total_products_wt'],
                                         'sin_iva'        => $value['total_paid_tax_excl'],
                                         'compra'         => $sumaCompra,
@@ -326,9 +340,11 @@ class ReportController extends Controller
                                         // 'utilidad'       => 'pendiente',
                                         'confirmacion'   => $value['current_state'],
                                         'status'         => $status,
+                                        'productos'      => $array_produ,
                         ];
 
                         $sumar = [];
+                        $array_produ = [];
                         $total_venta[] = $value['total_paid'];
                         $sumaTotalPiezas = array_sum($total_piezas);
                         $total_sin_iva[] = $value['total_paid_tax_excl'];
@@ -342,27 +358,50 @@ class ReportController extends Controller
 
             }
 
-            $sumaTotalVenta = array_sum($total_venta);
+            if(!empty($total_venta)){
+                $sumaTotalVenta = array_sum($total_venta);
+                $ordenarTabla = $tablaProdu;
 
-            $ordenarTabla = $tablaProdu;
+                $parametros = ['ordenes' => $ordenarTabla];
+                $total_piezas = $sumaTotalPiezas;
+                $total_venta = $sumaTotalVenta;
+                $sumaSinIva = array_sum($total_sin_iva);
+                $sumaCompra = array_sum($total_compra);
+                $sumaEnvio = array_sum($total_envio);
 
-            $parametros = ['ordenes' => $ordenarTabla];
-            $total_piezas = $sumaTotalPiezas;
-            $total_venta = $sumaTotalVenta;
-            $sumaSinIva = array_sum($total_sin_iva);
-            $sumaCompra = array_sum($total_compra);
-            $sumaEnvio = array_sum($total_envio);
+                $total_utilidad = [
+                    'sumaSinIva'  => $sumaSinIva,
+                    'sumaCompra'  => $sumaCompra,
+                    'sumaEnvio'   => $sumaEnvio
+                ];
 
-            $total_utilidad = [
-                'sumaSinIva'  => $sumaSinIva,
-                'sumaCompra'  => $sumaCompra,
-                'sumaEnvio'   => $sumaEnvio
-            ];
+                $filtro = [
+                    'de_fecha' => $_REQUEST['de_fecha'],
+                    'a_fecha' => $_REQUEST['a_fecha']            
+                ];
 
-            $filtro = [
-                'de_fecha' => $_REQUEST['de_fecha'],
-                'a_fecha' => $_REQUEST['a_fecha']            
-            ];
+            }else{
+                $sumaTotalVenta = 0.00;
+                $ordenarTabla = [];
+                
+                $parametros = ['ordenes' => $ordenarTabla];
+                $total_piezas = [];
+                $total_venta = $sumaTotalVenta;
+                $sumaSinIva = array();
+                $sumaCompra = array();
+                $sumaEnvio = array();
+
+                $total_utilidad = [
+                    'sumaSinIva'  => $sumaSinIva,
+                    'sumaCompra'  => $sumaCompra,
+                    'sumaEnvio'   => $sumaEnvio
+                ];
+
+                $filtro = [
+                    'de_fecha' => $_REQUEST['de_fecha'],
+                    'a_fecha' => $_REQUEST['a_fecha']            
+                ];
+            }
 
         }else{
             
@@ -389,25 +428,27 @@ class ReportController extends Controller
                             if($value['id'] == $key){
                                 if(in_array(0, $ejem[$key])){              
 
-                                        if($valPro['id'] == $ejem[$key]['product_id']) {
-                                            $num_cdad_produ = $ejem[$key]['product_quantity'];
-                                            $nombre_produ = $ejem[$key]['product_name'];
-                                            $array_produ[$num_cdad_produ] = $nombre_produ;  
-                                            $total_piezas[] = $ejem[$key]['product_quantity'];
-                                            $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
-                                        }                          
+                                    if($valPro['id'] == $ejem[$key]['product_id']) {
+                                        $num_cdad_produ = $ejem[$key]['product_quantity'];
+                                        $nombre_produ = $ejem[$key]['product_name'];
+                                        $precio_produ = $ejem[$key]['unit_price_tax_incl'];
+                                        $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);  
+                                        $total_piezas[] = $ejem[$key]['product_quantity'];
+                                        $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
+                                    }                          
                                     
                                 }else{
 
                                     foreach($ejem[$key] as $filas){
                                         
-                                            if($valPro['id'] == $filas['product_id']) {
-                                                $num_cdad_produ = $filas['product_quantity'];
-                                                $nombre_produ = $filas['product_name'];
-                                                $array_produ[$num_cdad_produ] = $nombre_produ;
-                                                $total_piezas[] = $filas['product_quantity'];
-                                                $sumar[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
-                                            }
+                                        if($valPro['id'] == $filas['product_id']) {
+                                            $num_cdad_produ = $filas['product_quantity'];
+                                            $nombre_produ = $filas['product_name'];
+                                            $precio_produ = $filas['unit_price_tax_incl'];
+                                            $array_produ[$num_cdad_produ] = $nombre_produ . ' - $' . number_format($precio_produ, 2);
+                                            $total_piezas[] = $filas['product_quantity'];
+                                            $sumar[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
+                                        }
                                     
                                     }
                                 
@@ -423,9 +464,11 @@ class ReportController extends Controller
                         $id_orden = $row[1];
                         if(intval($value['id']) == intval($id_orden)){
                             $paqueteria = $row[2];
+                            $seguro = $row[3];
                             break;
                         }else{
                             $paqueteria = 0.00;
+                            $seguro = 0.00;
                         }
                 
                     }
@@ -446,6 +489,7 @@ class ReportController extends Controller
                                     'total'          => $value['total_paid'],
                                     'descuento'      => $value['total_discounts'],
                                     'envio'          => $value['total_shipping_tax_incl'],
+                                    'seguro'         => $seguro,
                                     'pagado'         => $value['total_products_wt'],
                                     'sin_iva'        => $value['total_paid_tax_excl'],
                                     'compra'         => $sumaCompra,
@@ -495,228 +539,6 @@ class ReportController extends Controller
         }
 
         // dd($arrayOrder);
-
-        /*
-        if (request('fecha') || request('mes')) {
-            if (request('fecha')) {
-                $parametros['rango'] = request('fecha');
-                $rango = explode(' - ', request('fecha'));
-                $inicio =  date('Y-m-d', strtotime($rango[0]));
-                $final =  date('Y-m-d', strtotime($rango[1]));
-
-                $registros = DB::connection('mysql2')->select("SELECT o.id_order, o.reference, o.payment,o.current_state, o.module, oi.total_products_wt, oi.total_shipping_tax_incl, 
-                                                                      oi.total_discount_tax_incl, oi.total_paid_tax_excl, r.free_shipping, oi.total_paid_tax_incl, o.date_add,
-                                                                      (SELECT GROUP_CONCAT(d.product_quantity, 'x', d.product_name) AS productos
-                                                                         FROM psj_order_detail d
-                                                                        WHERE d.id_order=o.id_order) AS productos,
-                                                                      (SELECT SUM(d.product_quantity) AS piezas
-                                                                         FROM psj_order_detail d
-                                                                        WHERE d.id_order=o.id_order) AS piezas,
-                                                                      (SELECT 'true' AS aplicar
-                                                                         FROM psj_order_detail od 
-                                                                        WHERE (od.reduction_percent>0 OR od.reduction_amount>0)
-                                                                          AND od.id_order=o.id_order
-                                                                        LIMIT 1) AS precio_especial
-                                                                 FROM psj_orders o 
-                                                                 LEFT JOIN psj_order_invoice oi ON o.id_order=oi.id_order
-                                                                 LEFT JOIN psj_order_cart_rule r ON o.id_order=r.id_order
-                                                                WHERE o.current_state<>6
-                                                                  AND DATE(o.date_add) BETWEEN :inicio AND :final
-                                                                GROUP BY o.id_order
-                                                                ORDER BY oi.date_add DESC", ['inicio' => $inicio, 'final' => $final]);
-            } else {
-                $mes = $parametros['mes'] = request('mes');
-                $anio= date('Y');
-                
-                $sQuery= "SELECT o.id_order, o.reference, o.payment,o.current_state, o.module, oi.total_products_wt, oi.total_shipping_tax_incl, 
-                oi.total_discount_tax_incl, oi.total_paid_tax_excl, r.free_shipping, oi.total_paid_tax_incl, o.date_add,
-                (SELECT GROUP_CONCAT(d.product_quantity, 'x', d.product_name) AS productos
-                   FROM psj_order_detail d
-                  WHERE d.id_order=o.id_order) AS productos,
-                (SELECT SUM(d.product_quantity) AS piezas
-                   FROM psj_order_detail d
-                  WHERE d.id_order=o.id_order) AS piezas,
-                (SELECT 'true' AS aplicar
-                   FROM psj_order_detail od 
-                  WHERE (od.reduction_percent>0 OR od.reduction_amount>0)
-                    AND od.id_order=o.id_order
-                  LIMIT 1) AS precio_especial
-           FROM psj_orders o 
-           LEFT JOIN psj_order_invoice oi ON o.id_order=oi.id_order
-           LEFT JOIN psj_order_cart_rule r ON o.id_order=r.id_order
-          WHERE o.current_state<>6
-            AND YEAR(o.date_add) =  '2021'
-            AND MONTH(o.date_add) ='1'
-          GROUP BY o.id_order
-          ORDER BY oi.date_add DESC";
-
-
-                $registros = DB::connection('mysql2')->select("SELECT o.id_order, o.reference, o.payment,o.current_state, o.module, oi.total_products_wt, oi.total_shipping_tax_incl, 
-                                                                      oi.total_discount_tax_incl, oi.total_paid_tax_excl, r.free_shipping, oi.total_paid_tax_incl, o.date_add,
-                                                                      (SELECT GROUP_CONCAT(d.product_quantity, 'x', d.product_name) AS productos
-                                                                         FROM psj_order_detail d
-                                                                        WHERE d.id_order=o.id_order) AS productos,
-                                                                      (SELECT SUM(d.product_quantity) AS piezas
-                                                                         FROM psj_order_detail d
-                                                                        WHERE d.id_order=o.id_order) AS piezas,
-                                                                      (SELECT 'true' AS aplicar
-                                                                         FROM psj_order_detail od 
-                                                                        WHERE (od.reduction_percent>0 OR od.reduction_amount>0)
-                                                                          AND od.id_order=o.id_order
-                                                                        LIMIT 1) AS precio_especial
-                                                                 FROM psj_orders o 
-                                                                 LEFT JOIN psj_order_invoice oi ON o.id_order=oi.id_order
-                                                                 LEFT JOIN psj_order_cart_rule r ON o.id_order=r.id_order
-                                                                WHERE o.current_state<>6
-                                                                  AND YEAR(o.date_add) = :anio
-                                                                  AND MONTH(o.date_add) = :mes
-                                                                GROUP BY o.id_order
-                                                                ORDER BY oi.date_add DESC", ['mes' => $mes, 'anio' => date('Y')]);
-            }
-
-            foreach ($registros as $key => $value) {
-                $siniva = $value->total_paid_tax_incl / 1.16;
-
-                //Cálculo de descuento en caso de que el producto lleve aplicado el descuento directo 
-                if ($value->precio_especial != null) {
-                    $detalle = DB::connection('mysql2')->select("SELECT product_name, product_quantity, original_product_price, unit_price_tax_incl
-                                                                   FROM psj_order_detail
-                                                                  WHERE id_order = :id_order", ['id_order' => $value->id_order]);
-                    $real = 0;
-                    $rebajado = 0;
-                    foreach ($detalle as $ke => $va) {
-                        $precio = round($va->original_product_price + ($va->original_product_price * 0.16));
-                        $real += ($va->product_quantity * $precio);
-                        $rebajado += ($va->product_quantity * $va->unit_price_tax_incl);
-                        $value->total_discount_tax_incl = $real - $rebajado;
-                    }
-
-                    $value->total_products_wt = $real;
-                }
-
-
-              
-                
-                $comision = 0.00;
-                switch ($value->payment) {
-                    case 'Conekta oxxo_cash':
-                        $valor = $value->total_paid_tax_incl * 0.039;
-                        $iva = $valor * 0.16;
-                        $comision = round($valor + $iva, 2);
-                        // $comision = bcdiv($valor+$iva, 1, 2);
-                        break;
-
-                    case 'Conekta tarjetas de crédito':
-                    case 'Conekta Cards':
-                        $valor = $value->total_paid_tax_incl * 0.029 + 2.5;
-                        $iva = $valor * 0.16;
-                        $comision = round($valor + $iva, 2);
-                        break;
-
-                    case 'Pago por transferencia bancaria':
-                        $comision = 0.00;
-                        break;
-
-                    case 'PayPal':
-                        $valor = $value->total_paid_tax_incl * 0.0395 + 4;
-                        $comision = round($valor, 2);
-                        break;
-
-                    case 'Stripe Payment Pro':
-                        $valor = $value->total_paid_tax_incl * 0.036 + 3;
-                        $comision = round($valor, 2);
-                        break;
-                }
-
-                $pedido = [
-                    'fecha'      => $value->date_add,
-                    'current_state'      => $value->current_state,
-                    'productos'  => $value->productos,
-                    'orden'      => $value->id_order,
-                    'referencia' => $value->reference,
-                    'total'      => number_format($value->total_products_wt, 2, '.', ''),
-                    'descuento'  => number_format(($value->total_discount_tax_incl * -1), 2, '.', ''),
-                    'envio'      => number_format($value->total_shipping_tax_incl, 2, '.', ''),
-                    'pagado'     => number_format($value->total_paid_tax_incl, 2, '.', ''),
-                    'espacio'    => '',
-                    'siniva'     => number_format($siniva, 2, '.', ''),
-                    'compra'     => 0.00,
-                    'paqueteria' => 0.00,
-                    'comision'   => number_format(($comision * -1), 2, '.', ''),
-                    'plataforma' => $value->payment,
-                    'utilidad'   => 0.00
-                ];
-
-                //Checar si tiene valores como tarjeta de regalo
-                $detailgift = DB::connection('mysql2')->select("SELECT COUNT(*) AS existe
-                                                                  FROM psj_gift_card_customer gcc
-                                                                 WHERE gcc.id_order=:orden", ['orden' => $pedido['orden']]);
-                if ($detailgift[0]->existe > 0) {
-                    $detailproducts = DB::connection('mysql2')->select("SELECT (od.product_price * od.product_quantity) AS valor
-                                                                          FROM psj_order_detail od
-                                                                         WHERE od.id_order=:orden
-                                                                           AND product_reference='GIFT_PRODUCT_'", ['orden' => $pedido['orden']]);
-
-                    $total_sin_iva_ni_tarjeta = ($value->total_paid_tax_incl - $detailproducts[0]->valor) / 1.16 + $detailproducts[0]->valor;
-                    $pedido['siniva'] = number_format($total_sin_iva_ni_tarjeta, 2, '.', '');
-                }
-
-                $detalles = DB::connection('mysql2')->select("SELECT od.product_quantity, pl.name
-                                                                FROM psj_order_detail od
-                                                                LEFT JOIN psj_product_lang pl ON od.product_id=pl.id_product
-                                                               WHERE od.id_order=:orden
-                                                                 AND pl.id_lang=:idioma", [
-                    'orden'  => $value->id_order,
-                    'idioma' => 2
-                ]);
-
-                foreach ($detalles as $ke => $va) {
-                    try {
-                        $precio = Product::select('costo')->where('producto', '=', $va->name)->first();
-                        $paqueteria = Delivery::select('precio')->where('id_orden', '=', $value->id_order)->first();
-                        if (isset($precio['costo'])) {
-                            $pedido['compra'] += number_format(($precio['costo'] * $va->product_quantity) * -1, 2, '.', '');
-                        }
-                        $pedido['paqueteria'] = number_format($paqueteria == null ? 0.00 : $paqueteria['precio'] * -1, 2, '.', '');
-                        $utilidad = $pedido['siniva'] + $pedido['compra'] + $pedido['comision'] + $pedido['paqueteria'];
-                        $pedido['utilidad'] = number_format($utilidad, 2, '.', '');
-                    } catch (Exception $exception) {
-                    }
-                }
-
-                $pedido['confirmacion'] = false;
-                $confirmacion = Confirmation::select('confirmado', DB::raw('DATE_FORMAT(created_at,  \'%Y-%m-%d\') AS created_at'))->where('referencia', '=', $pedido['referencia'])->first();
-              
-             
-                if (isset($confirmacion['confirmado']) && $confirmacion['confirmado'] == 1) {
-                    $pedido['confirmacion'] = true;
-                    $fecha_confirmacion = strtotime($confirmacion['created_at'] . ' 00:00:00');
-                    $hoy = strtotime(date('Y-m-d') . ' 00:00:00');
-                    $pedido['color'] = 'danger';
-                    if ($hoy > $fecha_confirmacion) {
-                        $pedido['color'] = 'success';
-                    }
-                    //Sumatoria solo si el pedido esta confirmado
-                    $parametros['totales']['piezas'] += $value->piezas;
-                    $parametros['totales']['venta'] += $value->total_paid_tax_incl;
-                    $parametros['totales']['utilidad'] += $utilidad;
-                } else {
-                    $pedido['color'] = 'danger';
-                }
-
-                $ventas[] = $pedido;
-            }
-
-            $parametros['totales']['porcentaje'] = 0;
-            if ($parametros['totales']['utilidad'] > 0 && $parametros['totales']['venta'] > 0) {
-                $parametros['totales']['porcentaje'] = ($parametros['totales']['utilidad'] * 100) / $parametros['totales']['venta'];
-            }
-            $parametros['ventas'] = $ventas;
-
-  
-        }
-        */
-        
         // $total_utilidad = $sumaSinIva - $sumaCompra - $comision - $sumaEnvio
 
         return view('admin.ventas.ventas', compact('parametros','total_pedidos','total_piezas','total_venta','total_utilidad','filtro'));

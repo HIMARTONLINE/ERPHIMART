@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
+use App\Imports\ProductsImport;
 use Maatwebsite\Excel\Facades\Excel;
  
  
@@ -22,6 +23,15 @@ class ExcelCSVController extends Controller
         $a_fecha = $request->a_fecha;
 
         return Excel::download(new ProductsExport($categoria, $de_stock, $a_stock, $de_precio, $a_precio, $de_fecha, $a_fecha), 'products.xlsx');
+    }
+
+    public function importExcelCSV(Request $request) 
+    {
+
+        Excel::import(new ProductsImport, request()->file('archivo'));
+        
+        return redirect('admin/productos');
+    
     }
     
 }
