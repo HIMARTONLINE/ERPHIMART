@@ -17,6 +17,11 @@
           <div class="dropdown-divider"></div>
       
           <a href="#" class="dropdown-item">
+            {{--
+            @foreach($cart['prueba'] as $row)
+              {{ $row['stock'] }}
+            @endforeach
+            --}}
             <i class="fas fa-envelope mr-2"></i> No tienes notificaciones
             <span class="float-right text-muted text-sm">3 mins</span>
           </a>
