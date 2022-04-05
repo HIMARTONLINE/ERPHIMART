@@ -378,7 +378,7 @@ class ReportController extends Controller
                         $sumaTotalPiezas = array_sum($total_piezas);
                         $total_sin_iva[] = $value['total_paid_tax_excl'];
                         $total_compra[] = $sumaCompra;
-                        $total_envio[] = $value['total_shipping_tax_incl'];
+                        $total_envio[] = $paqueteria;
                         $total_pedidos++;
 
                     }
@@ -537,7 +537,7 @@ class ReportController extends Controller
                     $sumaTotalPiezas = array_sum($total_piezas);
                     $total_sin_iva[] = $value['total_paid_tax_excl'];
                     $total_compra[] = $sumaCompra;
-                    $total_envio[] = $value['total_shipping_tax_incl'];
+                    $total_envio[] = $paqueteria;
                     
                 }
                 $total_pedidos++;

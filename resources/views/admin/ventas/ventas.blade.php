@@ -192,7 +192,9 @@
                                 $total_comision[] = $comision;
                             ?>
                         @else
-
+                            <?php 
+                                $total_comision[] = 0.00;
+                            ?>
                         @endif
                     @endforeach
                     <?php
@@ -306,6 +308,9 @@
                                         ?>
                                     @else
                                         {{ $v['comision'] }}
+                                        <?php
+                                            $comision = 0;
+                                        ?>
                                     @endif
                                 </td>
                                 <td>

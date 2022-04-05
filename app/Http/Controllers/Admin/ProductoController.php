@@ -18,7 +18,36 @@ class ProductoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        
+        /*
+        $urlProdu['resource'] = 'products/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
+        $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
+
+        $urlStock['resource'] = 'stock_availables/?display=full';
+        $xmlStock = Prestashop::get($urlStock);
+
+        $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
+        $arrayProdu = json_decode($jsonProdu, true);  //decodificamos el json anterior para poder manipularlos
+
+        $jsonStock = json_encode($xmlStock);
+        $arrayStock = json_decode($jsonStock, true);
+
+        foreach($arrayProdu['products']['product'] as $key => $value) {
+    
+            foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+
+                if($value['id'] == $valor['id_product']) {
+                    if($valor['quantity'] == 1){
+                        $tablaProdu[] = ['stock' => $valor['quantity']];
+                    }
+                }   
+            }                              
+        }
+        /*
+        $arreglo['cart'] = ['carts'=>'Sesión','count'=>'Prueba'];
+        if(isset($arreglo)){*/                  
+            /*View::share('cart', ['prueba' => $tablaProdu]);*/
+        /*
+        }*/
     }
 
     /**
@@ -60,7 +89,6 @@ class ProductoController extends Controller
 
         $urlStockMvt['resource'] = 'stock_movements/?display=full';
         $xmlStockMvt = Prestashop::get($urlStockMvt);
-
 
         $urlOrder['resource'] = 'orders/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
         $xmlOrder = Prestashop::get($urlOrder); //llama los parametros por GET
