@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use App\Imports\ProductsImport;
+use App\Exports\ClientesExport;
 use Maatwebsite\Excel\Facades\Excel;
  
  
@@ -32,6 +33,12 @@ class ExcelCSVController extends Controller
         
         return redirect('admin/productos');
     
+    }
+
+    public function exportClientesCSV(Request $request) 
+    {
+
+        return Excel::download(new ClientesExport(), 'clientes.xlsx');
     }
     
 }
