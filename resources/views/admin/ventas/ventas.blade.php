@@ -201,7 +201,7 @@
                         $sumaTotalComision = array_sum($total_comision);
                     ?>
                     <h5 class="text-muted font-weight-normal mt-0">Utilidad Total</h5>
-                    <h3 class="mt-3 mb-3">{{ number_format($totalUtilidad = $total_utilidad['sumaSinIva'] - $total_utilidad['sumaCompra'] - $sumaTotalComision - $total_utilidad['sumaEnvio'], 2) }}</span></h3>
+                    <h3 class="mt-3 mb-3">{{ number_format($totalUtilidad = $total_utilidad['sumaSinIva'] - $total_utilidad['sumaCompra'] - $sumaTotalComision - $total_utilidad['sumaEnvio'] - $total_utilidad['sumaSeguro'], 2) }}</span></h3>
                 </div>
             </div>
         </div>

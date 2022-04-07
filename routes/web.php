@@ -30,9 +30,12 @@ Route::get('filtro-productos','Admin\ProductoController@index')->name('filtro-pr
 //Clientes 
 Route::resource('admin/clientes', 'Admin\ClientesController')->parameters(['clientes' => 'clientes'])->names('admin.clientes');
 
+// Reportes
 Route::get('admin/reportes', 'Admin\ReportController@periodSales')->name('admin.reportes');
 Route::post('/confirmacion-p', 'Admin\ReportController@confirmacion_p');
 Route::get('filtro-ventas','Admin\ReportController@periodSales')->name('filtro-ventas');
+Route::get('admin/poco-stock', 'Admin\ReportController@poco_stock')->name('admin.poco-stock');
+Route::get('admin/pocas-ventas', 'Admin\ReportController@pocas_ventas')->name('admin.pocas-ventas');
 
 //Facturas
 Route::resource('admin/facturas', 'Admin\FacturasController')->parameters(['facturas' => 'facturas'])->names('admin.facturas');
