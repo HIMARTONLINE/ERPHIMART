@@ -379,6 +379,7 @@ class ReportController extends Controller
                         $total_sin_iva[] = $value['total_paid_tax_excl'];
                         $total_compra[] = $sumaCompra;
                         $total_envio[] = $paqueteria;
+                        $total_seguro[] = $seguro;
                         $total_pedidos++;
 
                     }
@@ -397,11 +398,13 @@ class ReportController extends Controller
                 $sumaSinIva = array_sum($total_sin_iva);
                 $sumaCompra = array_sum($total_compra);
                 $sumaEnvio = array_sum($total_envio);
+                $sumaSeguro = array_sum($total_seguro);
 
                 $total_utilidad = [
                     'sumaSinIva'  => $sumaSinIva,
                     'sumaCompra'  => $sumaCompra,
-                    'sumaEnvio'   => $sumaEnvio
+                    'sumaEnvio'   => $sumaEnvio,
+                    'sumaSeguro'  => $sumaSeguro
                 ];
 
                 $filtro = [
@@ -419,11 +422,13 @@ class ReportController extends Controller
                 $sumaSinIva = array();
                 $sumaCompra = array();
                 $sumaEnvio = array();
+                $sumaSeguro = array();
 
                 $total_utilidad = [
                     'sumaSinIva'  => $sumaSinIva,
                     'sumaCompra'  => $sumaCompra,
-                    'sumaEnvio'   => $sumaEnvio
+                    'sumaEnvio'   => $sumaEnvio,
+                    'sumaSeguro'  => $sumaSeguro
                 ];
 
                 $filtro = [
@@ -538,6 +543,7 @@ class ReportController extends Controller
                     $total_sin_iva[] = $value['total_paid_tax_excl'];
                     $total_compra[] = $sumaCompra;
                     $total_envio[] = $paqueteria;
+                    $total_seguro[] = $seguro;
                     
                 }
                 $total_pedidos++;
@@ -554,11 +560,13 @@ class ReportController extends Controller
             $sumaSinIva = array_sum($total_sin_iva);
             $sumaCompra = array_sum($total_compra);
             $sumaEnvio = array_sum($total_envio);
+            $sumaSeguro = array_sum($total_seguro);
 
             $total_utilidad = [
                 'sumaSinIva'  => $sumaSinIva,
                 'sumaCompra'  => $sumaCompra,
-                'sumaEnvio'   => $sumaEnvio
+                'sumaEnvio'   => $sumaEnvio,
+                'sumaSeguro'   => $sumaSeguro,
             ];
 
             $filtro = [
@@ -607,6 +615,177 @@ class ReportController extends Controller
         );
 
         return response()->json($response);
+
+    }
+
+    public function poco_stock(Request $request)
+    {   
+        $urlProdu['resource'] = 'products/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
+        $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
+
+        $urlStock['resource'] = 'stock_availables/?display=full';
+        $xmlStock = Prestashop::get($urlStock);
+
+        $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
+        $arrayProdu = json_decode($jsonProdu, true);  //decodificamos el json anterior para poder manipularlos
+
+        $jsonStock = json_encode($xmlStock);
+        $arrayStock = json_decode($jsonStock, true);
+
+        foreach($arrayProdu['products']['product'] as $key => $value) {
+    
+            foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+
+                if($value['id'] == $valor['id_product']) {
+                    if($valor['quantity'] == 1){
+                        $tablaProdu[] = [
+                            'id' => $value['id'],
+                            'id_img' => $value['id_default_image'],
+                            'referencia' => $value['reference'],
+                            'nombre' => $value['name']['language']
+                            // 'stock' => $valor['quantity']
+                        ];
+                    }
+                    $id_p = $value['id'];
+                    $array_produ[$id_p] = [
+                        'id' => $value['id'],
+                        'id_img' => $value['id_default_image'],
+                        'referencia' => $value['reference'],
+                        'nombre' => $value['name']['language']
+                    ];
+                }   
+            }                       
+        }
+
+        return view('admin.ventas.poco_stock', ['cantidad' => $tablaProdu]);
+
+    }
+
+    public function pocas_ventas(Request $request)
+    {   
+        $urlProdu['resource'] = 'products/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
+        $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
+
+        $urlStock['resource'] = 'stock_availables/?display=full';
+        $xmlStock = Prestashop::get($urlStock);
+
+        $urlOrder['resource'] = 'orders/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
+        $xmlOrder = Prestashop::get($urlOrder); //llama los parametros por GET
+
+        $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
+        $arrayProdu = json_decode($jsonProdu, true);  //decodificamos el json anterior para poder manipularlos
+
+        $jsonStock = json_encode($xmlStock);
+        $arrayStock = json_decode($jsonStock, true);
+
+        $jsonOrder = json_encode($xmlOrder);    //codificamos el xml de la api en json
+        $arrayOrder = json_decode($jsonOrder, true);  //decodificamos el json anterior para poder manipularlos
+
+        foreach($arrayProdu['products']['product'] as $key => $value) {
+    
+            foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
+
+                if($value['id'] == $valor['id_product']) {
+                    if($valor['quantity'] == 1){
+                        $tablaProdu[] = [
+                            'id' => $value['id'],
+                            'id_img' => $value['id_default_image'],
+                            'referencia' => $value['reference'],
+                            'nombre' => $value['name']['language']
+                            // 'stock' => $valor['quantity']
+                        ];
+                    }
+                    $id_p = $value['id'];
+                    $array_produ[$id_p] = [
+                        'id' => $value['id'],
+                        'id_img' => $value['id_default_image'],
+                        'referencia' => $value['reference'],
+                        'nombre' => $value['name']['language']
+                    ];
+                }   
+            }                       
+        }
+
+        foreach($arrayOrder['orders']['order'] as $i => $v) {
+
+            if($v['current_state'] == 3 || $v['current_state'] == 5 || $v['current_state'] == 4 || $v['current_state'] == 2) {
+                
+                // $suma[] = floatval($v['total_paid']);
+                $id_orden = $v['id'];
+                $ejem[$id_orden] = $v['associations']['order_rows']['order_row'];
+
+            }
+        }
+
+        $arreglo_produ = [];
+
+        foreach($arrayOrder['orders']['order'] as $index => $value) {
+
+            if($value['current_state'] == 3 || $value['current_state'] == 5 || $value['current_state'] == 4 || $value['current_state'] == 2) {
+
+                foreach($arrayProdu['products']['product'] as $inPro => $valPro) {
+
+                    foreach($ejem as $key => $row){
+                        if($value['id'] == $key){
+                            if(in_array(0, $ejem[$key])){              
+                                
+                                if(!in_array($valPro['id'], $arreglo_produ)){
+                                    if(array_key_exists($valPro['id'], $array_produ)){
+                                        if($valPro['id'] == $ejem[$key]['product_id']) {
+                                            $id_produ = $valPro['id'];
+                                            $fecha_actual = date('Y-m-d H:i:s');
+                                            $ultima_fecha = $value['date_upd'];                                      
+                                            $fecha1 = date_create($fecha_actual);
+                                            $fecha2 = date_create($ultima_fecha);
+                                            $dias = date_diff($fecha2, $fecha1)->format('%R%a');
+                                            if($dias >= 30){
+                                                $lista_produ[$id_produ] = $dias;
+                                                $array_produ_dias[$id_produ] = [
+                                                    'dias' => $dias
+                                                ];
+                                            }
+                                            $arreglo_produ[] = $valPro['id'];
+                                        }
+                                    }                          
+                                }
+                                
+                            }else{
+
+                                foreach($ejem[$key] as $filas){
+                                    
+                                    if(!in_array($valPro['id'], $arreglo_produ)){
+                                        if(array_key_exists($valPro['id'], $array_produ)){
+                                            if($valPro['id'] == $filas['product_id']) {
+                                                $id_produ = $valPro['id'];
+                                                $fecha_actual = date('Y-m-d H:i:s');
+                                                $ultima_fecha = $value['date_upd'];
+                                                $fecha1 = date_create($fecha_actual);
+                                                $fecha2 = date_create($ultima_fecha);
+                                                $dias = date_diff($fecha2, $fecha1)->format('%R%a');
+                                                if($dias >= 30){
+                                                    $lista_produ[$id_produ] = $dias;
+                                                    $array_produ_dias[$id_produ] = [
+                                                        'dias' => $dias
+                                                    ];
+                                                }
+                                                $arreglo_produ[] = $valPro['id'];
+                                            }
+                                        }
+                                    }
+                                
+                                }
+                            
+                            }
+                        }
+                        
+                    }
+                }
+                
+            }
+
+        }
+
+        return view('admin.ventas.pocas_ventas', ['lista_produ' => $lista_produ, 'array_produ' => $array_produ, 'array_produ_dias' => $array_produ_dias]);
 
     }
 
