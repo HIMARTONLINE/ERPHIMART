@@ -30,7 +30,10 @@
                                             <th scope="col">Referencia</th>
                                             <th scope="col">Imagen</th>
                                             <th scope="col">Nombre</th>
-                                            <th scope="col">Días</th>
+                                            <th scope="col">Precio</th>
+                                            <th scope="col">Stock</th>
+                                            <th scope="col">Días sin venta</th>
+                                            <th scope="col">Fecha inicio</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -41,7 +44,10 @@
                                                 <td>{{ $array_produ[$key]['referencia'] }}</td>
                                                 <td><img src="https://himart.com.mx/api/images/products/{{ $array_produ[$key]['id'] }}/{{ $array_produ[$key]['id_img'] }}/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4&display=full" width="100" height="100" /></td>
                                                 <td>{{ $array_produ[$key]['nombre'] }}</td>
+                                                <td>{{ number_format($array_produ[$key]['precio'], 2) }}</td>
+                                                <td>{{ $array_produ[$key]['stock'] }}</td>
                                                 <td>{{ str_replace("+", "", $array_produ_dias[$key]['dias']) }}</td>
+                                                <td>{{ $array_produ[$key]['fecha'] }}</td>
                                             </tr>
                                             @endif
                                         @endforeach
