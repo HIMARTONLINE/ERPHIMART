@@ -570,7 +570,7 @@ class ReportController extends Controller
             ];
 
             $filtro = [
-                'de_fecha' => 2020-01-01,
+                'de_fecha' => '2020-01-01',
                 'a_fecha' => date('Y-m-d')            
             ];
 
@@ -686,21 +686,15 @@ class ReportController extends Controller
             foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
 
                 if($value['id'] == $valor['id_product']) {
-                    if($valor['quantity'] == 1){
-                        $tablaProdu[] = [
-                            'id' => $value['id'],
-                            'id_img' => $value['id_default_image'],
-                            'referencia' => $value['reference'],
-                            'nombre' => $value['name']['language']
-                            // 'stock' => $valor['quantity']
-                        ];
-                    }
                     $id_p = $value['id'];
                     $array_produ[$id_p] = [
                         'id' => $value['id'],
                         'id_img' => $value['id_default_image'],
                         'referencia' => $value['reference'],
-                        'nombre' => $value['name']['language']
+                        'nombre' => $value['name']['language'],
+                        'precio' => $value['price'],
+                        'stock' => $valor['quantity'],
+                        'fecha' => $value['date_add'],
                     ];
                 }   
             }                       
@@ -738,7 +732,7 @@ class ReportController extends Controller
                                             $fecha1 = date_create($fecha_actual);
                                             $fecha2 = date_create($ultima_fecha);
                                             $dias = date_diff($fecha2, $fecha1)->format('%R%a');
-                                            if($dias >= 30){
+                                            if($dias >= 10){
                                                 $lista_produ[$id_produ] = $dias;
                                                 $array_produ_dias[$id_produ] = [
                                                     'dias' => $dias
@@ -762,7 +756,7 @@ class ReportController extends Controller
                                                 $fecha1 = date_create($fecha_actual);
                                                 $fecha2 = date_create($ultima_fecha);
                                                 $dias = date_diff($fecha2, $fecha1)->format('%R%a');
-                                                if($dias >= 30){
+                                                if($dias >= 10){
                                                     $lista_produ[$id_produ] = $dias;
                                                     $array_produ_dias[$id_produ] = [
                                                         'dias' => $dias

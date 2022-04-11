@@ -1,6 +1,6 @@
 @extends('admin.layout.layout')
 @section('title')
-<h1 class="m-0 text-dark">Productos con poco Stock</h1>
+<h1 class="m-0 text-dark">Productos con poco stock</h1>
 @endsection
 @section('css')
     <link rel="stylesheet" href="/css_custom.css">
@@ -11,7 +11,7 @@
 <ol class="breadcrumb float-sm-right">
     <li class="breadcrumb-item"><a href="{{route('home')}}">Inicio</a></li>
     <li class="breadcrumb-item">Administración</li>
-    <li class="breadcrumb-item active">Productos con poco Stock</li>
+    <li class="breadcrumb-item active">Productos con poco stock</li>
 </ol>
 @stop
 @section('content')

@@ -13,9 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Auth::routes();
-
+// Exportar clientes
 Route::get('export-clientes', 'ExcelCSVController@exportClientesCSV')->name('export-clientes');
 
+// Exportar reporte de ventas
+Route::get('export-ventas', 'ExcelCSVController@exportVentasCSV')->name('export-ventas');
+
+// Exportar inventario
 Route::get('export-excel', 'ExcelCSVController@exportExcelCSV')->name('export-excel');
 Route::post('import-excel', 'ExcelCSVController@importExcelCSV')->name('import-excel');
 

@@ -45,58 +45,16 @@
                     <div class="mb-3">
                         Obten los registros de ventas de acuerdo al rango de fechas proporcionado.
                     </div>
-
-                    <ul class="nav nav-tabs nav-bordered mb-3">
-                        <li class="nav-item">
-                            {{--
-                            <a href="#meses" data-toggle="tab" aria-expanded="{{ $parametros['mes']=="" && $parametros['rango']==""?"true":"false" }}{{ $parametros['mes']!=""?"true":"" }}" class="nav-link {{ $parametros['mes']=="" && $parametros['rango']==""?"active":"" }}{{ $parametros['mes']!=""?"active":"" }}">
-                                <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                <span class="d-none d-md-block">{{ __('reportes.tab1') }}</span>
-                            </a>
-                            --}}
-                        </li>
-                        <li class="nav-item">
-                            {{--
-                            <a href="#rango" data-toggle="tab" aria-expanded="{{ $parametros['rango']==""?"false":"true" }}" class="nav-link {{ $parametros['rango']==""?"":"active" }}">
-                                <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                                <span class="d-none d-md-block">{{ __('reportes.tab2') }}</span>
-                            </a>
-                            --}}
-                        </li>
-                    </ul>
+                    <hr />
+                    <form class="mb-4" action="{{ route('export-ventas') }}" method="GET">
+                    @csrf
+                        <input type="hidden" name="de_fecha" value="{{ $filtro['de_fecha'] }}">
+                        <input type="hidden" name="a_fecha" value="{{ $filtro['a_fecha'] }}">
+                        <button type="submit" class="btn btn-success float-right ml-3"><i class="fa fa-file-excel"></i> Exportar Ventas</button>
+                    </form>
                     {{--
                     <div class="tab-content">
-                        <div class="tab-pane {{ $parametros['mes']=="" && $parametros['rango']==""?"show active":"" }}{{ $parametros['mes']!=""?"show active":"" }}" id="meses">
-                            <form id="consultames" action="{{ route('admin.reportes') }}" method="post" enctype="multipart/form-data" autocomplete="off">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="mes">{{ __('reportes.mes') }}</label>
-                                            <select name="mes" id="mes" class="form-control select2" data-toggle="select2" required="true" data-tipo="txt">
-                                                <option>{{ __('reportes.seleccionames') }}</option>
-                                                <option value="1" {{ $parametros['mes']==1?'selected="selected"':'' }}>{{ __('layout.ene') }}</option>
-                                                <option value="2" {{ $parametros['mes']==2?'selected="selected"':'' }}>{{ __('layout.feb') }}</option>
-                                                <option value="3" {{ $parametros['mes']==3?'selected="selected"':'' }}>{{ __('layout.mar') }}</option>
-                                                <option value="4" {{ $parametros['mes']==4?'selected="selected"':'' }}>{{ __('layout.abr') }}</option>
-                                                <option value="5" {{ $parametros['mes']==5?'selected="selected"':'' }}>{{ __('layout.may') }}</option>
-                                                <option value="6" {{ $parametros['mes']==6?'selected="selected"':'' }}>{{ __('layout.jun') }}</option>
-                                                <option value="7" {{ $parametros['mes']==7?'selected="selected"':'' }}>{{ __('layout.jul') }}</option>
-                                                <option value="8" {{ $parametros['mes']==8?'selected="selected"':'' }}>{{ __('layout.ago') }}</option>
-                                                <option value="9" {{ $parametros['mes']==9?'selected="selected"':'' }}>{{ __('layout.sep') }}</option>
-                                                <option value="10" {{ $parametros['mes']==10?'selected="selected"':'' }}>{{ __('layout.oct') }}</option>
-                                                <option value="11" {{ $parametros['mes']==11?'selected="selected"':'' }}>{{ __('layout.nov') }}</option>
-                                                <option value="12" {{ $parametros['mes']==12?'selected="selected"':'' }}>{{ __('layout.dic') }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" data-consultarmes="true" class="btn btn-secondary margenbtnfloat"><i class="mdi mdi-database-search"></i> {{ __('layout.consultar') }}</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        --}}
+                    --}}
                         <div class="tab-pane" id="rango">
                             <form id="form-produ" class="mb-4" action="{{ route('filtro-ventas') }}" method="GET">
                             @csrf    
