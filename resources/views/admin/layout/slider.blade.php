@@ -21,10 +21,25 @@
             <li class="nav-header">Menú</li>
 
             <li class="nav-item">
-                <a href="" class="nav-link">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>Usuarios</p>
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fa-solid fas fa-users"></i>
+                    <p>Recursos Humanos<i class="fas fa-angle-left right"></i></p>
                 </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                    
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Personal</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Autorizaciones</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="nav-item">
@@ -62,8 +77,12 @@
                     <p>Empleados</p>
                 </a>
             </li>
-
-
+            <li class="nav-item">
+                <a href="{{ route('admin.festivos.index') }}" class="nav-link">
+                    <i class="nav-icon fa-solid bi bi-calendar2-week-fill"></i>
+                    <p>Festivos</p>
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fa-solid fas  fa-cash-register"></i>

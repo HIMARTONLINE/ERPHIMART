@@ -35,4 +35,12 @@ Route::get('filtro-ventas','Admin\ReportController@periodSales')->name('filtro-v
 //Facturas
 Route::resource('admin/facturas', 'Admin\FacturasController')->parameters(['facturas' => 'facturas'])->names('admin.facturas');
 
+    // Días no laborables
+    Route::resource('admin/festivos', 'Admin\HolidayController')->names('admin.festivos');
+
+    /*// Días de vacaciones
+    Route::resource('/vacaciones', 'VacationController')->names('vacaciones');
+    Route::match(array('GET', 'POST'), '/vacaciones/getregistros', 'VacationController@getRegistros')->name('vacaciones.getregistros');*/
+    Route::match(array('GET', 'POST'), '/home/vacacionando', 'Admin\HomeController@getBloqVac')->name('home.vacacionando');
+
 

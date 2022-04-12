@@ -9,6 +9,9 @@
   <!-- DaterangePicker -->
   <link rel="stylesheet" href="{{ asset('page/assets/js/daterangepicker/daterangepicker.css') }}">
 
+  <!-- fullCalendar 2.2.5-->
+  <link href="{{ asset('fullcalendar-scheduler/main.min.css') }}" rel="stylesheet" type="text/css" />
+  
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- CSRF Token -->
@@ -19,10 +22,12 @@
 
   @stack('styles')
   <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!--<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">-->
   <link rel="stylesheet" href="{{ asset('estilos_personalizados/styles.css')}}">
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+  <!-- Iconos de Bootstrap descargados-->
+  <link rel="stylesheet" href="{{asset('css/bootstrap-icons-1.8.1/bootstrap-icons.css')}}">
 
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css')}}">
@@ -34,6 +39,9 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
+
+  <!--- Script del calendario --->
+  <script src="{{ asset('js/calendario.js') }}"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -197,7 +205,7 @@
         alert('ACTIVO');
         $('#table_id').DataTable();
       }, 7000);*/
-      $('#table_id').DataTable();
+      //$('#table_id').DataTable();
   });
 </script>
 </body>
