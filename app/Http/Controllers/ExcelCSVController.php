@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use App\Imports\ProductsImport;
+use App\Exports\ClientesExport;
+use App\Exports\VentasExport;
 use Maatwebsite\Excel\Facades\Excel;
  
  
@@ -32,6 +34,20 @@ class ExcelCSVController extends Controller
         
         return redirect('admin/productos');
     
+    }
+
+    public function exportClientesCSV(Request $request) 
+    {
+
+        return Excel::download(new ClientesExport(), 'clientes.xlsx');
+    }
+
+    public function exportVentasCSV(Request $request) 
+    {
+        $de_fecha = $request->de_fecha;
+        $a_fecha = $request->a_fecha;
+
+        return Excel::download(new VentasExport($de_fecha, $a_fecha), 'ventas.xlsx');
     }
     
 }

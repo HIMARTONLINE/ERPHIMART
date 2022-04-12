@@ -23,8 +23,11 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-0">
-                                    <div class="d-flex justify-content-between">
-                                        
+                                    <div class="">
+                                        <form class="mb-4" action="{{ route('export-clientes') }}" method="GET">
+                                        @csrf
+                                            <button type="submit" class="btn btn-success float-right ml-3"><i class="fa fa-file-excel"></i> Exportar Clientes</button>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="card-body">

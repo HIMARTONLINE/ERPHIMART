@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>erp Himart</title>
-
+  <title>Sistema de ERP</title>
+  <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
   <!-- DaterangePicker -->
   <link rel="stylesheet" href="{{ asset('page/assets/js/daterangepicker/daterangepicker.css') }}">
 

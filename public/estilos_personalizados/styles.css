@@ -38,5 +38,21 @@
 }
 
 .icon-trash:before {
+<<<<<<< HEAD
     content: "\62";
+=======
+  content: "\62";
+}
+.navbar-white,
+[class*=sidebar-dark-] {
+    background-color: #ff5200 !important;
+}
+[class*=sidebar-dark] .brand-link,
+[class*=sidebar-dark-] .nav-header,
+[class*=sidebar-dark-] .sidebar a {
+    color: #fff !important;
+}
+.navbar-light .navbar-nav .nav-link {
+  color: #fff !important;
+>>>>>>> fca98e23cdd5b7ac0ea5bf9dab4e2b30465abebd
 }
