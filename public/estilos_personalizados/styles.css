@@ -44,3 +44,15 @@
 .icon-trash:before {
   content: "\62";
 }
+.navbar-white,
+[class*=sidebar-dark-] {
+    background-color: #ff5200 !important;
+}
+[class*=sidebar-dark] .brand-link,
+[class*=sidebar-dark-] .nav-header,
+[class*=sidebar-dark-] .sidebar a {
+    color: #fff !important;
+}
+.navbar-light .navbar-nav .nav-link {
+  color: #fff !important;
+}

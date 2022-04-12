@@ -642,8 +642,8 @@ class ReportController extends Controller
                             'id' => $value['id'],
                             'id_img' => $value['id_default_image'],
                             'referencia' => $value['reference'],
-                            'nombre' => $value['name']['language']
-                            // 'stock' => $valor['quantity']
+                            'nombre' => $value['name']['language'],
+                            'stock' => $valor['quantity']
                         ];
                     }
                     $id_p = $value['id'];
@@ -651,7 +651,8 @@ class ReportController extends Controller
                         'id' => $value['id'],
                         'id_img' => $value['id_default_image'],
                         'referencia' => $value['reference'],
-                        'nombre' => $value['name']['language']
+                        'nombre' => $value['name']['language'],
+                        'stock' => $valor['quantity']
                     ];
                 }   
             }                       
