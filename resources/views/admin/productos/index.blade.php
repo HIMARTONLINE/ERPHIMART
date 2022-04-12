@@ -51,10 +51,30 @@
                                     @if($filtro['categoria'] == 1)
                                         <option value="1" selected>Seleccionar...</option>
                                     @else
-                                        <option value="{{ $filtro['categoria'] }}" selected>{{ $filtro['categoria'] }}</option>
+                                        <option value="{{ $filtro['id_categoria'] .'-'. $filtro['categoria'] }}" selected>{{ $filtro['categoria'] }}</option>
                                     @endif
                                     <?php $catego = [];?>
                                     @foreach($categorias['categorias'] as $val)
+                                    <?php 
+                                        $id_cat = $val['id'];
+                                        $catego[$id_cat] = $val['nombre'];
+                                    ?>
+                                    @endforeach
+                                    @foreach(array_unique($catego) as $key => $val)
+                                        <option value="{{ $key .'-'. $val }}">{{ $val }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Subcategoría:</label>
+                                <select class="form-control" name="sub_categoria" id="sub_categoria">
+                                    @if($filtro['sub_categoria'] == 1)
+                                        <option value="1" selected>Seleccionar...</option>
+                                    @else
+                                        <option value="{{ $filtro['sub_categoria'] }}" selected>{{ $filtro['sub_categoria'] }}</option>
+                                    @endif
+                                    <?php $catego = [];?>
+                                    @foreach($sub_categorias['sub_categorias'] as $val)
                                     <?php array_push($catego, $val['nombre']);
                                     ?>
                                     @endforeach
@@ -99,11 +119,11 @@
                                     @endfor
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <label>De: (Fecha)</label>
                                 <input class="form-control" type="date" name="de_fecha" value="{{ $filtro['de_fecha'] }}">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <label>A: (Fecha)</label>
                                 <input class="form-control" type="date" name="a_fecha" value="{{ $filtro['a_fecha'] }}">
                             </div>
