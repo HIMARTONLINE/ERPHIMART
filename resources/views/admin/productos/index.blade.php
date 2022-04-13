@@ -171,7 +171,7 @@
                                     <td>{{ $val['merma'] }}</td>
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
                                     <td>$ {{ number_format($val['compra'], 2) }}</td>
-                                    <td>YYYY-mm-dd</td>
+                                    <td>{{ $val['caducidad'] }}</td>
                                     <td>{{ $val['date_upd'] }}</td>
                                     <td>
                                         <form action="{{route('admin.productos.destroy', $val['id'])}}" method="POST">
