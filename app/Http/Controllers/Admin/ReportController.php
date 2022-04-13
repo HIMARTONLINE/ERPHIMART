@@ -11,6 +11,7 @@ use Illuminate\Http\Client\Response;
 use DB;
 use App\User;
 use App\Order;
+use App\Expiration;
 use GuzzleHttp\Client;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -638,22 +639,22 @@ class ReportController extends Controller
 
                 if($value['id'] == $valor['id_product']) {
                     if($valor['quantity'] == 1){
+                        $caducidad = Expiration::where('id_product', $value['id'])->first();
+
+                        if($caducidad){
+                            $caducidad = $caducidad->expiration_date;
+                        }else{
+                            $caducidad = 'YYYY-mm-dd';
+                        }
                         $tablaProdu[] = [
                             'id' => $value['id'],
                             'id_img' => $value['id_default_image'],
                             'referencia' => $value['reference'],
                             'nombre' => $value['name']['language'],
-                            'stock' => $valor['quantity']
+                            'stock' => $valor['quantity'],
+                            'caducidad' => $caducidad
                         ];
                     }
-                    $id_p = $value['id'];
-                    $array_produ[$id_p] = [
-                        'id' => $value['id'],
-                        'id_img' => $value['id_default_image'],
-                        'referencia' => $value['reference'],
-                        'nombre' => $value['name']['language'],
-                        'stock' => $valor['quantity']
-                    ];
                 }   
             }                       
         }
