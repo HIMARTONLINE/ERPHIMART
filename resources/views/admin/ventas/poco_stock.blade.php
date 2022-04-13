@@ -31,6 +31,7 @@
                                             <th scope="col">Imagen</th>
                                             <th scope="col">Nombre</th>
                                             <th scope="col">Stock</th>
+                                            <th scope="col">Fecha de caducidad</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -41,6 +42,7 @@
                                             <td><img src="https://himart.com.mx/api/images/products/{{ $row['id'] }}/{{ $row['id_img'] }}/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4&display=full" width="100" height="100" /></td>
                                             <td>{{ $row['nombre'] }}</td>
                                             <td>{{ $row['stock'] }}</td>
+                                            <td>{{ $row['caducidad'] }}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
