@@ -23,7 +23,7 @@
   @stack('styles')
   <!-- Ionicons -->
   <!--<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">-->
-  <link rel="stylesheet" href="{{ asset('estilos_personalizados/styles.css')}}">
+  <link rel="stylesheet" href="{{ asset('estilos_personalizados/styles.css?v=2')}}">
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
   <!-- Iconos de Bootstrap descargados-->
