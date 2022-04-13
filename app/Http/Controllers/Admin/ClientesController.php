@@ -38,7 +38,7 @@ class ClientesController extends Controller
 
             foreach($arrayOrdenes['orders']['order'] as $key => $valor) {
                 
-                if($value['id'] == $valor['id_customer'] && $valor['current_state'] != "6") {
+                if($value['id'] == $valor['id_customer'] && $valor['current_state'] != 5) {
                     
                     $numeroPedido[] = $valor['id_customer'];
                     $suma[] = ['id'   => $valor['id_customer'], 'total_paid'  => $valor['total_paid'],];

@@ -1,5 +1,7 @@
 @extends('admin.layout.layout')
-
+  <!--- Script del calendario --->
+  <script src="{{ asset('js/calendario.js') }}"></script>
+  
 @section('title')
 <h1 class="m-0 text-dark">Inicio</h1>
 @endsection
