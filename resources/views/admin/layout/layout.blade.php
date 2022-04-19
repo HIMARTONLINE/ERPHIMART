@@ -40,6 +40,8 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 
+  <!--- Script del calendario --->
+  <script src="{{ asset('js/calendario.js') }}"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -122,6 +124,23 @@
   $(function () {
        $('#agregar-caducidad').click(function(){
             $('#caducidad-produ').append('<div class="row"><div class="col-md-2"><label for="nombre">No. de piezas:</label><input type="text" name="num_cad[]" class="form-control" required></div><div class="col-md-3"><label for="nombre">Fecha de caducidad:</label><input type="date" name="fecha_cad[]" class="form-control" required></div></div>');
+       });
+       $('#agregar-contactos').click(function(){
+            $('#campos-contactos').append('<tr>'+
+                                              '<td>'+
+                                                  '<input type="text" name="nombre[]" class="form-control" placeholder="Nombre completo" required="true" data-tipo="txt">'+
+                                                  '<span class="font-13 text-muted">&nbsp;</span>'+
+                                              '</td>'+
+                                              '<td>'+
+                                                  '<input type="text" name="parentesco[]" class="form-control" placeholder="Parentesco" required="true" data-tipo="txt">'+
+                                                  '<span class="font-13 text-muted">&nbsp;</span>'+
+                                              '</td>'+
+                                              '<td>'+
+                                                  '<input type="text" name="telefono[]" class="form-control" placeholder="Teléfono" data-toggle="input-mask" data-mask-format="00.0000.0000" required="true" data-tipo="txt" maxlength="12">'+
+                                                  '<span class="text-muted">ej. "xx.xxxx.xxxx"</span>'+
+                                              '</td>'+
+                                          '</tr>'
+            );
        });
        /*
        $('#referencia').change(function(){

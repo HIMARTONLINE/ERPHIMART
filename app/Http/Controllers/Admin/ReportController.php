@@ -571,7 +571,7 @@ class ReportController extends Controller
             ];
 
             $filtro = [
-                'de_fecha' => '2020-01-01',
+                'de_fecha' => '2022-01-01',
                 'a_fecha' => date('Y-m-d')            
             ];
 
