@@ -1,0 +1,15 @@
+<?php
+	return ['columna1' 	   => 'Campo',
+			'columna2' 	   => 'Valor',
+			'columna3' 	   => 'Fecha',
+			'alerta1'  	   => 'Completa los campos marcados.',
+			'alerta2'  	   => 'No pudieron ser cargados los valores.',
+			'alerta3'  	   => 'Problemas con el servidor.',
+			'titulo1'  	   => 'Nuevo Registro',
+			'titulo2'  	   => 'Editar Registro',
+			'descripcion1' => 'Completa el siguiente formulario para crear un registro nuevo de configuración.',
+			'descripcion2' => 'Completa el siguiente formulario para editar el registro de configuración.',
+			'campo1'       => 'Campo',
+			'etiqueta1'    => 'Nombre del campo',
+			'campo2'       => 'Valor',
+			'etiqueta2'    => 'Valor de configuración',];

@@ -1,0 +1,15 @@
+<?php
+	return ['columna1' 	   => 'Combinación',
+			'columna2' 	   => 'Cantidad',
+			'columna3' 	   => 'Motivo',
+			'columna4'	   => 'Recuperable',
+			'titulo1'  	   => 'Agregar merma',
+			'subtitulo1'   => 'Registrar merma',
+			'descripcion1' => 'Mediante este formulario se captura la información relacionada con el decremento del stock de productos distinto de una venta.',
+			'titulomodal'  => 'Productos',
+			'seleccionar'  => 'Seleccionar Producto',
+			'cantidad'	   => 'Cantidad',
+			'motivo'	   => 'Motivo',
+			'recuperable'  => 'Recuperable',
+			'motivodesc'   => 'Describe la razón por la que se descarta el producto.',
+			'alerta1'      => 'Completa los campos marcados.',];

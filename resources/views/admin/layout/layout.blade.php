@@ -39,7 +39,8 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
-
+  
+  <link href="{{ asset('css/override.css').'?r='.time() }}" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -108,7 +109,9 @@
 
 @stack('scripts')
 
-
+<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
+<script src="{{ asset('js/main.js') }}"></script>
 <!-- overlayScrollbars -->
 <script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <!-- AdminLTE App -->

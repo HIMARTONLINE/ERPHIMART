@@ -19,12 +19,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert("Error al trar los datos de la consulta");
             },
         },
-        /*eventRender: function(event, element) {
-
-            if (event.icon) {
+        eventRender: function(event, element) {
+            console.log(event);
+           /* if (event.icon) {
                 element.find('.fc-sticky').prepend('<i class="' + event.icon + ' mr-1"></i>');
-            }
-        }*/
+            }*/
+        }
     });
 
     calendar.render();

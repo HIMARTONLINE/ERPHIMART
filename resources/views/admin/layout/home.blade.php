@@ -93,9 +93,15 @@
 @stop
 
 @push('scripts')
-{{-- Incluimos los scripts de la tabla de un solo archivo --}}
-<script src="{{asset('fullcalendar-scheduler/main.js')}}"></script>
-<script src="{{ asset('chart.js/dist/chart.min.js')}}"></script>
-<script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>
+    {{--<script src="{{ asset('js/moment.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('js/locale-all.js') }}"></script>
+    <script src="{{ asset('chart.js/dist/chart.min.js')}}"></script>
+    <script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>--}}
+    {{-- Incluimos los scripts de la tabla de un solo archivo --}}
+    <script src="{{asset('fullcalendar-scheduler/main.js')}}"></script>
+    <script src="{{ asset('chart.js/dist/chart.min.js')}}"></script>
+    <script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>
 
 @endpush

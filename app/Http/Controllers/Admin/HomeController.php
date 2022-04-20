@@ -312,6 +312,9 @@ class HomeController extends Controller
                             'eventConstraint' => ['start'  => $fecha,
                                                   'allDay' => date('Y-m-d', strtotime($fecha . ' +1 day')), ]];
         }
+        /*-----------------------------------nuevo----------------------------------*/
+            
+        /*----------------------------------fin nuevo-------------------------------*/
 
         $ingreso = Crew::select('crews.id', DB::raw("users.id AS user_id"), DB::raw("DATE_FORMAT(crews.ingreso, '%m-%d') AS fecha"), 'crews.ingreso', 'users.name')
                        ->join('users', 'crews.user_id', '=', 'users.id')

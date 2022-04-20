@@ -39,4 +39,31 @@ $(document).ready(function() {
             }
         }
     });
+    /*var calendario = function() {
+        calendario = $('#calendario').fullCalendar({
+            locale: 'es',
+            header: {
+                left: "prev,next today",
+                center: "title",
+                right: "month"
+            },
+            events: {
+                url: '/home/vacacionando',
+                type: 'POST',
+                data: {
+                    custom_param1: 'something',
+                    custom_param2: 'somethingelse'
+                },
+                error: function() {
+                    main.alerta(etiquetas.alerta2, 'warning');
+                },
+            },
+            /*hiddenDays : [0],
+            eventRender: function(event, element) {
+                if (event.icon) {
+                    element.find('.fc-title').prepend('<i class="' + event.icon + ' mr-1"></i>');
+                }
+            }
+        });
+    };*/
 });

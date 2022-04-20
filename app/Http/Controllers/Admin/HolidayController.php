@@ -114,4 +114,65 @@ class HolidayController extends Controller
 
         return redirect('admin/festivos');
     }
+    public function getRegistros(Request $request) {
+        $permitido = $this->buscaPermiso('festivos.index', Auth::user()->permision_id);
+        $buscar = request('search');
+        $orden = request('order');
+        $ordenamiento = ['campo' => 'holidays.fecha_descanso',
+                         'dir'   => 'asc'];
+        $campos = ['holidays.festividad', 'holidays.fecha_descanso', 'holidays.fecha_conmemorativa'];
+        if(!empty($orden)) {
+            $ordenamiento = ['campo' => $campos[$orden[0]['column']],
+                             'dir'   => $orden[0]['dir']];
+        }
+
+        $registros = Holiday::select('holidays.id', 'holidays.festividad',
+                                     DB::raw('DATE_FORMAT(holidays.fecha_descanso, \'%d/%m/%Y\') AS fecha_descanso'), 
+                                     DB::raw('DATE_FORMAT(holidays.fecha_conmemorativa, \'%d/%m/%Y\') AS fecha_conmemorativa'))
+                            ->when(!empty($buscar['value']) , function($query) use($buscar) {
+                               return $query->where('holidays.festividad', 'LIKE', "%{$buscar['value']}%")
+                                            ->orWhere('holidays.fecha', 'LIKE', "%{$buscar['value']}%");
+                            })
+                            ->orderBy($ordenamiento['campo'], $ordenamiento['dir'])
+                            ->skip(request('start'))->take(request('length'))->get();
+
+        $datos = [];
+        foreach ($registros as $key => $value) {
+            $datos[] = ['<div class="nt"><span class="nl">'.$value->festividad.'</span></div>',
+                        '<div class="nt"><span class="nl"><span style="display: none;">'.strtotime($value->fecha_descanso).'</span>'.$value->fecha_descanso.'</span></div>',
+                        '<div class="nt"><span class="nl"><span style="display: none;">'.strtotime($value->fecha_descanso).'</span>'.$value->fecha_conmemorativa.'</span></div>',
+                        '<a href="editar" data-id="'.$value->id.'" class="action-icon" data-toggle="tooltip" data-placement="top" data-original-title="'.__('layout.editar').'"> <i class="mdi mdi-pencil"></i></a>
+                         <a href="eliminar" data-id="'.$value->id.'" class="action-icon" data-toggle="tooltip" data-placement="top" data-original-title="'.__('layout.eliminar').'"> <i class="mdi mdi-delete"></i></a>'];
+        }
+
+        $resultado = ['draw'            => request('draw'),
+                      'recordsTotal'    => sizeof($datos),
+                      'recordsFiltered' => sizeof($datos),
+                      'data'            => $datos];
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+        die();
+    }
+
+    public function getBloqueados() {
+        $registros = Holiday::select('holidays.id', 'holidays.festividad', 'holidays.fecha_descanso', 'holidays.fecha_conmemorativa')
+                            ->orderBy('holidays.fecha_descanso', 'asc')->get()->toArray();
+
+        $resultado = [];
+        foreach ($registros as $key => $value) {
+            $resultado[] = ['id'              => $value['id'],
+                            'title'           => $value['festividad'],
+                            'start'           => $value['fecha_descanso'],
+                            'allDay'          => true,
+                            'rendering'       => 'background',
+                            'backgroundColor' => '#536de6',
+                            'eventConstraint' => ['start'  => $value['fecha_descanso'],
+                                                  'allDay' => date('Y-m-d', strtotime($value['fecha_descanso'] . ' +1 day')), ]];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
+        die();
+    }
 }

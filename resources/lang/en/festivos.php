@@ -1,0 +1,15 @@
+<?php
+	return ['columna1' 	    => 'Festividad',
+			'columna2' 	    => 'Fecha Descaso',
+			'columna3' 	    => 'Fecha Conmemorativa',
+			'alerta1'  	    => 'Completa los campos marcados.',
+			'titulo1'  	    => 'Nueva Festividad',
+			'titulo2'  	    => 'Editar Festividad',
+			'subtitulo1'    => 'Crear nueva festividad',
+			'subtitulo2'    => 'Edición de festividad',
+			'descripcion1'  => 'Completa el siguiente formulario para crear una festividad.',
+			'descripcion2'  => 'Completa el siguiente formulario para editar la festividad.',
+			'campo1'        => 'Festividad',
+			'etiqueta1'     => 'Evento no laborable',
+			'campo2'        => 'Fecha Descanso',
+			'campo3'        => 'Fecha Conmemorativa',];

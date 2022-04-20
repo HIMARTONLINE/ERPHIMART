@@ -34,19 +34,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{route('admin.autorizacion.index')}}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Autorizaciones</p>
                         </a>
                     </li>
                 </ul>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ route('admin.clientes.index') }}" class="nav-link">
-                    <i class="nav-icon fas fa-user-check"></i>
-                    <p>Clientes</p>
-                </a>
             </li>
 
             <li class="nav-item">
@@ -70,14 +63,26 @@
 
 
             <li class="nav-item">
-                <a href="" class="nav-link">
-
+                <a href="#" class="nav-link">
                     <i class="nav-icon fa-solid fas fa-address-card"></i>
-
-
-                    <p>Empleados</p>
+                    <p>Empleados<i class="fas fa-angle-left right"></i></p>
                 </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                    <li class="nav-item">
+                        <a href="{{route('admin.permisos.index')}}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Permisos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('admin.vacaciones.index')}}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Vacaciones</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
+            
             <li class="nav-item">
                 <a href="{{ route('admin.festivos.index') }}" class="nav-link">
                     <i class="nav-icon fa-solid bi bi-calendar2-week-fill"></i>

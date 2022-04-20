@@ -1,0 +1,80 @@
+.auth-fluid {
+	background: url('../img/fondo.png') center !important;
+}
+
+.auth-fluid .auth-fluid-right {
+    padding: 6rem 3rem;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    position: relative;
+    color: #fff;
+    background-color: rgba(255,255,255,.3);
+}
+
+.auth-brand {
+	width: 80%;
+}
+
+.auth-brand a {
+	display: block;
+}
+
+.auth-brand a img {
+	display: block;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #31568C;
+    border-color: #31568C;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    color: #fff;
+    background-color: #31568C;
+    border-color: #31568C;
+    -webkit-box-shadow: 0 0 0 0.15rem rgba(49,86,140, 0.25);
+    box-shadow: 0 0 0 0.15rem rgba(49,86,140, 0.25);
+}
+
+.idiomas a {
+	margin: 0 5px;
+}
+
+@media screen and (max-width:320px) { 
+	.card-body {
+	    padding: 0;
+	}
+}
+
+@media screen and (max-width:480px) { 
+	.card-body {
+	    padding: 0;
+	}
+}
+
+@media screen and (max-width:640px) {
+	.auth-brand {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.auth-brand {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 960px) {
+	.auth-brand {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width:1024px) {
+	
+}

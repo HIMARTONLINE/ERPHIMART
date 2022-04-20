@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Crew;
 
 class User extends Authenticatable
 {
@@ -16,25 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'role_id',
-        'name',
-        'surname',
-        'date_birth',
-        'gender',
-        'telephone',
-        'profile_picture',
-        'area',
-        'address',
-        'location',
-        'state',
-        'nss',
-        'curp',
-        'rfc',
-        'infonavit',
-        'clabe_account',
-        'date_admission',
-        'email',
-        'password',
+        'permision_id', 'area_id', 'serial', 'clave', 'foto', 'name', 'email', 'password', 'idioma',
     ];
 
     /**
@@ -72,5 +55,9 @@ class User extends Authenticatable
         }
         return false;
     }
+    
+    public function crew() {
+        return $this->hasOne(Crew::class,'user_id','id');
+      }
     
 }
