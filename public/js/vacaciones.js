@@ -37,18 +37,19 @@ document.addEventListener('DOMContentLoaded', function() {
                                                                                         $("#vacaciones").attr('data-vacaciones', t).html(t);
                                                                                         date.dayEl.setAttribute("data-seleccionado", true);
                                                                                         date.dayEl.style.backgroundColor = "#81ecec";
-                                                                                    }else {
+                                                                                    }
+                                                                                    
+                                                                                }else {
 
-                                                                                        let posicion = $.inArray(date.dateStr, dias_solicitados);
-                                                                                        if(posicion != -1) {
+                                                                                    let posicion = $.inArray(date.dateStr, dias_solicitados);
+                                                                                    if(posicion != -1) {
 
-                                                                                            dias_solicitados.splice(posicion, 1);
-                                                                                            let t = JSON.parse($('#vacaciones').attr('data-vacaciones'));
-                                                                                            t += 1;
-                                                                                            $("#vacaciones").attr('data-vacaciones', t).html(t);
-                                                                                            date.dayEl.setAttribute('data-seleccionado', false);
-                                                                                            date.dayEl.style.backgroundColor = "";
-                                                                                        }
+                                                                                        dias_solicitados.splice(posicion, 1);
+                                                                                        let t = JSON.parse($('#vacaciones').attr('data-vacaciones'));
+                                                                                        t += 1;
+                                                                                        $("#vacaciones").attr('data-vacaciones', t).html(t);
+                                                                                        date.dayEl.setAttribute('data-seleccionado', false);
+                                                                                        date.dayEl.style.backgroundColor = "";
                                                                                     }
                                                                                 }
                                                                             }
