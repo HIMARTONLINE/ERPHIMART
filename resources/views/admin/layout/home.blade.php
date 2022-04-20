@@ -1,5 +1,9 @@
 @extends('admin.layout.layout')
 
+<script src="{{asset('fullcalendar-scheduler/main.min.js')}}"></script>
+<script src="{{ asset('js/moment.js') }}"></script>
+<script src="{{ asset('js/calendario.js').'?r='.time() }}"></script>
+
 @section('title')
 <h1 class="m-0 text-dark">Inicio</h1>
 @endsection
@@ -91,14 +95,8 @@
 @stop
 
 @push('scripts')
-    {{--<script src="{{ asset('js/moment.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/fullcalendar.min.js') }}"></script>
-    <script src="{{ asset('js/locale-all.js') }}"></script>
+
     <script src="{{ asset('chart.js/dist/chart.min.js')}}"></script>
-    <script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>--}}
-    {{-- Incluimos los scripts de la tabla de un solo archivo --}}
-    <script src="{{asset('fullcalendar-scheduler/main.js')}}"></script>
     <script src="{{ asset('chart.js/dist/chart.min.js')}}"></script>
     <script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>
 
