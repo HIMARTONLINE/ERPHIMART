@@ -59,8 +59,9 @@ class AuthorizationController extends Controller
                                                            DB::raw('DATE_FORMAT(request_permisions.created_at, \'%d/%m/%Y\') AS solicitado'), 'users.name', 'users.foto')
                                                     ->leftjoin('crews', 'crews.id', '=', 'request_permisions.crew_id')
                                                     ->leftjoin('users', 'users.id', '=', 'crews.user_id')
-                                                    ->where('request_permisions.autorizacion', '!=', 0)
-                                                    ->where('request_permisions.autorizacion', '!=', 3)
+                                                    ->where('request_permisions.autorizacion', '=', 2)
+                                                    /*->where('request_permisions.autorizacion', '!=', 0)
+                                                    ->where('request_permisions.autorizacion', '!=', 3)*/
                                                     ->orderBy('request_permisions.created_at', 'asc')
                                                     ->get()->toArray();
         foreach($permisos as $key => $value) {
