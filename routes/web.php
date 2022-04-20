@@ -63,3 +63,8 @@ use Illuminate\Support\Facades\Route;
     Route::resource('admin/autorizacion', 'Admin\AuthorizationController')->names('admin.autorizacion');
     Route::match(array('GET', 'POST'), '/autorizacion/{id}', 'Admin\AuthorizationController@update')->name('admin.autorizacion.getregistros');
     Route::post('/autorizacion/permisos/{id}', 'Admin\AuthorizationController@Permisos');
+
+    // Personal
+    Route::resource('admin/personal', 'Admin\CrewController')->names('admin.personal');
+
+    Route::get('/contacto_delete/{id}','Admin\CrewController@delete_item_cart');
