@@ -273,6 +273,13 @@ class FacturasController extends Controller
                         foreach($productos_orden as $key => $row){
                             $producto = Product::where('id_product', $row['id_producto'])->first();
 
+                            if($producto->clabe_sat == NULL || $producto->clabe_sat == ''){
+                                echo '<br /><br /><br /><center><b>El producto ' . $row['nombre'] . ' no tiene código SAT</b></center><br /><br />';
+                                echo '<center><a href="javascript:window.history.back();">Regresar a la página anterior</a></center>';
+
+                                return false;
+                            }
+
                             if($producto){
                                 $searchString = " ";
                                 $replaceString = "";
@@ -515,6 +522,14 @@ class FacturasController extends Controller
                             
                             foreach($productos_orden as $key => $row){
                                 $producto = Product::where('id_product', $row['id_producto'])->first();
+
+                                // if($producto->clabe_sat == NULL || $producto->clabe_sat == ''){
+                                if($producto->clabe_sat == NULL || $producto->clabe_sat == ''){
+                                    echo '<br /><br /><br /><center><b>El producto ' . $row['nombre'] . ' no tiene código SAT</b></center><br /><br />';
+                                    echo '<center><a href="javascript:window.history.back();">Regresar a la página anterior</a></center>';
+
+                                    return false;
+                                }
     
                                 if($producto){
                                     $searchString = " ";

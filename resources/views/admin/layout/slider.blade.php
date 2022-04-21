@@ -115,6 +115,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('admin.caducidad-proxima') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Productos por caducar</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('admin.facturas.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Facturas</p>
