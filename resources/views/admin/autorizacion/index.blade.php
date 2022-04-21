@@ -47,7 +47,7 @@
                             @foreach($parametros['vacaciones'] as $key=>$value)
                             <tr>
                                 <td class="table-user">
-                                    <img src="{{ asset($value['foto']) }}" alt="table-user" class="mr-2 rounded-circle" />
+                                    {{--<img src="{{ asset($value['foto']) }}" alt="table-user" class="mr-2 rounded-circle" />--}}
                                     {{ $value['name'] }}
                                 </td>
                                 <td>{{ $value['solicitado'] }}</td>
@@ -105,7 +105,7 @@
                             @foreach($parametros['permisos'] as $key=>$value)
                             <tr>
                                 <td class="table-user" >
-                                    <img src="{{ asset($value['foto']) }}" alt="table-user" class="mr-2 rounded-circle" />
+                                    {{--<img src="{{ asset($value['foto']) }}" alt="table-user" class="mr-2 rounded-circle" />--}}
                                     {{ $value['name'] }}
                                 </td>
                                 <td style="text-align: center">{{ $value['created_at'] }}</td>
@@ -290,6 +290,7 @@
 @stop
 @push('scripts')
     <script src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
+    <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
     {{--<script src="{{ asset('assets/js/vendor/fullcalendar.min.js') }}"></script>
     <script src="{{ asset('js/locale-all.js') }}"></script>--}}
     <script src="{{asset('js/autorizaciones.js')}}"></script>

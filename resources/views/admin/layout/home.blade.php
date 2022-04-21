@@ -97,7 +97,6 @@
 @push('scripts')
 
     <script src="{{ asset('chart.js/dist/chart.min.js')}}"></script>
-    <script src="{{ asset('chart.js/dist/chart.min.js')}}"></script>
     <script src="{{ asset('js/reportes.js').'?r='.time() }}"></script>
 
 @endpush

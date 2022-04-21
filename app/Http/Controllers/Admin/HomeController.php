@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Models\RequestVacation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Holiday;
@@ -313,7 +313,33 @@ class HomeController extends Controller
                                                   'allDay' => date('Y-m-d', strtotime($fecha . ' +1 day')), ]];
         }
         /*-----------------------------------nuevo----------------------------------*/
-            
+        $vacacionando = RequestVacation::select('request_vacations.id', 'request_vacations.dias_solicitados', 'users.name')
+                                       ->leftjoin('crews', 'request_vacations.crew_id', '=', 'crews.id')
+                                       ->leftjoin('users', 'crews.user_id', '=', 'users.id')
+                                       ->where('request_vacations.autorizacion', '=', '1')
+                                       ->get()->toArray();
+
+        $colores = ['#55efc4','#81ecec','#74b9ff','#a29bfe','#00b894','#00cec9','#0984e3','#6c5ce7','#ffeaa7','#fab1a0','#ff7675','#fd79a8',
+                    '#fdcb6e','#e17055','#d63031','#e84393','#786fa6','#f8a5c2','#63cdda','#ea8685','#f19066','#f5cd79','#546de5','#e15f41',
+                    '#c44569','#574b90','#f78fb3','#3dc1d3','#e66767','#32ff7e','#7efff5','#18dcff','#7d5fff','#cd84f1','#ffb8b8','#ff9f1a'];
+        $color = 0;
+        foreach ($vacacionando as $key => $value) {
+            if($color > sizeof($colores)) {
+                $color = 0;
+            }
+            $dias = json_decode($value['dias_solicitados'], true);
+            foreach ($dias as $ke => $va) {
+                $resultado[] = ['id'              => $value['id'].$ke,
+                                'title'           => $value['name'],
+                                'start'           => $va,
+                                'allDay'          => true,
+                                'icon'            => 'fas fa-plane',
+                                'backgroundColor' => $colores[$color],
+                                'eventConstraint' => ['start'  => $va,
+                                                      'allDay' => date('Y-m-d', strtotime($va . ' +1 day')), ]];   
+            }
+            $color++;
+        }            
         /*----------------------------------fin nuevo-------------------------------*/
 
         $ingreso = Crew::select('crews.id', DB::raw("users.id AS user_id"), DB::raw("DATE_FORMAT(crews.ingreso, '%m-%d') AS fecha"), 'crews.ingreso', 'users.name')

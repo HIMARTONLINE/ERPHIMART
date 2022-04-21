@@ -64,7 +64,7 @@ class VacationController extends Controller
         $parametros = ['url'         => route('admin.vacaciones.create'),
                        'vacaciones'  => $vacaciones[0]==null?0:$vacaciones[0],
                        'solicitudes' => $solicitudes];
-
+        
         return view('admin.vacaciones.index', compact('parametros'));
     }
 
@@ -122,6 +122,7 @@ class VacationController extends Controller
 
             $total = sizeof($dias_solicitados);
             foreach ($vacaciones as $key => $value) {
+                $pendientes = $value['pendientes'];
                 if($total > 0) {
                     if($value['pendientes'] <= $total) {
                         Vacation::where('id', '=', $value['id'])->update(['pendientes' => 0,
@@ -144,16 +145,17 @@ class VacationController extends Controller
             $registro = RequestVacation::create(['crew_id'          => Auth::user()->crew->id,
                                                  'autorizacion'     => 2,
                                                  'dias_solicitados' => json_encode($dias_solicitados),
-                                                 'pendientes'       => $vacaciones[0]==null?0:$vacaciones[0],
+                                                 'pendientes'       => $pendientes - $total,
                                                  'fecha_ingreso'    => $regreso,]);
-
         } catch(Exception $exception) {
             $mensaje = ['tipo'    => 'error',
                         'mensaje' => __('layout.problemas')];
         }
+                                                 
 
         return redirect()->route('admin.vacaciones.index')->with($mensaje['tipo'], $mensaje['mensaje']);
     }
+
 
     /**
      * Store a newly created resource in storage.

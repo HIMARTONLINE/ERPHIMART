@@ -63,5 +63,83 @@ document.addEventListener('DOMContentLoaded', function() {
             etiquetas = etiquetas_traduccion;
         }
     }*/
+    $('.fc-prev-button, .fc-next-button').on('click', function(e) {
+        dias_solicitados.forEach(function(value) {
+            $('.fc-day[data-date="'+value+'"]').attr('data-seleccionado', true).css('background-color', '#81ecec');
+        });
+    });
+
+    $('[data-guardar]').on('click', function(e) {
+        e.preventDefault();
+        
+        var continuar = true;
+        if(dias_solicitados.length > 0) {
+            $('#dias_solicitados').val(JSON.stringify(dias_solicitados));
+        } else {
+            $('#dias_solicitados').val('');
+        }
+        
+        $('.inputerror').removeClass('inputerror');
+
+        $('[required="true"]').each(function() {
+            if($(this).attr('required') != undefined && $(this).prop('disabled') == false) {
+                if(!main.validar($(this).val(), $(this).attr('data-tipo'))) {
+                    continuar = false;
+                    $(this).addClass('inputerror');    
+                    if($(this).hasClass('select2')) {
+                        $(this).parent().find('.select2').find('.select2-selection--multiple').addClass('inputerror');
+                    }
+                }
+            }
+        });
+        
+        if(continuar) {
+            $('#nuevo').submit();
+        } else {
+            alert("Error al enviar el formulario");
+        }
+    });
+
+    $('[data-solicitud]').each(function() {
+        $(this).on('click', function(e) {
+            e.preventDefault();
+
+            let datos = JSON.parse($(this).attr('data-solicitud'));
+            $("#regreso").html(datos.fecha_ingreso);
+            $("#diso tbody").html('');
+            $("#descartar").attr('data-id', datos.id);
+            datos.dias_solicitados.forEach(function(value, key) {
+                moment.locale('es');
+                let fecha = moment(value.fecha).format('DD/MM/YYYY');
+                let numero = key + 1;
+                $("#diso tbody").append('<tr><td>' + numero + '</td><td class="mayus ' + value.clase + '">' + fecha + '</span></td></tr>');
+            });
+            $('#solicitudModal').modal({backdrop : 'static', keyboard : false});
+        });
+    });
+
+    $('#descartar').on('click', function(e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        bootbox.confirm({
+            message: etiquetas.apunto,
+            buttons: {
+                confirm: {
+                    label: etiquetas.si,
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: etiquetas.no,
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result) {
+                    $('#registro_id').val(id);
+                    $('#formdelete').attr('action', '/vacaciones/'+id).submit();
+                }
+            }
+        });
+    });
 
 });

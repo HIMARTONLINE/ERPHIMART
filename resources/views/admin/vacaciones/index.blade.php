@@ -24,11 +24,11 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
-                <form id="nuevo" action="{{ url($parametros['url']) }}" method="post" enctype="multipart/form-data" autocomplete="off">
+                <form id="nuevo" action="{{ url($parametros['url']) }}" method="patch" enctype="multipart/form-data" autocomplete="off">
                     @csrf
 
                     @isset($parametros['data']->crew_id)
-                    {{ method_field('post') }}
+                    {{ method_field('PATCH') }}
                     @endif
                     <h4 class="header-title">{{ __('vacaciones.subtitulo1') }}</h4>
                     <p class="text-muted font-14">{{ __('vacaciones.descripcion1') }}</p>
@@ -60,7 +60,7 @@
                             <th>{{ __('vacaciones.columna3') }}</th>
                             <th>{{ __('vacaciones.columna4') }}</th>
                             <th>{{ __('vacaciones.columna5') }}</th>
-                            <th>{{ __('vacaciones.columna6') }}</th>
+                            {{--<th>{{ __('vacaciones.columna6') }}</th>--}}
                         </tr>
                     </thead>
                     <tbody>
@@ -76,14 +76,14 @@
                             <td>{{ $value['fecha_ingreso'] }}</td>
                             <td align="center">{{ $value['tomados'] }}</td>
                             <td align="center">{{ $value['pendientes'] }}</td>
-                            <td align="center"><i class="mdi mdi-circle {{ $value['autorizacion'] }}"></i></td>
-                            <td align="center">
+                            <td align="center"><i class="bi bi-circle-fill {{ $value['autorizacion'] }}"></i></td>
+                            {{--<td align="center">
                                 @if($value['autorizacion'] == 'text-warning')
-                                <button class="btn btn-sm btn-secondary" data-solicitud='@json($value)'><i class="mdi mdi-magnify"></i></button>
+                                <button class="btn btn-sm btn-secondary" data-solicitud='@json($value)'><i class="bi bi-trash3"></i></button>
                                 @else
-                                <button class="btn btn-sm btn-secondary disabled"><i class="mdi mdi-magnify"></i></button>
+                                <button class="btn btn-sm btn-secondary disabled"><i class="bi bi-trash3"></i></button>
                                 @endif
-                            </td>
+                            </td>--}}
                         </tr>
                         @endforeach
                     </tbody>
@@ -140,35 +140,6 @@
    {{-- <script src="{{ asset('assets/js/vendor/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/fullcalendar.min.js') }}"></script>
     <script src="{{ asset('js/locale-all.js') }}"></script>--}}
-    
-    <script>
-        (function($) {
-            var etiquetas = {apunto       : '{{ __('layout.apunto') }}',
-                             si           : '{{ __('layout.si') }}',
-                             no           : '{{ __('layout.no') }}',
-                             agregar      : '{{ __('layout.agregar') }}',
-                             buscar       : '{{ __('layout.buscar') }}',
-                             mostrando    : '{{ __('layout.mostrando') }}',
-                             vacio        : '{{ __('layout.vacio') }}',
-                             noencontrado : '{{ __('layout.noencontrado') }}',
-                             alerta1      : '{{ __('vacaciones.alerta1') }}',
-                             alerta2      : '{{ __('vacaciones.alerta2') }}'};
-
-            //vacaciones.form(etiquetas);
-
-            @if ($message = Session::get('success'))
-            main.alerta('{{ $message }}', 'success');
-            @endif
-
-            @if ($message = Session::get('error'))
-            main.alerta('{{ $message }}', 'error');
-            @endif
-
-            @if ($message = Session::get('warning'))
-            main.alerta('{{ $message }}', 'warning');
-            @endif
-        })(jQuery);
-    </script>
 
     
 @endpush
