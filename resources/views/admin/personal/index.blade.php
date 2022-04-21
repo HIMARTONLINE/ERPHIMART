@@ -69,7 +69,12 @@
                                     <td>{{ $value->area }}</td>
                                     <td>{{ $value->fecha }}</td>
                                     <td>
-                                    <a href="{{ route('admin.personal.edit', $value->id)}}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"><i class="mdi mdi-pencil"></i></a>
+                                        <form method="POST" action="{!! route('admin.personal.destroy', $value->user_id) !!}">
+                                        @csrf
+                                        @method('DELETE')
+                                            <a href="{{ route('admin.personal.edit', $value->id)}}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"><i class="mdi mdi-pencil"></i></a>&nbsp;&nbsp;&nbsp;
+                                            <button type="submit" style="background: transparent;border: none;color: #007bff;"><i class="fa fa-trash"></i></button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

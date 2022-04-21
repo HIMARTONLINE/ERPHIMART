@@ -24,7 +24,7 @@ class CrewController extends Controller {
      */
     public function index() {
         
-        $registros = Crew::select('crews.id', 'crews.nombres', 'crews.apellidos', 'crews.foto', 'crews.movil', 'areas.area', 'users.email', DB::raw('DATE_FORMAT(crews.ingreso, \'%d/%m/%Y\') AS fecha'))
+        $registros = Crew::select('crews.id', 'crews.user_id', 'crews.nombres', 'crews.apellidos', 'crews.foto', 'crews.movil', 'areas.area', 'users.email', DB::raw('DATE_FORMAT(crews.ingreso, \'%d/%m/%Y\') AS fecha'))
                     ->leftjoin('areas', 'crews.area_id', '=', 'areas.id')
                     ->leftjoin('users', 'crews.user_id', '=', 'users.id')
                     ->where('crews.activo', '=', 1)
@@ -267,15 +267,13 @@ class CrewController extends Controller {
      */
     public function destroy($id) {
         try {
-            $registro = Crew::where('id', '=', $id)->update(['activo' => 0]);
-            $datos = Crew::select('user_id')->where('id', '=', $id)->first();
-            $usuario = User::where('id', '=', $datos->user_id)->delete();
+            Crew::where('user_id', $id)->delete();
+            User::where('id', $id)->delete();
         } catch(Exception $exception) {
-            $mensaje = ['tipo'    => 'error',
-                        'mensaje' => __('layout.problemas')];
+
         }
 
-        return redirect()->route('admin.personal.index')->with($mensaje['tipo'], $mensaje['mensaje']);
+        return redirect()->route('admin.personal.index');
     }
 
     public function delete_item_cart($id)

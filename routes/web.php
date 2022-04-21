@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('filtro-ventas','Admin\ReportController@periodSales')->name('filtro-ventas');
     Route::get('admin/poco-stock', 'Admin\ReportController@poco_stock')->name('admin.poco-stock');
     Route::get('admin/pocas-ventas', 'Admin\ReportController@pocas_ventas')->name('admin.pocas-ventas');
+    Route::get('admin/caducidad-proxima', 'Admin\ReportController@caducidad_proxima')->name('admin.caducidad-proxima');
 
     //Facturas
     Route::resource('admin/facturas', 'Admin\FacturasController')->parameters(['facturas' => 'facturas'])->names('admin.facturas');

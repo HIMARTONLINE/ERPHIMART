@@ -109,7 +109,11 @@
 
 @stack('scripts')
 
+<<<<<<< HEAD
 
+=======
+<!-- <script src="{{ asset('assets/js/vendor.min.js') }}"></script> -->
+>>>>>>> 8307c09db93fad4cea40600137b8247c38aa4391
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
 <script src="{{ asset('js/main.js') }}"></script>
 <!-- overlayScrollbars -->

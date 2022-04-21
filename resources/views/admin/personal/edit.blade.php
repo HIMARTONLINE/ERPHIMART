@@ -206,15 +206,15 @@
                                     @foreach($contactos as $value)
                                         <tr>
                                             <td>
-                                                <input type="text" data-campo="nombre" class="form-control" placeholder="Nombre completo" value="{{ $value->nombre }}" required="true" data-tipo="txt">
+                                                <input type="text" class="form-control" placeholder="Nombre completo" value="{{ $value->nombre }}" required="true" data-tipo="txt">
                                                 <span class="font-13 text-muted">&nbsp;</span>
                                             </td>
                                             <td>
-                                                <input type="text" data-campo="parentesco" class="form-control" placeholder="Parentesco" value="{{ $value->parentesco }}" required="true" data-tipo="txt">
+                                                <input type="text" class="form-control" placeholder="Parentesco" value="{{ $value->parentesco }}" required="true" data-tipo="txt">
                                                 <span class="font-13 text-muted">&nbsp;</span>
                                             </td>
                                             <td>
-                                                <input type="text" data-campo="telefono" class="form-control" placeholder="Teléfono" value="{{ $value->telefono }}" data-toggle="input-mask" data-mask-format="00.0000.0000" required="true" data-tipo="txt" maxlength="12">
+                                                <input type="text" class="form-control" placeholder="Teléfono" value="{{ $value->telefono }}" data-toggle="input-mask" data-mask-format="00.0000.0000" required="true" data-tipo="txt" maxlength="12">
                                                 <span class="text-muted">ej. "xx.xxxx.xxxx"</span>
                                             </td>
                                             <td>
