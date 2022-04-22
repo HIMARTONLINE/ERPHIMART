@@ -830,13 +830,22 @@ class ReportController extends Controller
                         $data_exp = explode("&", $row);
 
                         if($id_p == $data_exp[0]){
+                            if($value['id_tax_rules_group'] == 1){
+                                $precio_p = $value['price'];
+                                $precio_p = $precio_p * 0.16;
+                            }else if($value['id_tax_rules_group'] == 2){
+                                $precio_p = $value['price'];
+                                $precio_p = $precio_p * 0.8;
+                            }else{
+                                $precio_p = $value['price'];
+                            }
                             // $prueba[] = $id_p;
                             $array_produ[$id_p] = [
                                 'id' => $value['id'],
                                 'id_img' => $value['id_default_image'],
                                 'referencia' => $value['reference'],
                                 'nombre' => $value['name']['language'],
-                                'precio' => $value['price'],
+                                'precio' => $precio_p,
                                 'compra' => $value['wholesale_price'],
                                 'stock' => $valor['quantity'],
                                 'expiracion' => $data_exp[1],
