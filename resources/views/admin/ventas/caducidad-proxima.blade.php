@@ -22,6 +22,14 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
+                                <div class="card-header border-0">
+                                    <div class="">
+                                        <form class="mb-4" action="{{ route('export-productos') }}" method="GET">
+                                        @csrf
+                                            <button type="submit" class="btn btn-success float-right ml-3"><i class="fa fa-file-excel"></i> Exportar Productos</button>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="card-body">
                                     <table id="table_id" class="table table-bordered table-striped">
                                         <thead>

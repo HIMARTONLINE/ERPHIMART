@@ -234,6 +234,7 @@
                                                                 <tr>
                                                                     <th scope="col">No. de piezas</th>
                                                                     <th scope="col">Fecha de caducidad</th>
+                                                                    <th scope="col">Acción</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -245,6 +246,7 @@
                                                                         $fecha = date("d/m/Y", $timestamp );
                                                                     ?>
                                                                     <td>{{ $fecha }}</td>
+                                                                    <td class="text-left"><a class="btn btn-danger btn-sm" href="{{App::make('url')->to('/')}}/caducidad_delete/{{ $cad->id }}">Eliminar</a></td>
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>

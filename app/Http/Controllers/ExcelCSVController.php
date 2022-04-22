@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use App\Imports\ProductsImport;
 use App\Exports\ClientesExport;
+use App\Exports\ProductosExport;
 use App\Exports\VentasExport;
 use Maatwebsite\Excel\Facades\Excel;
  
@@ -48,6 +49,12 @@ class ExcelCSVController extends Controller
         $a_fecha = $request->a_fecha;
 
         return Excel::download(new VentasExport($de_fecha, $a_fecha), 'ventas.xlsx');
+    }
+
+    public function exportProductosCSV(Request $request) 
+    {
+
+        return Excel::download(new ProductosExport(), 'productos.xlsx');
     }
     
 }

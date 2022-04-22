@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
     // Exportar reporte de ventas
     Route::get('export-ventas', 'ExcelCSVController@exportVentasCSV')->name('export-ventas');
 
+    // Exportar productos por caducar
+    Route::get('export-productos', 'ExcelCSVController@exportProductosCSV')->name('export-productos');
+
     // Exportar inventario
     Route::get('export-excel', 'ExcelCSVController@exportExcelCSV')->name('export-excel');
     Route::post('import-excel', 'ExcelCSVController@importExcelCSV')->name('import-excel');
@@ -30,6 +33,7 @@ use Illuminate\Support\Facades\Route;
     //Rutas de Catalogo Productos
     Route::resource('admin/productos','Admin\ProductoController')->parameters(['productos'=>'productos'])->names('admin.productos');
     Route::get('filtro-productos','Admin\ProductoController@index')->name('filtro-productos');
+    Route::get('/caducidad_delete/{id}','Admin\ProductoController@delete_item_cart');
 
     //Clientes 
     Route::resource('admin/clientes', 'Admin\ClientesController')->parameters(['clientes' => 'clientes'])->names('admin.clientes');
