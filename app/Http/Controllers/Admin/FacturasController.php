@@ -366,7 +366,7 @@ class FacturasController extends Controller
             $autenticacion = "Basic " . $autenticacion;
     
             $response = $client->request('POST', '/2/cfdis', [
-                // 'auth' => ['DEVHIMART', 'Torre123'], 
+                // 'auth' => ['HIMART', 'Himart2022'],
                 'auth' => ['HIMART', 'Himart2022'], 
                 // 'Authorization' => $autenticacion,
                 'form_params' => [
@@ -621,7 +621,7 @@ class FacturasController extends Controller
             $autenticacion = "Basic " . $autenticacion;
     
             $response = $client->request('POST', '/2/cfdis', [
-                // 'auth' => ['DEVHIMART', 'Torre123'], 
+                // 'auth' => ['HIMART', 'Himart2022'], 
                 'auth' => ['HIMART', 'Himart2022'],
                 'form_params' => [
                     "Receiver" => [
@@ -635,7 +635,7 @@ class FacturasController extends Controller
                     "CfdiType" => "I",
                     "NameId" => "1",
                     "ExpeditionPlace" => "06500",
-                    // "ExpeditionPlace" => "45200",
+                    // "ExpeditionPlace" => "44940",
                     "PaymentForm" => "03",
                     "PaymentMethod" => "PUE",
                     "Decimals" => "2",

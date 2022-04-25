@@ -684,16 +684,18 @@ class ReportController extends Controller
             foreach($arrayStock['stock_availables']['stock_available'] as $item => $valor) {
 
                 if($value['id'] == $valor['id_product']) {
-                    $id_p = $value['id'];
-                    $array_produ[$id_p] = [
-                        'id' => $value['id'],
-                        'id_img' => $value['id_default_image'],
-                        'referencia' => $value['reference'],
-                        'nombre' => $value['name']['language'],
-                        'precio' => $value['price'],
-                        'stock' => $valor['quantity'],
-                        'fecha' => $value['date_add'],
-                    ];
+                    if($valor['quantity'] > 0){
+                        $id_p = $value['id'];
+                        $array_produ[$id_p] = [
+                            'id' => $value['id'],
+                            'id_img' => $value['id_default_image'],
+                            'referencia' => $value['reference'],
+                            'nombre' => $value['name']['language'],
+                            'precio' => $value['price'],
+                            'stock' => $valor['quantity'],
+                            'fecha' => $value['date_add'],
+                        ];
+                    }
                 }   
             }                       
         }
@@ -804,7 +806,13 @@ class ReportController extends Controller
         $fechas_expiracion = Expiration::select('id_product','expiration_date')->get();
 
         foreach($fechas_expiracion as $row){
-            $products_exp[$row->expiration_date] = $row->id_product; 
+            $date1 = new \DateTime($row->expiration_date);
+            $date2 = new \DateTime();
+            $diff = $date1->diff($date2);
+            
+            if($diff->days <= 90){
+                $products_exp[] = $row->id_product .'&'. $row->expiration_date; 
+            }
         }
 
         foreach($arrayProdu['products']['product'] as $key => $value) {
@@ -813,27 +821,32 @@ class ReportController extends Controller
 
                 if($value['id'] == $valor['id_product']) {
 
-                    foreach($products_exp as $index => $row){
+                    foreach($products_exp as $row){
                         $id_p = $value['id'];
+                        $data_exp = explode("&", $row);
 
-                        if(in_array($id_p, $products_exp)){
-                            $date1 = new \DateTime($index);
-                            $date2 = new \DateTime();
-                            $diff = $date1->diff($date2);
-                            
-                            if($diff->days <= 90){
-                                $array_produ[$id_p] = [
-                                    'id' => $value['id'],
-                                    'id_img' => $value['id_default_image'],
-                                    'referencia' => $value['reference'],
-                                    'nombre' => $value['name']['language'],
-                                    'precio' => $value['price'],
-                                    'compra' => $value['wholesale_price'],
-                                    'stock' => $valor['quantity'],
-                                    'expiracion' => $index,
-                                    'fecha' => $value['date_add'],
-                                ];
-                            } 
+                        if($id_p == $data_exp[0]){
+                            if($value['id_tax_rules_group'] == 1){
+                                $precio_p = $value['price'];
+                                $precio_p = $precio_p * 0.16;
+                            }else if($value['id_tax_rules_group'] == 2){
+                                $precio_p = $value['price'];
+                                $precio_p = $precio_p * 0.8;
+                            }else{
+                                $precio_p = $value['price'];
+                            }
+                            // $prueba[] = $id_p;
+                            $array_produ[$id_p] = [
+                                'id' => $value['id'],
+                                'id_img' => $value['id_default_image'],
+                                'referencia' => $value['reference'],
+                                'nombre' => $value['name']['language'],
+                                'precio' => $precio_p,
+                                'compra' => $value['wholesale_price'],
+                                'stock' => $valor['quantity'],
+                                'expiracion' => $data_exp[1],
+                                'fecha' => $value['date_add'],
+                            ];
                         }
                     }
                     
@@ -841,86 +854,7 @@ class ReportController extends Controller
             }                       
         }
 
-        foreach($arrayOrder['orders']['order'] as $i => $v) {
-
-            if($v['current_state'] == 3 || $v['current_state'] == 5 || $v['current_state'] == 4 || $v['current_state'] == 2) {
-                
-                // $suma[] = floatval($v['total_paid']);
-                $id_orden = $v['id'];
-                $ejem[$id_orden] = $v['associations']['order_rows']['order_row'];
-
-            }
-        }
-
-        $arreglo_produ = [];
-
-        foreach($arrayOrder['orders']['order'] as $index => $value) {
-
-            if($value['current_state'] == 3 || $value['current_state'] == 5 || $value['current_state'] == 4 || $value['current_state'] == 2) {
-
-                foreach($arrayProdu['products']['product'] as $inPro => $valPro) {
-
-                    foreach($ejem as $key => $row){
-                        if($value['id'] == $key){
-                            if(in_array(0, $ejem[$key])){              
-                                
-                                if(!in_array($valPro['id'], $arreglo_produ)){
-                                    if(array_key_exists($valPro['id'], $array_produ)){
-                                        if($valPro['id'] == $ejem[$key]['product_id']) {
-                                            $id_produ = $valPro['id'];
-                                            $fecha_actual = date('Y-m-d H:i:s');
-                                            $ultima_fecha = $value['date_upd'];                                      
-                                            $fecha1 = date_create($fecha_actual);
-                                            $fecha2 = date_create($ultima_fecha);
-                                            $dias = date_diff($fecha2, $fecha1)->format('%R%a');
-                                            if($dias >= 10){
-                                                $lista_produ[$id_produ] = $dias;
-                                                $array_produ_dias[$id_produ] = [
-                                                    'dias' => $dias
-                                                ];
-                                            }
-                                            $arreglo_produ[] = $valPro['id'];
-                                        }
-                                    }                          
-                                }
-                                
-                            }else{
-
-                                foreach($ejem[$key] as $filas){
-                                    
-                                    if(!in_array($valPro['id'], $arreglo_produ)){
-                                        if(array_key_exists($valPro['id'], $array_produ)){
-                                            if($valPro['id'] == $filas['product_id']) {
-                                                $id_produ = $valPro['id'];
-                                                $fecha_actual = date('Y-m-d H:i:s');
-                                                $ultima_fecha = $value['date_upd'];
-                                                $fecha1 = date_create($fecha_actual);
-                                                $fecha2 = date_create($ultima_fecha);
-                                                $dias = date_diff($fecha2, $fecha1)->format('%R%a');
-                                                if($dias >= 10){
-                                                    $lista_produ[$id_produ] = $dias;
-                                                    $array_produ_dias[$id_produ] = [
-                                                        'dias' => $dias
-                                                    ];
-                                                }
-                                                $arreglo_produ[] = $valPro['id'];
-                                            }
-                                        }
-                                    }
-                                
-                                }
-                            
-                            }
-                        }
-                        
-                    }
-                }
-                
-            }
-
-        }
-
-        return view('admin.ventas.caducidad-proxima', ['lista_produ' => $lista_produ, 'array_produ' => $array_produ, 'array_produ_dias' => $array_produ_dias]);
+        return view('admin.ventas.caducidad-proxima', ['array_produ' => $array_produ]);
 
     }
 

@@ -856,4 +856,16 @@ class ProductoController extends Controller
 
         return redirect()->back();
     }
+
+    public function delete_item_cart($id)
+    {    
+        $deleted = Expiration::where('id', $id)->delete();
+        $message = "Se ha eliminado la caducidad con éxito";
+        if (!$deleted) {
+            $message = "Ocurrio un error al eliminar la caducidad";
+        }
+
+        return redirect()->back()->with('flash',$message);
+    }
+
 }
