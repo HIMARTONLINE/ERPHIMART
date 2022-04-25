@@ -4,20 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+//use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Client\Response;
 use DB;
-use App\User;
+//use App\User;
 use App\Order;
 use App\Expiration;
 use GuzzleHttp\Client;
-use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Prestashop;
-use Protechstudio\PrestashopWebService\PrestashopWebService;
-use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
+
 
 class ReportController extends Controller
 {

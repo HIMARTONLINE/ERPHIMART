@@ -122,7 +122,7 @@ class VacationController extends Controller
 
             $total = sizeof($dias_solicitados);
             foreach ($vacaciones as $key => $value) {
-                $pendientes = $value['pendientes'];
+                
                 if($total > 0) {
                     if($value['pendientes'] <= $total) {
                         Vacation::where('id', '=', $value['id'])->update(['pendientes' => 0,
@@ -136,18 +136,18 @@ class VacationController extends Controller
                 }
             }
 
-            $vacaciones = Arr::pluck(Vacation::select(DB::raw('SUM(vacations.pendientes) AS vacaciones'))
-                                             ->leftjoin('crews', 'vacations.crew_id', '=', 'crews.id')
-                                             ->where('crews.user_id', '=', Auth::user()->crew->id)
-                                             ->get()
-                                             ->toArray(), 'vacaciones');
-
+            $vacaciones = Vacation::select('vacations.pendientes')
+                                    ->leftjoin('crews', 'vacations.crew_id', '=', 'crews.id')
+                                    ->where('crew_id', '=', Auth::user()->crew->id)
+                                    ->first()->toArray();
+            
             $registro = RequestVacation::create(['crew_id'          => Auth::user()->crew->id,
                                                  'autorizacion'     => 2,
                                                  'dias_solicitados' => json_encode($dias_solicitados),
-                                                 'pendientes'       => $pendientes - $total,
+                                                 'pendientes'       => $vacaciones['pendientes'],
                                                  'fecha_ingreso'    => $regreso,]);
         } catch(Exception $exception) {
+
             $mensaje = ['tipo'    => 'error',
                         'mensaje' => __('layout.problemas')];
         }

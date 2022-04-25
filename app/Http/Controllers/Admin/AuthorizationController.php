@@ -207,6 +207,8 @@ class AuthorizationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $autorizacion = request('autorizacion');
+        
         $request->validate(['autorizacion' => 'required',]);
 
         $mensaje = ['tipo'    => 'success',
@@ -214,19 +216,26 @@ class AuthorizationController extends Controller
         
 
         try {
-            $registro = RequestVacation::where('id', '=', $id)->update(['autorizacion' => request('autorizacion'),]);
+            RequestVacation::where('id', '=', $id)->update(['autorizacion' => $autorizacion,]);
             
-            if(request('autorizacion') == 0) {
+            if($autorizacion == 0) {
                 $solicitadas = RequestVacation::where('id', '=', $id)->first();
+                
                 $datos = Vacation::select()->where('crew_id', '=', $solicitadas->crew_id)
                                  ->orderBy('created_at', 'desc')
                                  ->get()->toArray();
-                $total = sizeof(json_decode($solicitadas->dias_solicitados));
+
+                $solicitados = sizeof(json_decode($solicitadas->dias_solicitados));
+
                 foreach ($datos as $key => $value) {
-                    if($value['tomados'] > 0 && $total > 0) {
-                        $total -= $value['tomados'];
-                        $pendientes = $value['pendientes'] + $value['tomados'];
-                        Vacation::where('id', '=', $value['id'])->update(['tomados' => 0,
+
+                    if($value['tomados'] > 0 && $solicitados > 0) {
+                        
+                        $pendientes = $solicitados + $value['pendientes'];
+                        
+                        $tomados =  $value['tomados'] - $solicitados;
+
+                        Vacation::where('id', '=', $value['id'])->update(['tomados' => $tomados,
                                                                           'pendientes' => $pendientes]);
                     }
                 }

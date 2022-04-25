@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
     Auth::routes();
+
+    // Implementación de roles de usuarios
+    Route::resource('admin/usuario', 'Admin\UsuarioController')->names('admin.usuario');
+
     // Exportar clientes
     Route::get('export-clientes', 'ExcelCSVController@exportClientesCSV')->name('export-clientes');
 
