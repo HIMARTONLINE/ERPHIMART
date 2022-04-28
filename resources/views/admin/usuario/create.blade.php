@@ -44,7 +44,7 @@
                                     <div class="marco mt-3">
                                         <div class="foto">
                                             @if(isset($parametros['usuario']->foto))
-                                                <img src="{{ $parametros['usuario']->foto != ''?asset('images/usuarios/'.$parametros['usuario']->foto):asset('assets/images/users/avatar.jpg') }}" class="img-fluid" />
+                                                <img src="{{ $parametros['usuario']->foto != ''?asset('images/usuarios/'.$parametros['usuario']->foto):asset('images/avatar.jpg') }}" class="img-fluid" />
                                             @else
                                                 <img src="{{ asset('images/avatar.jpg') }}" class="img-fluid" />
                                             @endif
@@ -120,7 +120,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="foto">{{ __('usuarios.campo5') }}</label>
-                                        <input type="file" name="foto" id="foto" class="form-control" placeholder="{{ __('usuarios.etiqueta5') }}" required="false" data-tipo="txt" />
+                                        <input type="file" name="foto" id="foto" class="form-control" placeholder="{{ __('usuarios.etiqueta5') }}"  data-tipo="txt" />
                                     </div>
                                 </div>
                             </div>

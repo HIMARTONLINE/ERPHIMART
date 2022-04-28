@@ -7,13 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\Permision;
 use Illuminate\Support\Facades\Hash;
-use File;
-use Response;
+use App\Models\Crew;
 use App\User;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 
-use function Ramsey\Uuid\v1;
 
 class UsuarioController extends Controller
 {
@@ -67,7 +64,36 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(['permision_id' => 'required',
+                            'area_id'      => 'required',
+                            'serial'       => 'required',
+                            'name'         => 'required|max:255',
+                            'email'        => 'required|email|max:255',
+                            'password'     => 'required|min:8|max:255',]);
+
+        $imagePath = '';
+        if ($request->file('foto')) {
+            $imagePath = $request->foto->store('avatar', 'public');
+        }
+
+       $mensaje = ['tipo'    => 'success',
+                    'mensaje' => __('layout.guardado')];
+        try {
+            $registro = User::create(['permision_id' => request('permision_id'),
+                                      'area_id'      => request('area_id'),
+                                      'serial'       => request('serial'),
+                                      'clave'        => substr(time(), -6, 6),
+                                      'name'         => request('name'),
+                                      'email'        => request('email'),
+                                      'password'     => Hash::make(request('password')),
+                                      'foto'         => $imagePath,
+                                      ]);
+        } catch(Exception $exception) {
+            $mensaje = ['tipo'    => 'error',
+                        'mensaje' => __('usuarios.alerta2')];
+        }
+
+        return redirect()->route('admin.usuario.index')->with($mensaje['tipo'], $mensaje['mensaje']);
     }
 
     /**
@@ -92,7 +118,7 @@ class UsuarioController extends Controller
         $roles = Permision::select('id', 'rol')->get()->toArray();
         $area = Area::select('id', 'area')->get()->toArray();
 
-         $parametros = ['url'           => "/usuario/$id",
+         $parametros = ['url'           => "admin/usuario/$id",
                        'titulo'         => 'Editar Usuario',
                        'subtitulo'      => 'Editar usuario',
                        'descripcion'    => __('usuarios.descripcion1'),
@@ -113,7 +139,44 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate(['permision_id' => 'required',
+                            'area_id'      => 'required',
+                            'serial'       => 'required',
+                            'name'         => 'required|max:255',
+                            'email'        => 'required|email|max:255',
+                            ]);
+
+        $datos = User::findOrFail($id);
+        $imagePath = $datos->foto;
+
+        if($request->hasFile('foto')){
+
+            $path = $request->file('foto');
+            $imagePath = $path->getClientOriginalName();
+            $path->move(public_path().'/images/usuarios/avatar', $imagePath);
+        }
+        
+        $data = ['permision_id' => request('permision_id'),
+                 'area_id'      => request('area_id'),
+                 'serial'       => request('serial'),
+                 'name'         => request('name'),
+                 'email'        => request('email'),
+                 'foto'         => $imagePath];
+        
+        if(request('password') != null) {
+            $data['password'] = Hash::make(request('password'));
+        }
+
+        $mensaje = ['tipo'    => 'success',
+                    'mensaje' => __('layout.actualizado')];
+        try {
+            $registro = User::where('id', '=', $id)->update($data);
+        } catch(Exception $exception) {
+            $mensaje = ['tipo'    => 'error',
+                        'mensaje' => __('usuarios.alerta2')];
+        }
+
+        return redirect()->route('admin.usuario.index')->with($mensaje['tipo'], $mensaje['mensaje']);
     }
 
     /**
@@ -124,6 +187,13 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Crew::where('user_id', $id)->delete();
+            User::where('id', $id)->delete();
+        } catch(Exception $exception) {
+
+        }
+
+        return redirect()->route('admin.usuario.index');
     }
 }

@@ -734,7 +734,7 @@ class ProductoController extends Controller
             else {
                 $activo = 1;
             }
-            
+           //marcar desde aqui /* 
             $xmlProdu = Prestashop::get([
                 'resource' => 'products',
                 'id' => $id
@@ -781,6 +781,7 @@ class ProductoController extends Controller
                             'id' => $id, 
                             'putXml' => $xmlSchema->asXml()
             ]);
+            //finalizar aqui */ prestashop
             
             $producto = Product::where('id_product', $id)->first();
 

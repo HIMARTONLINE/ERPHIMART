@@ -47,7 +47,7 @@
                             <td>{{ $v['rol'] }}</td>
                             <td>{{ date('d/m/Y H:i', strtotime($v['updated_at'])) }}</td>
                             <td>
-                                <form action="{!! route('admin.usuario.destroy', $v['id']) !!}">
+                                <form action="{{route('admin.usuario.destroy', $v['id'])}}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                     <a href="{{ route('admin.usuario.edit', $v['id'])}}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"><i class="mdi mdi-pencil"></i></a>&nbsp;
