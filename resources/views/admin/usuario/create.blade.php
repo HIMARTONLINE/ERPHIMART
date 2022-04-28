@@ -141,4 +141,9 @@
 @stop
 @push('scripts')
 <script src="{{ asset('page/assets/js/vendor/jquery-3.6.0.min.js') }}"></script>
+<script>
+    if($("#name") != "") {
+        $("#password").prop('required', false);
+    }
+</script>
 @endpush
