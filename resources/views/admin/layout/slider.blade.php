@@ -21,72 +21,16 @@
             <li class="nav-header">Menú</li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fa-solid fas fa-users"></i>
-                    <p>Recursos Humanos<i class="fas fa-angle-left right"></i></p>
-                </a>
-                <ul class="nav nav-treeview" style="display: none;">
-                    
-                    <li class="nav-item">
-                        <a href="{{ route('admin.personal.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Personal</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{route('admin.autorizacion.index')}}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Autorizaciones</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="nav-item">
 
                 <a href="{{route('admin.productos.index')}}" class="nav-link">
                     <i class="nav-icon fas fa-box"></i>
                     <p>Productos</p>
-
-
                 </a>
             </li>
-
             <li class="nav-item">
-                <a href="" class="nav-link">
-                    <i class="nav-icon fas fa-box"></i>
-                    <p>Categorias</p>
-
-
-                </a>
-            </li>
-
-
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fa-solid fas fa-address-card"></i>
-                    <p>Empleados<i class="fas fa-angle-left right"></i></p>
-                </a>
-                <ul class="nav nav-treeview" style="display: none;">
-                    <li class="nav-item">
-                        <a href="{{route('admin.permisos.index')}}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Permisos</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{route('admin.vacaciones.index')}}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Vacaciones</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            
-            <li class="nav-item">
-                <a href="{{ route('admin.festivos.index') }}" class="nav-link">
-                    <i class="nav-icon fa-solid bi bi-calendar2-week-fill"></i>
-                    <p>Festivos</p>
+                <a href="{{ route('admin.clientes.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-user-check"></i>
+                    <p>Clientes</p>
                 </a>
             </li>
             <li class="nav-item">
@@ -128,13 +72,57 @@
                     </li>
                 </ul>
             </li>
-
             <li class="nav-item">
-                <a href="{{ route('admin.clientes.index') }}" class="nav-link">
-                    <i class="nav-icon fas fa-user-check"></i>
-                    <p>Clientes</p>
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fa-solid fas fa-address-card"></i>
+                    <p>Empleados<i class="fas fa-angle-left right"></i></p>
                 </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                    <li class="nav-item">
+                        <a href="{{route('admin.permisos.index')}}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Permisos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('admin.vacaciones.index')}}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Vacaciones</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fa-solid fas fa-users"></i>
+                    <p>Recursos Humanos<i class="fas fa-angle-left right"></i></p>
+                </a>
+                <ul class="nav nav-treeview" style="display: none;">
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.personal.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Personal</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('admin.autorizacion.index')}}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Autorizaciones</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.festivos.index') }}" class="nav-link">
+                            <i class="nav-icon fa-solid bi bi-calendar2-week-fill"></i>
+                            <p>Festivos</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>           
+
+            
+
+
 
             <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -155,16 +143,7 @@
                             <p>Categorias</p>
                         </a>
                     </li>
-
-
-                    <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <i class="nav-icon fa-solid fas fa-address-card"></i>
-                            <p>Empleados</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                    
 
             <li class="nav-item">
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit();"

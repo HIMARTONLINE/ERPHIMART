@@ -432,11 +432,11 @@ class ProductoController extends Controller
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $ordenarTabla,];
 
-        /*$urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,id_parent,name]';
+        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,id_parent,name]';
         $xmlCateg = Prestashop::get($urlCateg);
 
         $jsonCateg = json_encode($xmlCateg);
-        $arrayCateg = json_decode($jsonCateg, true);*/
+        $arrayCateg = json_decode($jsonCateg, true);
 
         foreach($arrayCateg["categories"]["category"] as $categorias) {
             
