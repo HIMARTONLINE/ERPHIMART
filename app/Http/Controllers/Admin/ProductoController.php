@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\View;
+
 use App\Sku;
 use App\Product;
 use App\Expiration;
 use Prestashop;
-use Protechstudio\PrestashopWebService\PrestashopWebService;
+use DB;
 use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
 
 class ProductoController extends Controller
@@ -432,11 +432,11 @@ class ProductoController extends Controller
         //pasamos los parametros a otro arreglo para poder usarlos en el Front
         $parametros = ['productos' => $ordenarTabla,];
 
-        $urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,id_parent,name]';
+        /*$urlCateg['resource'] = 'categories/?sort=[id_ASC]&display=[id,id_parent,name]';
         $xmlCateg = Prestashop::get($urlCateg);
 
         $jsonCateg = json_encode($xmlCateg);
-        $arrayCateg = json_decode($jsonCateg, true);
+        $arrayCateg = json_decode($jsonCateg, true);*/
 
         foreach($arrayCateg["categories"]["category"] as $categorias) {
             
@@ -697,7 +697,8 @@ class ProductoController extends Controller
         }
 
         $caducidad = Expiration::where('id_product', $id)->get();
-
+        //$caducidad = Expiration::select(DB::raw('SUM(expirations.quantity) AS quantity'))->where('id_product', '=', $id)->get();
+        //dd($caducidad);
         return view('admin.productos.edit', compact('categorias','parametros','producto','caducidad'));
 
     }
