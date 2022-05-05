@@ -9,23 +9,6 @@
 </ol>
 @stop
 @section('content')
-    <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ url('/home') }}"><i class="uil-home"></i></a></li>
-                        <li class="breadcrumb-item"><a href="#">Recursos Humanos</a></li>
-                        <li class="breadcrumb-item"><a href="#">Personal</a></li>
-                        <li class="breadcrumb-item active">Actualizar persona</li>
-                    </ol>
-                </div>
-                <h4 class="page-title">Actualizar persona</h4>
-            </div>
-        </div>
-    </div>     
-    <!-- end page title -->
 
     <div class="row">
         <div class="col-md-12">

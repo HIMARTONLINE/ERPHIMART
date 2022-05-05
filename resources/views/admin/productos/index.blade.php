@@ -147,6 +147,7 @@
                                 <th>Precio de venta</th>
                                 <th>Precio de compra</th>
                                 <th>Fecha de caducidad</th>
+                                <th>NO. de fechas de caducidad</th>
                                 <th>Fecha</th>
                                 <th>Opciones</th>
                             </tr>
@@ -172,6 +173,7 @@
                                     <td>$ {{ number_format($val['price'], 2) }}</td>
                                     <td>$ {{ number_format($val['compra'], 2) }}</td>
                                     <td>{{ $val['caducidad'] }}</td>
+                                    <td>{{ $val['totalRegis'] }}</td>
                                     <td>{{ $val['date_upd'] }}</td>
                                     <td>
                                         <form action="{{route('admin.productos.destroy', $val['id'])}}" method="POST">

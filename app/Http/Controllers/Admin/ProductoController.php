@@ -18,12 +18,7 @@ class ProductoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        /*
-        $arreglo['cart'] = ['carts'=>'Sesión','count'=>'Prueba'];
-        if(isset($arreglo)){*/               
-            // View::share('data', ['cantidad' => $tablaProdu, 'lista_produ' => $lista_produ, 'array_produ' => $array_produ, 'array_produ_dias' => $array_produ_dias]);
-        /*
-        }*/
+       
     }
 
     /**
@@ -33,26 +28,6 @@ class ProductoController extends Controller
      */
     public function index(Request $request)
     {
-        // $image = $request->file('image');
-        // $image->move('uploads', $image->getClientOriginalName());
-
-        /*
-        $urlImage['resource'] = 'images/products/10'; //pasamos los parametros por url de la apí
-        $xmlImage = Prestashop::get($urlImage); //llama los parametros por GET
-
-        $jsonImage = json_encode($xmlImage);
-        $arrayImage = json_decode($jsonImage, true);
-
-        for($i=0; $i<count($arrayImage['image']['declination']); $i++){
-            foreach($arrayImage['image']['declination'] as $value) {
-                echo $value['id'] . '<br>';
-            }
-        }*/
-
-        // $xml = $xmlProdu->products->children();
-
-        // dd($xmlProdu);
-        // return false;
         
         $urlProdu['resource'] = 'products/?sort=[id_DESC]&display=full'; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
@@ -386,7 +361,11 @@ class ProductoController extends Controller
                             }
 
                             $caducidad = Expiration::where('id_product', $value['id'])->first();
-
+                            $totalRegistros = Expiration::select(DB::raw('COUNT(expirations.id) AS totalRegistros'))->where('id_product', $value['id'])->get()->toArray();
+                            foreach($totalRegistros as $registros => $valRe) {
+                                $total = $valRe['totalRegistros'];
+                            }
+                            //dd($total);
                             if($caducidad){
                                 $caducidad = $caducidad->expiration_date;
                             }else{
@@ -405,6 +384,7 @@ class ProductoController extends Controller
                                             'price'         => $value['price'],
                                             'compra'        => $value['wholesale_price'],
                                             'caducidad'     => $caducidad,
+                                            'totalRegis'    => $total,
                                             'state'         => $value['state'],
                                             'activo'        => $value['active'],
                                             'date_upd'      => $value['date_upd'],
@@ -453,7 +433,7 @@ class ProductoController extends Controller
         $categorias = ['categorias' => $tablaCategorias];
         $sub_categorias = ['sub_categorias' => $tablaSubCategorias];
 
-         //dd($xmlProdu);
+         //dd($total);
 
         return view('admin.productos.index', compact('parametros','categorias','sub_categorias','filtro'));
 
@@ -622,11 +602,17 @@ class ProductoController extends Controller
      */
     public function edit($id)
     {
-        $urlProdu['resource'] = 'products/' . $id . '?display=full'; //pasamos los parametros por url de la apí
+        $urlPriceSpecial['resource'] = 'specific_prices?display=full';
+        $xmlPriceSpecial = Prestashop::get($urlPriceSpecial);
+
+        $urlProdu['resource'] = 'products/' . $id . ''; //pasamos los parametros por url de la apí
         $xmlProdu = Prestashop::get($urlProdu); //llama los parametros por GET
 
         $jsonProdu = json_encode($xmlProdu);    //codificamos el xml de la api en json
         $arrayProdu = json_decode($jsonProdu, true);  //decodificamos el json anterior para poder manipularlos
+
+        $jsonPrice = json_encode($xmlPriceSpecial);
+        $arrayPrice = json_decode($jsonPrice, true);
         
         if(is_numeric($arrayProdu['product']['id_default_image'])){
 
@@ -696,9 +682,28 @@ class ProductoController extends Controller
             ];
         }
 
-        $caducidad = Expiration::where('id_product', $id)->get();
-        //$caducidad = Expiration::select(DB::raw('SUM(expirations.quantity) AS quantity'))->where('id_product', '=', $id)->get();
-        //dd($caducidad);
+        $caducidad = Expiration::where('id_product', $id)->get()->toArray();
+
+        $sumStock = Expiration::select(DB::raw('SUM(expirations.quantity) AS quantity'))->where('id_product', '=', $id)->get()->toArray();
+
+                $resta = $sumStock[0]['quantity'] - $cantidad;
+                $restante = $caducidad[0]['quantity'] - $resta;
+
+        foreach($arrayPrice['specific_prices']['specific_price'] as $item) { //Recorrer arreglo de precios especificos
+            
+            if($id == $item['id_product']) {  //En caso de tener precio crear nueva tabla
+
+                //$resta2 = $cantidad - $resta;
+                $restante = $cantidad;    
+            }
+            $caducidad[0] =  ['id'                  =>$caducidad[0]['id'],
+                                  'id_product'      =>$caducidad[0]['id_product'],
+                                  'quantity'        =>$restante,
+                                  'expiration_date' =>$caducidad[0]['expiration_date'],
+                                ];
+           // dd($item);
+        }
+        
         return view('admin.productos.edit', compact('categorias','parametros','producto','caducidad'));
 
     }
@@ -736,7 +741,7 @@ class ProductoController extends Controller
                 $activo = 1;
             }
            //marcar desde aqui /* 
-            $xmlProdu = Prestashop::get([
+           /* $xmlProdu = Prestashop::get([
                 'resource' => 'products',
                 'id' => $id
             ]);
@@ -781,7 +786,7 @@ class ProductoController extends Controller
             Prestashop::edit(['resource' => 'stock_availables', 
                             'id' => $id, 
                             'putXml' => $xmlSchema->asXml()
-            ]);
+            ]);*/
             //finalizar aqui */ prestashop
             
             $producto = Product::where('id_product', $id)->first();

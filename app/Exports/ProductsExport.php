@@ -7,8 +7,7 @@ use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Prestashop;
-use Protechstudio\PrestashopWebService\PrestashopWebService;
-use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
+
 
 class ProductsExport implements FromCollection, WithHeadings
 {

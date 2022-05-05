@@ -240,13 +240,13 @@
                                                             <tbody>
                                                                 @foreach($caducidad as $cad)
                                                                 <tr>
-                                                                    <td>{{ $cad->quantity }}</td>
+                                                                    <td>{{ $cad['quantity'] }}</td>
                                                                     <?php
-                                                                        $timestamp = strtotime($cad->expiration_date); 
+                                                                        $timestamp = strtotime($cad['expiration_date']); 
                                                                         $fecha = date("d/m/Y", $timestamp );
                                                                     ?>
                                                                     <td>{{ $fecha }}</td>
-                                                                    <td class="text-left"><a class="btn btn-danger btn-sm" href="{{App::make('url')->to('/')}}/caducidad_delete/{{ $cad->id }}">Eliminar</a></td>
+                                                                    <td class="text-left"><a class="btn btn-danger btn-sm" href="{{App::make('url')->to('/')}}/caducidad_delete/{{ $cad['id'] }}">Eliminar</a></td>
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>

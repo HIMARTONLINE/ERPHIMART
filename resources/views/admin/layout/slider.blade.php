@@ -4,7 +4,11 @@
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
         <div class="image">
-            <img src="{{ asset('images/usuarios/'.Auth::user()->foto) }}" class="img-circle elevation-2" alt="User Image">
+            @if(Auth::user()->foto == '' || Auth::user()->foto == null)
+                <img class="rounded-circle" src="{{ asset('images/avatar.jpg') }}" alt="table-user" width="40" />
+            @else
+                <img src="{{ asset('images/usuarios/'.Auth::user()->foto) }}" class="rounded-circle" alt="User Image">
+            @endif
         </div>
 
         <div class="info">
@@ -98,7 +102,12 @@
                     <p>Recursos Humanos<i class="fas fa-angle-left right"></i></p>
                 </a>
                 <ul class="nav nav-treeview" style="display: none;">
-                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.asistencias.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Asistencias</p>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.personal.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>

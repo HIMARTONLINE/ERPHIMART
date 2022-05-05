@@ -2,13 +2,10 @@
 
 namespace App\Exports;
 
-use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Expiration;
 use Prestashop;
-use Protechstudio\PrestashopWebService\PrestashopWebService;
-use Protechstudio\PrestashopWebService\PrestaShopWebserviceException;
 
 class ProductosExport implements FromCollection, WithHeadings
 {

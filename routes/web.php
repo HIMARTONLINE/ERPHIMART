@@ -68,6 +68,9 @@ use Illuminate\Support\Facades\Route;
     Route::match(array('GET', 'POST'), '/vacaciones/getregistros', 'Admin\PermisoController@store')->name('admin.permisos.getregistros');
     Route::post('/permisos/solicitar', 'Admin\PermisoController@create')->name('admin.permisos.enviar');
 
+    //Ruta de asistencias
+    Route::resource('admin/asistencias', 'Admin\AsistenciaController')->names('admin.asistencias');
+
     // Autorizaciones
     Route::resource('admin/autorizacion', 'Admin\AuthorizationController')->names('admin.autorizacion');
     Route::match(array('GET', 'POST'), '/autorizacion/{id}', 'Admin\AuthorizationController@update')->name('admin.autorizacion.getregistros');
@@ -77,3 +80,14 @@ use Illuminate\Support\Facades\Route;
     Route::resource('admin/personal', 'Admin\CrewController')->names('admin.personal');
 
     Route::get('/contacto_delete/{id}','Admin\CrewController@delete_item_cart');
+
+    // Rutas imagenes producto
+    Route::get('/prodimg/{filename}', 'PresenceController@displayImageG')->name('prodimg.displayImageG');
+
+
+    // Rutas checador
+    Route::get('/presencia', 'PresenceController@index')->name('presencia');
+    Route::get('/tokenpresencia', 'PresenceController@token')->name('tokenpresencia');
+    Route::post('/setpresencia', 'PresenceController@setPresence')->name('setpresencia');
+    Route::get('/getpersonal', 'PresenceController@getPersonal')->name('getpersonal');
+    Route::get('/avatar/{filename}', 'PresenceController@displayImage')->name('image.displayImage');
