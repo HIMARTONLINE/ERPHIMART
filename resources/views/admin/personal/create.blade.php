@@ -99,7 +99,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="foto">Foto</label>
-                                            <input type="file" name="foto" id="foto" class="form-control" required="false" data-tipo="txt" />
+                                            <input type="file" name="foto" id="foto" class="form-control" data-tipo="txt" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">

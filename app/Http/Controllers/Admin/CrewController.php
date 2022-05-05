@@ -100,7 +100,7 @@ class CrewController extends Controller {
                         'area_id'    => request('area_id'),
                         'nombres'    => request('nombres'),
                         'apellidos'  => request('apellidos'),
-                        'foto'       => $name_file,
+                        'foto'       => '',
                         'genero'     => request('genero'),
                         'nacimiento' => $nacimiento,
                         'direccion'  => nl2br(request('direccion')),
