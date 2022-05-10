@@ -147,9 +147,9 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <i class="nav-icon fas fa-box"></i>
-                            <p>Categorias</p>
+                        <a href="{{ route('admin.password.index')}}" class="nav-link">
+                            <i class="nav-icon bi bi-lock"></i>
+                            <p>Contraseñas</p>
                         </a>
                     </li>
                     

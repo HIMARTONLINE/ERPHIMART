@@ -60,8 +60,7 @@ class AuthorizationController extends Controller
                                                     ->leftjoin('crews', 'crews.id', '=', 'request_permisions.crew_id')
                                                     ->leftjoin('users', 'users.id', '=', 'crews.user_id')
                                                     ->where('request_permisions.autorizacion', '=', 2)
-                                                    /*->where('request_permisions.autorizacion', '!=', 0)
-                                                    ->where('request_permisions.autorizacion', '!=', 3)*/
+                                                    ->orWhere('request_permisions.autorizacion', '=', 1)
                                                     ->orderBy('request_permisions.created_at', 'asc')
                                                     ->get()->toArray();
         foreach($permisos as $key => $value) {
@@ -82,24 +81,7 @@ class AuthorizationController extends Controller
                     $permisos[$key]['estatus'] = 'text-danger';
                 break;
             }
-            /*$comparar = date("d/m/Y h:i", strtotime($permisos[$key]['hora_ingreso'])); //obtener la hora registrada de reingreso de la base de datos
-            $fechaReingreso = date("d/m/Y", strtotime(($permisos[$key]['fecha_ingreso'])));
-            //verificar el por que actualiza ambos registros en caso de haberse creado uno nuevo para diferente hora
-            if(date("d/m/Y h:i") >= $comparar) {    //hacer la comparación de la fecha de la PC con la hora guardada en la base de datos
-                dd($comparar);
-                if($value['autorizacion'] == 1) {   //una segunda condición para en el caso de que se haya autorizado el permiso y no cambie todas las solictudes de permisos
-
-                    DB::connection('mysql')->table('request_permisions')->where('hora_ingreso', '>=', '{$comparar}')->update(['autorizacion' => 3]);
-
-                }
-            }
-
-            if(date("d/m/Y") >= $fechaReingreso) {
-                if($value['autorizacion'] == 1) {
-                    
-                    DB::connection('mysql')->table('request_permisions')->where('fecha_ingreso', '>=', '{$fechaReingreso}')->update(['autorizacion' => 3]);
-                }
-            }*/
+            
             
             if($permisos[$key]['dias'] == null) {
                 //Aqui van los registros creados por horas

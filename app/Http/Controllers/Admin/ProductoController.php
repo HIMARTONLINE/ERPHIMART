@@ -688,6 +688,14 @@ class ProductoController extends Controller
 
                 $resta = $sumStock[0]['quantity'] - $cantidad;
                 $restante = $caducidad[0]['quantity'] - $resta;
+                
+                //$idExpiracion = Expiration::select('id')->where('id_product', $id)->first();
+                if($restante == 0) {
+                    $idExpiracion = $caducidad[0]['id'];
+                    
+                    Expiration::where('id', $idExpiracion)->delete();
+                }
+                
 
         foreach($arrayPrice['specific_prices']['specific_price'] as $item) { //Recorrer arreglo de precios especificos
             

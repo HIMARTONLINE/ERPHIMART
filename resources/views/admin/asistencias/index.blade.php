@@ -95,10 +95,10 @@
                                     @if($v['estatus'] != '0')
                                         @switch($v['estatus'])
                                             @case(1)
-                                                <i class="fas fa-smile-beam atiempo" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $v['hora'] }}"></i> 
+                                                <i class="fas fa-smile-beam atiempo" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $v['hora'] }}"></i> 
                                             @break
                                             @case(-1)
-                                                <i class="fas fa-sad-tear tarde" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $v['hora'] }}"></i>
+                                                <i class="fas fa-sad-tear tarde" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $v['hora'] }}"></i>
                                             @break
                                             @default
                                                  <i class="fas fa-dizzy falta"></i>
@@ -106,11 +106,11 @@
                                     @else   
                                         @if($v['estatus'] == '0')
                                             @if($v['hora'] > '14:10')
-                                                <i class="fas fa-sad-tear tarde" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $v['salida'] }}"></i>
-                                                <i class="fas fa-sad-tear tarde" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $v['hora'] }}"></i>
+                                                <i class="fas fa-sad-tear tarde" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $v['hora'] }}"></i>
+                                                <i class="fas fa-sad-tear tarde" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $v['hora'] }}"></i>
                                             @else
-                                                <i class="fas fa-smile-beam atiempo" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $v['salida'] }}"></i>
-                                                <i class="fas fa-smile-beam atiempo" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $v['hora'] }}"></i>
+                                                <i class="fas fa-smile-beam atiempo" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $v['hora'] }}"></i>
+                                                <i class="fas fa-smile-beam atiempo" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $v['hora'] }}"></i>
                                             @endif
                                         @endif
 

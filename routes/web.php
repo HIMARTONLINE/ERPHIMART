@@ -76,6 +76,9 @@ use Illuminate\Support\Facades\Route;
     Route::match(array('GET', 'POST'), '/autorizacion/{id}', 'Admin\AuthorizationController@update')->name('admin.autorizacion.getregistros');
     Route::post('/autorizacion/permisos/{id}', 'Admin\AuthorizationController@Permisos');
 
+    //Contraseñas
+    Route::resource('admin/passwords', 'Admin\PasswordController')->names('admin.password');
+
     // Personal
     Route::resource('admin/personal', 'Admin\CrewController')->names('admin.personal');
 
