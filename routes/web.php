@@ -78,6 +78,8 @@ use Illuminate\Support\Facades\Route;
 
     //Contraseñas
     Route::resource('admin/passwords', 'Admin\PasswordController')->names('admin.password');
+    Route::post('admin/passwords/create', 'Admin\PasswordController@store')->name('admin.password.store');
+    Route::post('admin/passwords/update/{id}', 'Admin\PasswordController@update')->name('admin.password.update');
 
     // Personal
     Route::resource('admin/personal', 'Admin\CrewController')->names('admin.personal');

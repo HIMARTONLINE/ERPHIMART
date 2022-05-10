@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <button id="btn_add" type="button" class="btn btn-secondary mb-3" data-toggle="modal" data-target="#exampleModal">{{ __('layout.agregar') }}</button>
+                    <button id="btn_add"  type="button" class="btn btn-secondary mb-3 agregar" data-toggle="modal" data-target="#exampleModal">Agregar</button>
                     <table id="table_id" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
@@ -41,12 +41,12 @@
                                     <td><a href="{{$value->enlace}}" target="_blank">Link</a></td>
                                     <td>{{$value->estado}}</td>
                                     <td>
-                                      <form action="" method="POST">
+                                      <form action="{!! route('admin.password.destroy', $value->id) !!}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                           <a style="cursor: pointer" type="button" name="edit" id="{{$value->id}}" class="edit"><i class="fa fa-edit" data-toggle="modal" data-target="#exampleModal"></i></a>
                                           <button type="submit" style="background: transparent;border: none;" class="edit"><i class="fa fa-trash"></i></button>
-                                          <a href="" class="fa fa-key" data-toggle="tooltip" data-placement="top" data-original-title="Editar"></a>&nbsp;
+                                          <a type="button" id="{{$value->id}}" class="fa fa-key clave" data-toggle="modal" data-target="#mostrarClave" data-original-title="Editar"></a>&nbsp;
                                       </form></td>
                                 </tr>   
                             @endforeach
@@ -151,6 +151,25 @@
       </div>
     </div>
   </div>
+
+      <!-- Info Alert Modal -->
+      <div id="mostrarClave" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <i class="dripicons-information h1 text-info"></i>
+                        <h4 class="mt-2">Mi contraseña!</h4>
+                        <!-- Trigger -->
+                        <input type="text" id="miclave" class="form-control m-1 text-center" value="">
+                        <button class="btn btn-dark" data-clipboard-target="#miclave">
+                            <i class="fa fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   
 @stop
 @push('styles')
@@ -158,84 +177,9 @@
 @include('auxiliares.design-datatables')
 @endpush
 @push('scripts')
+
 <script src="{{ asset('page/assets/js/vendor/jquery-3.6.0.min.js') }}"></script>
-
-{{--<script src="{{ asset('js/password.js') }}"></script>--}}
-<script>
-    $(document).ready(function () {
-    
-
-    $('#btn_add').on('click', function() { 
-
-        $('.modal-title').text("Agregar nueva contraseña");
-        $("#action").val("Agregar");
-        
-    });
-    /*Crear Registro*/
-    /* Crear registro */
-    $('#password_form').on('submit', function(event){
-        event.preventDefault();
-        if( $('#action').val() == 'Agregar' ){
-            $.ajax({
-                url:"{{ route('admin.password.store' )}}",
-                method:"POST",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success:function(data){
-                    if(data.errors){
-                        for(var count = 0; count < data.errors.length; count++){
-                            alert('Opps!', 'error');
-                        }
-                    }
-                    if(data.success){
-                        console.log(data);
-                        main.alerta('Contraseña registrada', 'success');
-                        $('#password_form')[0].reset();
-                        $('#datatable_password').DataTable().ajax.reload();
-                    }
-                }
-            })
-        }
-        if($('#action').val() == "Editar"){
-            $.ajax({
-                url:"",
-                method:"POST",
-                data:new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType:"json",
-                success:function(data){
-                    if(data.errors){
-                        for(var count = 0; count < data.errors.length; count++){
-                            main.alerta('Opps!', 'error');
-                        }
-                    }
-                    if(data.success){
-                        main.alerta('Contraseña editada', 'success');
-                        $('#password_form')[0].reset();
-                        $('#passwordModal').modal('hide');
-                        $('#datatable_password').DataTable().ajax.reload();
-                    }
-                }
-            });
-        }
-    });
-
-    $(document).on('click', '.edit', function() {
-        
-        let id = $(this).attr('id');
-
-        $('.modal-title').text("Editar registro");
-    });
-    
-});
-
-</script>
-
+<script src="{{ asset('js/contraenias.js') }}"></script>
 {{-- Incluimos los scripts de la tabla de un solo archivo --}}
 <script src="{{asset('assets/plugins/inputmask/jquery.inputmask.min.js')}}"></script>
 @include('auxiliares.scripts-datatables')

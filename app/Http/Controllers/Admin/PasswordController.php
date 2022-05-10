@@ -42,22 +42,8 @@ class PasswordController extends Controller
      */
     public function store(Request $request)
     {
-        //Validaciones
-        $rules = array(
-            'empresa'  => 'required|string|max:100',
-            'servicio' => 'required|string|max:255',
-            'enlace'   => 'required|string|max:255',
-            'usuario'  => 'required|string|max:255',
-            'clave'    => 'required|string|max:255',
-            'user_id'  => 'required'
-        );
-
-        $error = Validator::make($request->all(), $rules);
-
-        if ($error->fails()) {
-            return response()->json(['errors' => $error->errors()->all()]);
-        }
-
+        
+        
         DB::table('contrasenias')
             ->insert([
                 [
@@ -70,7 +56,7 @@ class PasswordController extends Controller
                 ]
             ]);
 
-        return route('/admin/password');
+        return redirect()->route('admin.password.index');
     }
 
     /**
@@ -93,6 +79,10 @@ class PasswordController extends Controller
     public function edit($id)
     {
         //
+        if (request()->ajax()) {
+            $data = Savepassword::findOrFail($id);
+            return response()->json(['data' => $data]);
+        }
     }
 
     /**
@@ -104,7 +94,19 @@ class PasswordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //dd($request->hidden_id);
+        DB::table('contrasenias')
+        ->where('id', '=', $request->hidden_id)
+        ->update([
+            'empresa'  => $request->empresa,
+            'servicio' => $request->servicio,
+            'enlace'   => $request->enlace,
+            'usuario'  => $request->usuario,
+            'estado'   => $request->estado,
+            'clave'    => $request->clave
+        ]);
+
+        return redirect()->route('admin.password.index');
     }
 
     /**
@@ -115,6 +117,9 @@ class PasswordController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Eliminando la categori por id
+        $data = Savepassword::findOrFail($id);
+        $data->delete();
+        return redirect()->route('admin.password.index');
     }
 }
