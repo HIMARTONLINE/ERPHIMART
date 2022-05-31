@@ -24,6 +24,7 @@
                         <input type="hidden" name="categoria" value="{{ $filtro['categoria'] }}">
                         <input type="hidden" name="de_stock" value="{{ $filtro['de_stock'] }}">
                         <input type="hidden" name="a_stock" value="{{ $filtro['a_stock'] }}">
+                        <input type="hidden" name="venta" value="{{ $filtro['venta'] }}">
                         <input type="hidden" name="de_precio" value="{{ $filtro['de_precio'] }}">
                         <input type="hidden" name="a_precio" value="{{ $filtro['a_precio'] }}">
                         <input type="hidden" name="de_fecha" value="{{ $filtro['de_fecha'] }}">

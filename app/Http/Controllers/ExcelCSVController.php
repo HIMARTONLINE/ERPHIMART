@@ -20,12 +20,13 @@ class ExcelCSVController extends Controller
         $categoria = $request->categoria;
         $de_stock = $request->de_stock;
         $a_stock = $request->a_stock;
+        $venta = $request->venta;
         $de_precio = $request->de_precio;
         $a_precio = $request->a_precio;
         $de_fecha = $request->de_fecha;
         $a_fecha = $request->a_fecha;
 
-        return Excel::download(new ProductsExport($categoria, $de_stock, $a_stock, $de_precio, $a_precio, $de_fecha, $a_fecha), 'products.xlsx');
+        return Excel::download(new ProductsExport($categoria, $de_stock, $a_stock, $venta, $de_precio, $a_precio, $de_fecha, $a_fecha), 'products.xlsx');
     }
 
     public function importExcelCSV(Request $request) 

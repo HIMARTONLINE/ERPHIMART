@@ -225,7 +225,12 @@ class ProductoController extends Controller
                                     $merma = 0;
                                 }
 
+                                
                                 $caducidad = Expiration::where('id_product', $value['id'])->first();
+                                $totalRegistros = Expiration::select(DB::raw('COUNT(expirations.id) AS totalRegistros'))->where('id_product', $value['id'])->get()->toArray();
+                                foreach($totalRegistros as $registros => $valRe) {
+                                    $total = $valRe['totalRegistros'];
+                                }
 
                                 if($caducidad){
                                     $caducidad = $caducidad->expiration_date;
@@ -245,6 +250,7 @@ class ProductoController extends Controller
                                                 'price'         => $value['price'],
                                                 'compra'        => $value['wholesale_price'],
                                                 'caducidad'     => $caducidad,
+                                                'totalRegis'    => $total,
                                                 'state'         => $value['state'],
                                                 'activo'        => $value['active'],
                                                 'date_upd'      => $value['date_upd'],
@@ -394,6 +400,7 @@ class ProductoController extends Controller
                     }                              
                 }
             }
+            
             $ordenarTabla = Arr::sort($tablaProdu);
 
             $filtro = [
@@ -401,6 +408,7 @@ class ProductoController extends Controller
                 'sub_categoria' => 1,
                 'de_stock' => 0,
                 'a_stock' => 200,
+                'venta'    => 0,
                 'de_precio' => 0.00,
                 'a_precio' => 2000.00,
                 'de_fecha' => 2020-01-01,
@@ -434,7 +442,7 @@ class ProductoController extends Controller
         $sub_categorias = ['sub_categorias' => $tablaSubCategorias];
 
          //dd($total);
-
+         //dd($tablaProdu);
         return view('admin.productos.index', compact('parametros','categorias','sub_categorias','filtro'));
 
         
@@ -683,35 +691,37 @@ class ProductoController extends Controller
         }
 
         $caducidad = Expiration::where('id_product', $id)->get()->toArray();
+				//dd($caducidad);
+				if($caducidad == []) {
+					
+					$caducidad = $caducidad;
+				}else {
+					$sumStock = Expiration::select(DB::raw('SUM(expirations.quantity) AS quantity'))->where('id_product', '=', $id)->get()->toArray();
+					$resta = $sumStock[0]['quantity'] - $cantidad;
+					$restante = $caducidad[0]['quantity'] - $resta;
+					
+					//$idExpiracion = Expiration::select('id')->where('id_product', $id)->first();
+					if($restante == 0) {
+						$idExpiracion = $caducidad[0]['id'];
 
-        $sumStock = Expiration::select(DB::raw('SUM(expirations.quantity) AS quantity'))->where('id_product', '=', $id)->get()->toArray();
-
-                $resta = $sumStock[0]['quantity'] - $cantidad;
-                $restante = $caducidad[0]['quantity'] - $resta;
-                
-                //$idExpiracion = Expiration::select('id')->where('id_product', $id)->first();
-                if($restante == 0) {
-                    $idExpiracion = $caducidad[0]['id'];
-                    
-                    Expiration::where('id', $idExpiracion)->delete();
-                }
-                
-
-        foreach($arrayPrice['specific_prices']['specific_price'] as $item) { //Recorrer arreglo de precios especificos
+						Expiration::where('id', $idExpiracion)->delete();
+					}
+					foreach($arrayPrice['specific_prices']['specific_price'] as $item) { //Recorrer arreglo de precios especificos
             
-            if($id == $item['id_product']) {  //En caso de tener precio crear nueva tabla
+						if($id == $item['id_product']) {  //En caso de tener precio crear nueva tabla
 
-                //$resta2 = $cantidad - $resta;
-                $restante = $cantidad;    
-            }
-            $caducidad[0] =  ['id'                  =>$caducidad[0]['id'],
-                                  'id_product'      =>$caducidad[0]['id_product'],
-                                  'quantity'        =>$restante,
-                                  'expiration_date' =>$caducidad[0]['expiration_date'],
-                                ];
-           // dd($item);
-        }
-        
+							$resta2 = $cantidad - $resta;
+							$restante = $cantidad;    
+						}
+						$caducidad[0] =  ['id'              =>$caducidad[0]['id'],
+										  'id_product'      =>$caducidad[0]['id_product'],
+										  'quantity'        =>$restante,
+										  'expiration_date' =>$caducidad[0]['expiration_date'],
+										];
+					   // dd($item);
+					}
+				}               
+		//dd($caducidad);       
         return view('admin.productos.edit', compact('categorias','parametros','producto','caducidad'));
 
     }

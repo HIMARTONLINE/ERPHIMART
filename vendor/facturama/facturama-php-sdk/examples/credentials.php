@@ -9,5 +9,5 @@
  * with this source code in the file LICENSE.
  */
 
-define('USER', '');
-define('PASSWORD', '');
+define('USER', 'HIMART');
+define('PASSWORD', 'Himart2022');

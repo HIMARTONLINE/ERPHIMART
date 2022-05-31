@@ -52,6 +52,8 @@ use Illuminate\Support\Facades\Route;
 
     //Facturas
     Route::resource('admin/facturas', 'Admin\FacturasController')->parameters(['facturas' => 'facturas'])->names('admin.facturas');
+    Route::POST('admin/facturas/enviar', 'Admin\FacturasController@update')->name('personal');
+    //Route::match(array('GET', 'POST'), '/api/facturama', 'Admin\FacturasController@show')->name('home.vacacionando');
 
     // Días no laborables
     Route::resource('admin/festivos', 'Admin\HolidayController')->names('admin.festivos');

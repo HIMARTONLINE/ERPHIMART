@@ -108,30 +108,27 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($parametros['ordenes'] as $key => $value)
-                                                    @if(in_array($value['id'], $array_ordenes))
+                                                    
                                                     <tr>
-                                                        <td class="text-center"><input class="orden-factura" type="checkbox" name="orden[]" value="{{ $value['id'] }}" checked></td>
+                                                        @if(in_array($value['id'], $array_ordenes))
+                                                            <td class="text-center"><i class="bi bi-check-lg success"></i></td>
+                                                        @else
+                                                            <td class="text-center"><input class="orden-factura" type="checkbox" name="orden[]" value="{{ $value['id'] }}"></td>
+                                                        @endif
                                                         <td>{{ date('Y-m-d', strtotime($value['date_add'])) }}</td>
                                                         <td>{{ $value['id'] }}</td>
                                                         <td>{{ $value['reference'] }}</td>
                                                         <td>${{ number_format($value['total_products'], 2) }}</td>
                                                         <td>${{ number_format($value['total_paid'], 2) }}</td>
                                                         <td>
-                                                            <a href="{{ route('admin.facturas.edit', $value['id']) }}" data-id="{{ $value['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                                            <button type="button" class="btn btn-primary">FACTURADO</button>
+                                                            @if(in_array($value['id'], $array_ordenes))
+                                                                <label type="text" class="btn btn-success">FACTURADO</label>
+                                                            @else
+                                                                <a href="{{ route('admin.facturas.edit', $value['id']) }}" data-id="{{ $value['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a>&nbsp;
+                                                            @endif  
                                                         </td>
                                                     </tr>
-                                                    @else
-                                                    <tr>
-                                                        <td class="text-center"><input class="orden-factura" type="checkbox" name="orden[]" value="{{ $value['id'] }}"></td>
-                                                        <td>{{ date('Y-m-d', strtotime($value['date_add'])) }}</td>
-                                                        <td>{{ $value['id'] }}</td>
-                                                        <td>{{ $value['reference'] }}</td>
-                                                        <td>${{ number_format($value['total_products'], 2) }}</td>
-                                                        <td>${{ number_format($value['total_paid'], 2) }}</td>
-                                                        <td><a href="{{ route('admin.facturas.edit', $value['id']) }}" data-id="{{ $value['id'] }}" class="icon-pencil" data-toggle="tooltip" data-placement="top" data-original-title="Editar"> <i class="mdi mdi-pencil"></i></a></td>
-                                                    </tr>
-                                                    @endif
+                                                    
                                                 @endforeach
                                             </tbody>
                                         </table>
