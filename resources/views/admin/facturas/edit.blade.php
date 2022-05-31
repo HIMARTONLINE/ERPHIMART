@@ -56,6 +56,12 @@
                                     <input class="form-control" type="text" name="referencia" id="pedidoId" value="{{ $parametros['orden']['reference'] }}" disabled />
                                 </div>
                             </div>
+                            <div class="col-md-1 text">
+                                <div class="form-group">
+                                    <label for="">Descuento</label><br>
+                                    <input class="form-control" type="number" name="porcentaje" id="" placeholder="Porcentaje"> 
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             
@@ -147,7 +153,7 @@
                                 <button type="submit" class="btn btn-success" name="factura-individual">Realizar factura</button>
                             </div>
                             <div class="col align-self-end">
-                                <label for="">Total: $<span id="totalSuma">{{number_format($parametros['total'], 2)}}</span></label>
+                                <label for="">Total: $<span id="totalSuma"></span></label>
                             </div>
                         </div>                       
                     </form>

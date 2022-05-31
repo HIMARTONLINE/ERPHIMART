@@ -144,7 +144,7 @@ class FacturasController extends Controller
                             $TaxObject = "01";
                         }
                         
-                        if($value['order']['total_discounts_tax_incl'] == "0.000000") {
+                        if($value['order']['total_discounts_tax_incl'] != "0.000000") {
 
                             $descuento = $value['order']['total_discounts_tax_incl'] - $value['order']['total_discounts_tax_excl'];
 
@@ -249,7 +249,7 @@ class FacturasController extends Controller
                                                              //'valor'        => 0.16,
                                                              'iva'          => $iva, 
                                                              'referencia'   => $dev,
-                                                             'sinImpuesto'  => $productPres
+                                                             'sinImpuesto'  => $productPres,
                                                             ];
                                     }else { 
 
@@ -290,15 +290,16 @@ class FacturasController extends Controller
                 $temp = $envioIva;
             }
             if(isset($tablaImpuestos)) { 
-
+                   
                 foreach($arrayOrdenes as $index => $valor2) {
 
                     $sumaIva = 0;
                     $subIva = 0;
                     $sumaIeps = 0;
-                    $subIeps = 0;
+                    $subIeps = 0; 
+
                     foreach($tablaImpuestos as $inTabla => $valTabla) {
-                
+                        
                         if($valor2['order']['reference'] == $valTabla['referencia']) {
 
                             if($valTabla['impuesto'] == 'iva') {
@@ -366,10 +367,10 @@ class FacturasController extends Controller
 
                                 if(isset($item[$inItem]['Discount'])) {
 
-                                    if($item[$inItem]['Discount'] == 0.0) {
+                                    if($item[$inItem]['Discount'] == 0.0 || $item[$inItem]['Discount'] === 20.55) {
 
                                         unset($item[$inItem]['Discount']);
-                                        
+                                        $item[$inItem]['Total'] = round($item[$inItem]['Subtotal'] + $valueTaxIVa['Total'] + $valTaxIeps['Total'], 2);
 
                                     }else {
 
@@ -409,9 +410,10 @@ class FacturasController extends Controller
 
                             if(isset($item[$index2]['Discount'])) {
 
-                                if($item[$index2]['Discount'] == 0.0) {
+                                if($item[$index2]['Discount'] == 0.0 || $item[$index2]['Discount'] === 20.55) {
 
                                     unset($item[$index2]['Discount']);
+                                    $item[$index2]['Total'] = round($item[$index2]['Subtotal'] + $totalIva, 2);
 
                                 }else {
 
@@ -450,15 +452,20 @@ class FacturasController extends Controller
                             
                             if(isset($item[$index3]['Discount'])) {
 
-                                if($item[$index3]['Discount'] == 0.0) {
+                                if($item[$index3]['Discount'] == 0.0 || $item[$index3]['Discount'] === 20.55) {
 
                                     unset($item[$index3]['Discount']);
+                                    $item[$index3]['Total'] = round($item[$index3]['Subtotal'] + $valueTaxIeps['Total'], 2);
 
                                 }else {
 
-                                    $resta2 = floatval($item[$index3]['Subtotal'] + $valueTaxIeps['Total']);
+                                    $iepssubtotal = floatval($item[$index3]['Subtotal']); 
+                                    $iepstotal = floatval($valueTaxIeps['Total']);
                                     $descontar2 = floatval($item[$index3]['Discount']);
-                                    $item[$index3]['Total'] = round($resta2 - $descontar2, 2);
+
+                                    $SumasubTo = $iepstotal + $iepssubtotal;
+                                    
+                                    $item[$index3]['Total'] = round($SumasubTo - $descontar2, 2) ;
                                 }
                             }else {
 
@@ -491,9 +498,10 @@ class FacturasController extends Controller
                                                      
                             if(isset($item[$iItem]['Discount'])) {
 
-                                if($item[$iItem]['Discount'] == 0.0) {
+                                if($item[$iItem]['Discount'] == 0.0 || $item[$iItem]['Discount'] === 20.55) {
 
                                     unset($item[$iItem]['Discount']);
+                                    $item[$iItem]['Total'] = round($item[$iItem]['Subtotal'] + $sumaIva2, 2);
                                 }else {
                                     
                                     $resta3 = round($item[$iItem]['Subtotal'] + $sumaIva2, 2);
@@ -529,15 +537,15 @@ class FacturasController extends Controller
         ];
         //dd($cfdi);
         //dd($cfdi); https://api.facturama.mx/ https://apisandbox.facturama.mx/
-        //$urlApi = new Client(['base_uri' => 'https://api.facturama.mx/']);
-        $urlApi = new Client(['base_uri' => 'https://apisandbox.facturama.mx/']);
+        $urlApi = new Client(['base_uri' => 'https://api.facturama.mx/']);
+        //$urlApi = new Client(['base_uri' => 'https://apisandbox.facturama.mx/']);
 
         $posApi = $urlApi->POST('3/cfdis', $cfdi);
 
-        /*foreach($ordenes as $facturada) {
+        foreach($ordenes as $facturada) {
 
             Ordenes_facturadas::create(['id_orden' => $facturada]);
-        } */
+        } 
 
         return redirect('admin/facturas');    
     }
@@ -807,7 +815,8 @@ class FacturasController extends Controller
                     ];
 
         //dd(number_format($totalPagado, 2));
-        return view('admin.facturas.edit', compact('parametros'));
+        //return view('admin.facturas.edit', compact('parametros'));
+        return redirect('admin/facturas');
     }
 
     /**
@@ -827,6 +836,7 @@ class FacturasController extends Controller
         $metodo = request('metodo_pago');
         $cp = request('cp');
         $regimen = request('regimen');
+        $porcentaje = request('porcentaje');
 
         $urlOrden['resource'] = 'orders/' . $id;
         $xmlOrden = Prestashop::get($urlOrden);
@@ -838,10 +848,7 @@ class FacturasController extends Controller
             $tablaOrden = ["id"         => $valor['id'],
                            "reference"  => $valor['reference']
                           ];
-        if($valor['total_discounts_tax_excl'] != "0.000000") {
 
-            $descuentos = floatval($valor['total_discounts_tax_incl'] - $valor['total_discounts_tax_excl']);
-        }
             if($valor['total_wrapping_tax_excl'] != "0.000000") {
                 
                 $subTotal = round($valor['total_wrapping_tax_excl'] * 0.16, 2);
@@ -1067,7 +1074,7 @@ class FacturasController extends Controller
                 "Items" => $item
             ]
         ];
-        dd($arrayOrden);
+        dd($cfdi);
         //dd($cfdi); https://api.facturama.mx/  https://apisandbox.facturama.mx/
         $urlApi = new Client(['base_uri' => 'https://apisandbox.facturama.mx/']);
         /*$urlApi = new Client(['base_uri' => 'https://api.facturama.mx/']);*/
