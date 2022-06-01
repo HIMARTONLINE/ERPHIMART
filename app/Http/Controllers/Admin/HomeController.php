@@ -23,6 +23,20 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $meses = ['Enero', 'Febrero', 'Marzo', 'Abril',
+                  'Mayo', 'Junio', 'Julio', 'Agosto',
+                  'septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                ];
+
+        $mes = request('mes');
+        $rango = request('rango');
+
+        if($mes == "00") {
+
+            //dd($mes);
+
+            return redirect('/');
+        }
         
         $urlOrdes['resource'] = 'orders/?display=full';
         $xmlOrders = Prestashop::get($urlOrdes);
@@ -30,21 +44,90 @@ class HomeController extends Controller
         $urlProduct['resource'] = 'products/?sort=[id_ASC]&display=full';
         $xmlProduct = Prestashop::get($urlProduct);
 
+        $urlStock['resource'] = 'stock_availables/?display=full';
+        $xmlStock = Prestashop::get($urlStock);
+
         $jsonOrders = json_encode($xmlOrders);
         $arrayOrders = json_decode($jsonOrders, true);
 
         $jsonProduct = json_encode($xmlProduct);
         $arrayProduct = json_decode($jsonProduct, true);
 
-        foreach($arrayOrders['orders']['order'] as $i => $v) {
+        $jsonStock = json_encode($xmlStock);
+        $arrayStock = json_decode($jsonStock, true);
+        
+        foreach($arrayStock['stock_availables']['stock_available'] as $indexStock => $valorstock) {
+
+            //$sumaStock[] = intval($valorstock['quantity']);
             
-            if($v['current_state'] == "3"|| $v['current_state'] == "5" || $v['current_state'] == "4" || $v['current_state'] == "2") {
-            
-                //$suma[] = floatval($v['total_paid']);
-                $ejem[] = $v['associations']['order_rows']['order_row'];
-                $rangoGraf[] = date('Y-m', strtotime($v['date_add']));
+            foreach($arrayProduct['products']['product'] as $indexProdu => $valorProduct) {
+                
+                $tablaProductos[] = $valorProduct;
+
+                if($valorstock['id_product'] == $valorProduct['id']) {
+
+                    $sumaVenta[] =  floatval($valorProduct['price']) * floatval($valorstock['quantity']);
+                }
+                
             }
         }
+
+        foreach($arrayOrders['orders']['order'] as $i => $v) {
+            
+            $fecha = date('Y-m-d', strtotime($v['date_add']));
+
+            if($rango != null) {
+
+                $fechas = explode(' - ', $rango);
+
+                $inicio = date('Y-m-d', strtotime($fechas[0]));
+                $final = date('Y-m-d', strtotime($fechas[1]));
+
+                if($fecha >= $inicio && $fecha <= $final) {
+                    
+                    if($v['current_state'] == "3"|| $v['current_state'] == "5" || $v['current_state'] == "4" || $v['current_state'] == "2") {
+                    
+                        $suma[] = floatval($v['total_paid']);
+                        $ejem[] = $v['associations']['order_rows']['order_row'];
+                        $rangoGraf[] = date('Y-m-d', strtotime($v['date_add']));
+                        
+                    }
+                }
+                
+            } else {
+               
+                if($mes != null) {
+                    
+                    $mes = date("Y-$mes");
+                    
+                    foreach($arrayOrders['orders']['order'] as $key => $value) {
+                        
+                        $fecha = date('Y-m', strtotime($value['date_add']));
+                        
+                        if($fecha == $mes) { 
+
+                            if($value['current_state'] == "3"|| $value['current_state'] == "5" || $value['current_state'] == "4" || $value['current_state'] == "2") {
+                    
+                                $suma[] = floatval($value['total_paid']);
+                                $ejem[] = $value['associations']['order_rows']['order_row'];
+                                $rangoGraf[] = date('Y-m-d', strtotime($value['date_add']));
+                            }
+
+                        }
+                    }
+                    
+                } else {
+
+                    if($v['current_state'] == "3"|| $v['current_state'] == "5" || $v['current_state'] == "4" || $v['current_state'] == "2") {
+                    
+                        $suma[] = floatval($v['total_paid']);
+                        $ejem[] = $v['associations']['order_rows']['order_row'];
+                        $rangoGraf[] = date('Y-m', strtotime($v['date_add']));
+                    }
+                }
+            }
+        }
+        //dd($suma, $ejem);
         try {
             
             foreach($arrayProduct['products']['product'] as $inPro => $valPro) {
@@ -69,7 +152,7 @@ class HomeController extends Controller
                                             'imagen'    => "https://himart.com.mx/api/images/products/".$ejem[$key]['product_id']."/".$imagen."/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4",
                                             'id' => $ejem[$key]['product_id'],
                                           ];
-                            //$sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
+                            $sumar[] = floatval($valPro['wholesale_price']) * floatval($ejem[$key]['product_quantity']);
                         }
                         
                         
@@ -92,7 +175,7 @@ class HomeController extends Controller
                                                 'imagen'    => "https://himart.com.mx/api/images/products/".$filas['product_id']."/".$imagen."/?ws_key=I24KTKXC8CLL94ENE1R1MX3SR8Q966H4", 
                                                 'id'        => $filas['product_id'],
                                 ];
-                                //$sumar2[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
+                                $sumar2[] = floatval($valPro['wholesale_price']) * floatval($filas['product_quantity']);
                             }
                             
                         }
@@ -208,6 +291,10 @@ class HomeController extends Controller
                         //'totalCompra'        => $totalCompra,
                         'CantidadVendida'      => $topTen,
                         'rangoGra'          => $datosGraf,
+                        'mes'                => '',
+                        'meses'              => $meses,
+                        'rangoGra'          => $datosGraf,
+                        'rango'              => ''
                       ];
                     
         //dd($mes);

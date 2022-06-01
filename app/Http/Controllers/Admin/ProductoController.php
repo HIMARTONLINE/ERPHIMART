@@ -269,6 +269,7 @@ class ProductoController extends Controller
                 'sub_categoria' => $_REQUEST['sub_categoria'],
                 'de_stock' => $_REQUEST['de_stock'],
                 'a_stock' => $_REQUEST['a_stock'],
+                'venta'    => 0,
                 'de_precio' => $_REQUEST['de_precio'],
                 'a_precio' => $_REQUEST['a_precio'],
                 'de_fecha' => $_REQUEST['de_fecha'],

@@ -248,8 +248,68 @@ class ReportController extends Controller
                 }
             }
         }
+
+        /*$response6 = $client->request(
+            'GET',
+            'guide/06/' . $anio, 
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer 448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349"
+                ]
+            ]
+        )->getBody()->getContents();
         
-        $response = array_merge($response11,$response22,$response33,$response44, $response55);
+        $response6 = json_decode($response6);
+
+        $response6_seguro = $client->request(
+            'GET',
+            'invoice/05/' . $anio, 
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer 448f95d66c4b3751a19ae8a5162f9498df781f4e46070e51df3a4cd8c0dac349"
+                ]
+            ]
+        )->getBody()->getContents();
+        
+        $response6_seguro = json_decode($response6_seguro);
+
+        foreach($response6_seguro as $key => $row){
+            for($i=0; $i<count($row); $i++){
+                $num_guia = $row[$i]->tracking_number;
+                $array_seguro4[$num_guia] = str_replace("$", "", $row[$i]->insurance);
+            }
+        }
+
+        foreach($response6 as $row){
+            $ultimo_env6[] = $row[array_key_last($row)];
+        }
+        
+        $id_env = $ultimo_env6[0]->id;
+
+        foreach($response6 as $row){
+            for($i=0; $i<3000; $i++){
+                $id_envio = $row[$i]->id;
+                $numero_guia = $row[$i]->tracking_number;
+                $id_orden = explode(" - ", $row[$i]->consignee_name);
+                $id_orden = $id_orden[0];
+                $total_orden = $row[$i]->total;
+                if(array_key_exists($numero_guia, $array_seguro4)){
+                    $seguro = $array_seguro4[$numero_guia];
+                    if($seguro == 1.00){
+                        $seguro = 100.00;
+                    }else{
+                        $seguro = 0.00;
+                    }
+                }
+                $response66[$i] = array(0 => $id_envio, 1 => $id_orden, 2 => $total_orden, 3 => $seguro);
+
+                if($id_env == $id_envio){
+                    break;
+                }
+            }
+        }*/
+        
+    $response = array_merge($response11,$response22,$response33,$response44, $response55/*, $response66*/);
         /*
         foreach($response as $row){
             $ultimo_env[] = $row[array_key_last($row)];

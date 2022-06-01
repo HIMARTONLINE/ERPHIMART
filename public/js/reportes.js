@@ -39,31 +39,29 @@ $(document).ready(function() {
             }
         }
     });
-    /*var calendario = function() {
-        calendario = $('#calendario').fullCalendar({
-            locale: 'es',
-            header: {
-                left: "prev,next today",
-                center: "title",
-                right: "month"
-            },
-            events: {
-                url: '/home/vacacionando',
-                type: 'POST',
-                data: {
-                    custom_param1: 'something',
-                    custom_param2: 'somethingelse'
-                },
-                error: function() {
-                    main.alerta(etiquetas.alerta2, 'warning');
-                },
-            },
-            /*hiddenDays : [0],
-            eventRender: function(event, element) {
-                if (event.icon) {
-                    element.find('.fc-title').prepend('<i class="' + event.icon + ' mr-1"></i>');
-                }
-            }
-        });
-    };*/
+
 });
+
+//---------------------------- DateRangePicker------------------------//
+
+var start = moment().subtract(29, 'days');
+var end = moment();
+
+function cb(start, end) {
+    $('#reportrange input').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+}
+
+$('#reportrange').daterangepicker({
+    startDate: start,
+    endDate: end,
+    ranges: {
+        'Hoy': [moment(), moment()],
+        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Ultimos 7 días': [moment().subtract(6, 'days'), moment()],
+        'Ultimos 30 días': [moment().subtract(29, 'days'), moment()],
+        'Este mes': [moment().startOf('month'), moment().endOf('month')],
+        'Mes pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    }
+}, cb);
+
+cb(start, end);
